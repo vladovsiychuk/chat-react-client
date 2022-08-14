@@ -1,0 +1,13 @@
+/node_modules/
+/.idea/.gitignore
+/.idea/.name
+/public/favicon.ico
+/public/index.html
+/public/logo192.png
+/public/logo512.png
+/public/manifest.json
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/react-client.iml
+/public/robots.txt
+/.idea/vcs.xml
