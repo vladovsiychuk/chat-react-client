@@ -1,4 +1,4 @@
-import { unauthorized } from '../httpClient';
+import { authorized } from '../httpClient';
 import EndpointConstants from '../../constants/EndpointConstants';
 import types from './types';
 
@@ -27,7 +27,7 @@ export function loadMessage() {
 
         dispatch(updateAsync(true));
         try {
-            const res = await unauthorized({
+            const res = await authorized({
                 method: endpoint.method,
                 path: endpoint.path,
             });

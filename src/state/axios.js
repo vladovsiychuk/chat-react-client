@@ -2,17 +2,17 @@ import axios from 'axios';
 // import createAuthRefreshInterceptor from 'axios-auth-refresh';
 // import store from 'state/store';
 // import { refreshAuth } from './auth/actions';
-// import { getAccessToken } from './middleware/authMiddleware';
+import { getAccessToken } from './middleware/authMiddleware';
 
 const instance = axios.create();
 
-// instance.interceptors.request.use(request => {
-//     if (request.shouldAddToken) {
-//         const accessToken = getAccessToken();
-//         request.headers['Authorization'] = `Bearer ${accessToken}`;
-//     }
-//     return request;
-// });
+instance.interceptors.request.use(request => {
+    if (request.shouldAddToken) {
+        const accessToken = getAccessToken();
+        request.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+    return request;
+});
 
 // async function refreshAuthLogic(failedRequest) {
 //     try {
