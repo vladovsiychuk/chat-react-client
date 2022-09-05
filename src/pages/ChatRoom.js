@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loadMessage } from '../state/message/actions';
+import {getAccessToken} from '../state/middleware/authMiddleware';
+import {Redirect} from 'react-router-dom';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import * as messageSelectors from '../state/message/selector';
@@ -9,6 +11,8 @@ import * as messageSelectors from '../state/message/selector';
 var stompClient = null;
 
 function ChatRoom({ loadMessage, messages, async }) {
+    const token = getAccessToken()
+
     const [tab, setTab] = useState('CHATROOM');
     const [userData, setUserData] = useState({
         username: '',
@@ -21,6 +25,7 @@ function ChatRoom({ loadMessage, messages, async }) {
         loadMessage();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     const [privateChats, setPrivateChats] = useState(new Map());
     const [publicChats, setPublicChats] = useState([]);
 
