@@ -1,9 +1,12 @@
 import React from 'react'
+import GoogleButton from 'react-google-button'
 
 const AuthForm = () => {
     return (
         <div>
-            <a href="http://localhost:8082/oauth/login/google">login with google</a>
+            <GoogleButton
+                onClick={() => { window.location.replace("http://localhost:8082/oauth/login/google"); }}
+            />
         </div>
     )
 }
