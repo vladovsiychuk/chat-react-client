@@ -1,0 +1,5 @@
+export default {
+    CHATS_GET: 'CHATS_GET',
+    CHATS_ASYNC: 'CHATS_ASYNC',
+    CHATS_ADD_MESSAGE: 'CHATS_ADD_MESSAGE',
+};
