@@ -34,7 +34,7 @@ export default function userReducer(state = initialState, action) {
                 currentUser: {
                     ...state.currentUser,
                     socketData: {
-                        ...this.state.socketData,
+                        ...state.currentUser.socketData,
                         ...action.data
                     },
                 },
@@ -43,7 +43,10 @@ export default function userReducer(state = initialState, action) {
         case types.CURRENT_USER_GET: {
             return {
                 ...state,
-                ...action.data,
+                currentUser: {
+                    ...state.currentUser,
+                    data: action.data
+                }
             }
         }
         default:

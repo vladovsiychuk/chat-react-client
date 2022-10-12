@@ -16,9 +16,7 @@ function updateAsync(isLoading, error = null, currentUserIsFound = null) {
 function currentUserLoaded(currentUser) {
     return {
         type: types.CURRENT_USER_GET,
-        data: {
-            currentUser,
-        },
+        data: currentUser,
     };
 }
 
@@ -73,10 +71,13 @@ export function loadCurrentUser() {
             dispatch(currentUserLoaded(res || []));
             dispatch(updateAsync(false, null, true));
         } catch (err) {
+            console.log("err", err)
+
             if (err.status === 404) {
                 dispatch(updateAsync(false, err, false));
+            } else {
+                dispatch(updateAsync(false, err, null));
             }
-            dispatch(updateAsync(false, err, null));
         }
     }
 }
