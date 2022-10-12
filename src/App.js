@@ -34,9 +34,11 @@ const App = ({ loadCurrentUser, createCurrentUser }) => {
                     <Redirect to="/auth" />
                 </Route>
             )}
-            <Route path="/" exact>
-                <ChatRoom />
-            </Route>
+            {!!currentUserIsFound && (
+                <Route path="/" exact>
+                    <ChatRoom />
+                </Route>
+            )}
         </Switch>
     );
 };
