@@ -76,7 +76,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
 
     const sendPrivateValue = () => {
         if (stompClient) {
-            var chatMessage = {
+            const chatMessage = {
                 sender: currentUser.data.id,
                 receiver: tab,
                 date: Date.now(),
@@ -85,6 +85,12 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
             };
 
             stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
+
+            const sender = chatMessage.sender
+            const receiver = chatMessage.receiver
+            const companion = sender === currentUser.data.id ? receiver : sender
+
+            addNewMessage(chatMessage, companion)
         }
     };
 
