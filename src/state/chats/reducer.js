@@ -29,7 +29,7 @@ export default function chatsReducer(state = initialState, action) {
             };
         }
         case types.CHATS_ADD_MESSAGE : {
-            const clonedState = { ...state }
+            const clonedState = JSON.parse(JSON.stringify(state));
             const message = action.data.message
             const companion = action.data.companion
             const index = clonedState.chats.findIndex(x => x.companion === companion);
@@ -37,7 +37,7 @@ export default function chatsReducer(state = initialState, action) {
             index === -1 ?
                 clonedState.chats.push({companion: companion, messages: [message]})
                 :
-                clonedState.chats.find(chat => chat.companion === companion).push(message)
+                clonedState.chats.find(chat => chat.companion === companion).messages.push(message)
 
             return clonedState
         }
