@@ -20,7 +20,7 @@ const App = ({ loadCurrentUser, createCurrentUser }) => {
             createCurrentUser()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [currentUserIsFound]);
 
     return (
         <Switch>
