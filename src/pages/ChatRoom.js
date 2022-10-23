@@ -6,12 +6,14 @@ import { addNewMessage, loadChats } from '../state/chats/actions';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import { currentUserConnected, currentUserJoined } from '../state/users/actions';
+import { Fab, Grid, List, ListItem, ListItemButton, ListItemText, OutlinedInput } from '@mui/material';
+import { Send } from '@mui/icons-material';
 
 var stompClient = null;
 
 function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMessage }) {
     const [tab, setTab] = useState(null);
-    const [message, setMessage] = useState(null)
+    const [message, setMessage] = useState("")
 
     const chats = useSelector(state => state.chats.chats)
     const chatsAsync = useSelector(state => state.chats.async)
@@ -91,46 +93,60 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
             const companion = sender === currentUser.data.id ? receiver : sender
 
             addNewMessage(chatMessage, companion)
+
+            setMessage("")
         }
     };
 
     return (
-        <div className="container">
+        <div>
             { chatsAsync.isLoading ? (
                 <div>
                     Loading
                 </div>
             ) : (
                 currentUser.socketData.connected && (
-                        <div className="chat-box">
-                            <div className="member-list">
-                                <ul>
-                                    {chats.map(chat => chat.companion).map((id, index) => (
-                                        <li onClick={() => {
-                                            setTab(id);
-                                        }} className={`member ${tab === id && 'active'}`} key={index}>{id}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                            {tab != null && <div className="chat-content">
-                                <ul className="chat-messages">
+                    <Grid container>
+                        <Grid item xs={3}>
+                            <List>
+                                {chats.map(chat => chat.companion).map((id, index) => (
+                                    <ListItemButton onClick={() => {setTab(id)}} selected={tab === id} key={index}>
+                                        <ListItemText primary={id}/>
+                                    </ListItemButton>
+                                ))}
+                            </List>
+                        </Grid>
+                        {tab != null &&
+                            <Grid item xs={9}>
+                                <List>
                                     {chats.find(chat => chat.companion === tab).messages.map((message, index) => (
-                                        <li className={`message ${message.sender === currentUser.data.id && 'self'}`} key={index}>
-                                            {message.sender !== currentUser.data.id && <div className="avatar">{message.sender}</div>}
-                                            <div className="message-data">{message.message}</div>
-                                            {message.sender === currentUser.data.id && <div className="avatar self">{message.sender}</div>}
-                                        </li>
+                                        <ListItem key={index}>
+                                            <Grid container>
+                                                <Grid item xs={12}>
+                                                    <ListItemText align={message.sender === currentUser.data.id ? "right" : "left"} primary={message.message}/>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <ListItemText align={message.sender === currentUser.data.id ? "right" : "left"} secondary={message.date}/>
+                                                </Grid>
+                                            </Grid>
+                                        </ListItem>
                                     ))}
-                                </ul>
-
-                                <div className="send-message">
-                                    <input type="text" className="input-message" placeholder="enter the message" value={message} onChange={handleMessage} />
-                                    <button type="button" className="send-button" onClick={sendPrivateValue}>send</button>
-                                </div>
-                            </div>}
-                        </div>)
-            )
-            }
+                                </List>
+                                <Grid container>
+                                    <Grid item xs={11}>
+                                        <OutlinedInput placeholder="Enter the message..." value={message} onChange={handleMessage} fullWidth/>
+                                    </Grid>
+                                    <Grid item xs={1}>
+                                        <Fab color="primary" aria-label="add" onClick={sendPrivateValue}>
+                                            <Send />
+                                        </Fab>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        }
+                    </Grid>
+                )
+            )}
         </div>
     );
 }
