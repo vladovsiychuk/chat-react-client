@@ -120,15 +120,24 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
     };
 
     return (
-        <div>
+        <div style={{borderStyle: "dashed", borderColor: "red"}}>
             { chatsAsync.isLoading ? (
                 <div>
                     Loading
                 </div>
             ) : (
                 currentUser.socketData.connected && (
-                    <Grid container>
-                        <Grid item xs={3}>
+                    <div style={{borderStyle: "dashed", borderColor: "orange"}}>
+                        <main style={{
+                            borderStyle: "dashed",
+                            borderColor: "green",
+                            height: "calc(100% - 70px)",
+                            position: "absolute",
+                            top: "70px",
+                            left: "0",
+                            width: "300px",
+                            boxShadow: "0px 0px 1px black",
+                        }}>
                             <List>
                                 {chats.map(chat => chat.companion).map((id, index) => (
                                     <ListItemButton onClick={() => {setTab(id)}} selected={tab === id} key={index}>
@@ -136,7 +145,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                     </ListItemButton>
                                 ))}
                             </List>
-                        </Grid>
+                        </main>
                         {tab != null &&
                             <Grid item xs={9}>
                                 <List>
@@ -165,7 +174,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                 </Grid>
                             </Grid>
                         }
-                    </Grid>
+                    </div>
                 )
             )}
         </div>
