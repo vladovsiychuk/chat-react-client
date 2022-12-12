@@ -6,8 +6,8 @@ import { addNewMessage, loadChats } from '../state/chats/actions';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import { currentUserConnected, currentUserJoined } from '../state/users/actions';
-import { Fab, Grid, List, ListItem, ListItemButton, ListItemText, OutlinedInput } from '@mui/material';
-import { Send } from '@mui/icons-material';
+import { Avatar, Button, Divider, Fab, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, OutlinedInput, TextField, Typography } from '@mui/material';
+import { ArrowBackRounded, Send } from '@mui/icons-material';
 
 var stompClient = null;
 
@@ -119,6 +119,12 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
         // }
     };
 
+    const userTyping = (e) => {
+        e.keyCode === 13
+            ? sendPrivateValue()
+            : setMessage(e.target.value);
+    };
+
     return (
         <div style={{borderStyle: "dashed", borderColor: "red"}}>
             { chatsAsync.isLoading ? (
@@ -140,15 +146,104 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                         }}>
                             <List>
                                 {chats.map(chat => chat.companion).map((id, index) => (
-                                    <ListItemButton onClick={() => {setTab(id)}} selected={tab === id} key={index}>
-                                        <ListItemText primary={id}/>
-                                    </ListItemButton>
+                                    <React.Fragment>
+                                        <ListItemButton
+                                            onClick={() => {setTab(id)}}
+                                            selected={tab === id}
+                                            key={index}
+                                            style={{ borderStyle: "dashed", borderColor: "black"}}
+                                            alignItems="flex-start">
+
+                                            <ListItemAvatar>
+                                                <Avatar alt="Remy Sharp">
+                                                    A
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={id}
+                                                secondary={
+                                                    <React.Fragment>
+                                                        <Typography component="span" color="textPrimary">
+                                                           Some last message here
+                                                        </Typography>
+                                                    </React.Fragment>
+                                                }
+                                            />
+                                            <ListItemIcon>
+                                                <Avatar alt="Remy Sharp"
+                                                    style={{
+                                                        backgroundColor: "#3A4691",
+                                                        fontSize: "15px",
+                                                        color: "white",
+                                                        position: "absolute",
+                                                        height: "25px",
+                                                        width: "25px",
+                                                        top: "35px",
+                                                        right: "10px", }}>
+                                                    1
+                                                </Avatar>
+                                            </ListItemIcon>
+                                        </ListItemButton>
+                                        <Divider></Divider>
+                                    </React.Fragment>
                                 ))}
                             </List>
                         </main>
                         {tab != null &&
-                            <Grid item xs={9}>
-                                <List>
+                            <div style={{ borderStyle: "dashed", borderColor: "violet" }}>
+                                <div style={{
+                                    width: "calc(100% - 301px)",
+                                    height: "70px",
+                                    backgroundColor: "#344195",
+                                    position: "fixed",
+                                    marginLeft: "301px",
+                                    boxSizing: "border-box",
+                                }}>
+                                    <Button  size="large" style={{
+                                        position: "fixed",
+                                        height: "70px",
+                                        width: "100px",
+                                        right: "0px", }}>
+
+                                        <ArrowBackRounded style={{
+                                            color: "white",
+                                            height: "35px",
+                                            width: "35px",}} />
+                                    </Button>
+                                    <div style={{
+                                        backgroundColor: "#344195",
+                                        position: "fixed",
+                                        marginTop: "25px",
+                                        marginLeft: "85px",
+                                        fontSize: "18px",
+                                        textAlign: "center",
+                                        color: "white",
+                                        boxSizing: "border-box", }}>
+
+                                        some.email@mail.com
+                                    </div>
+                                    <Avatar style={{
+                                        marginTop: "10px",
+                                        marginLeft: "25px",
+                                        height: "50px",
+                                        width: "50px", }}
+                                            alt="Remy Sharp">
+                                        B
+                                    </Avatar>
+                                </div>
+                                <main  style={{
+                                    borderStyle: "dashed", borderColor: "black",
+                                    height: "calc(100vh - 100px)",
+                                    overflow: "auto",
+                                    padding: "25px",
+                                    marginLeft: "300px",
+                                    boxSizing: "border-box",
+                                    overflowY: "scroll",
+                                    top: "70px",
+                                    paddingBottom: "50px",
+                                    width: "calc(100% - 300px)",
+                                    position: "absolute",
+                                }}>
                                     {chats.find(chat => chat.companion === tab).messages.map((message, index) => (
                                         <ListItem key={index}>
                                             <Grid container>
@@ -161,18 +256,40 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                             </Grid>
                                         </ListItem>
                                     ))}
-                                </List>
-                                <Grid container>
-                                    <Grid item xs={11}>
-                                        <OutlinedInput placeholder="Enter the message..." value={message} onChange={handleMessage} fullWidth/>
-                                    </Grid>
-                                    <Grid item xs={1}>
-                                        <Fab color="primary" aria-label="add" onClick={sendPrivateValue}>
-                                            <Send />
-                                        </Fab>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
+                                </main>
+                                <div style={{
+                                    position: "absolute",
+                                    bottom: "15px",
+                                    left: "315px",
+                                    boxSizing: "border-box",
+                                    overflow: "auto",
+                                    width: "calc(100% - 300px - 50px)",
+                                    height: "50px",
+                                    backgroundColor: "#d3d4db",
+                                    borderRadius: "10px",
+                                    padding: "10px", }}>
+
+                                    <TextField
+                                        id="chattextbox"
+                                        autoComplete="off"
+                                        placeholder="Type your message ..."
+                                        onKeyUp={(e) => userTyping(e)}
+                                        style={{
+                                            width: "calc(100% - 40px)",
+                                            height: "20px",
+                                            marginRight: "10px"
+                                        }}
+                                        onFocus={() => {}}
+                                    ></TextField>
+                                    <Send onClick={sendPrivateValue} style={{
+                                        color: "blue",
+                                        cursor: "pointer",
+                                        // "&:hover": {
+                                        //     color: "gray",
+                                        // },
+                                    }}></Send>
+                                </div>
+                            </div>
                         }
                     </div>
                 )
