@@ -267,23 +267,28 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                     height: "50px",
                                     backgroundColor: "#d3d4db",
                                     borderRadius: "10px",
-                                    padding: "10px", }}>
+                                    padding: "5px",
+                                    display: "flex",
+                                    alignItems: "center"
+                                }}>
 
                                     <TextField
                                         id="chattextbox"
                                         autoComplete="off"
                                         placeholder="Type your message ..."
                                         onKeyUp={(e) => userTyping(e)}
+                                        size={'small'}
                                         style={{
                                             width: "calc(100% - 40px)",
-                                            height: "20px",
-                                            marginRight: "10px"
+                                            height: "40px",
+                                            marginRight: "10px",
                                         }}
                                         onFocus={() => {}}
                                     ></TextField>
                                     <Send onClick={sendPrivateValue} style={{
                                         color: "blue",
                                         cursor: "pointer",
+                                        marginLeft: "auto",
                                         // "&:hover": {
                                         //     color: "gray",
                                         // },
