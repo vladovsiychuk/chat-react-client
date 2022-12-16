@@ -285,9 +285,6 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                         color: "blue",
                                         cursor: "pointer",
                                         marginLeft: "auto",
-                                        // "&:hover": {
-                                        //     color: "gray",
-                                        // },
                                     }}></Send>
                                 </div>
                             </div>
