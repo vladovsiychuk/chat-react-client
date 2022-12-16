@@ -126,17 +126,15 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
     };
 
     return (
-        <div style={{borderStyle: "dashed", borderColor: "red"}}>
+        <div>
             { chatsAsync.isLoading ? (
                 <div>
                     Loading
                 </div>
             ) : (
                 currentUser.socketData.connected && (
-                    <div style={{borderStyle: "dashed", borderColor: "orange"}}>
+                    <div>
                         <main style={{
-                            borderStyle: "dashed",
-                            borderColor: "green",
                             height: "calc(100% - 70px)",
                             position: "absolute",
                             top: "70px",
@@ -151,7 +149,6 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                             onClick={() => {setTab(id)}}
                                             selected={tab === id}
                                             key={index}
-                                            style={{ borderStyle: "dashed", borderColor: "black"}}
                                             alignItems="flex-start">
 
                                             <ListItemAvatar>
@@ -190,7 +187,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                             </List>
                         </main>
                         {tab != null &&
-                            <div style={{ borderStyle: "dashed", borderColor: "violet" }}>
+                            <div>
                                 <div style={{
                                     width: "calc(100% - 301px)",
                                     height: "70px",
@@ -232,7 +229,6 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                     </Avatar>
                                 </div>
                                 <main  style={{
-                                    borderStyle: "dashed", borderColor: "black",
                                     height: "calc(100vh - 100px)",
                                     overflow: "auto",
                                     padding: "25px",
