@@ -8,19 +8,19 @@ import { connect, useSelector } from 'react-redux';
 import { createCurrentUser, loadCurrentUser } from './state/users/actions';
 
 const App = ({ loadCurrentUser, createCurrentUser }) => {
-    const token = "something"
-    // const { currentUserIsFound } = useSelector(state => state.users.async)
+    const token = getAccessToken()
+    const { currentUserIsFound } = useSelector(state => state.users.async)
 
-    // useEffect(() => {
-    //     if (!!token && currentUserIsFound == null) {
-    //         loadCurrentUser()
-    //     }
-    //
-    //     if (currentUserIsFound != null && !currentUserIsFound) {
-    //         createCurrentUser()
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [currentUserIsFound]);
+    useEffect(() => {
+        if (!!token && currentUserIsFound == null) {
+            loadCurrentUser()
+        }
+
+        if (currentUserIsFound != null && !currentUserIsFound) {
+            createCurrentUser()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentUserIsFound]);
 
     return (
         <Switch>
@@ -34,11 +34,11 @@ const App = ({ loadCurrentUser, createCurrentUser }) => {
                     <Redirect to="/auth" />
                 </Route>
             )}
-            {/*{!!currentUserIsFound && (*/}
+            {!!currentUserIsFound && (
                 <Route path="/" exact>
                     <ChatRoom />
                 </Route>
-            {/*)}*/}
+            )}
         </Switch>
     );
 };
