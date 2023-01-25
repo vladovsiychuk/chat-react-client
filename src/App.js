@@ -10,17 +10,20 @@ import { createCurrentUser, loadCurrentUser } from './state/users/actions';
 const App = ({ loadCurrentUser, createCurrentUser }) => {
     const token = getAccessToken()
     const { currentUserIsFound } = useSelector(state => state.users.async)
+    const { isLoading } = useSelector(state => state.users.async)
 
     useEffect(() => {
-        if (!!token && currentUserIsFound == null) {
-            loadCurrentUser()
-        }
+        if (isLoading !== true) {
+            if (!!token && currentUserIsFound == null) {
+                loadCurrentUser()
+            }
 
-        if (currentUserIsFound != null && !currentUserIsFound) {
-            createCurrentUser()
+            if (currentUserIsFound != null && !currentUserIsFound) {
+                createCurrentUser()
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentUserIsFound]);
+    }, [currentUserIsFound, isLoading]);
 
     return (
         <Switch>
