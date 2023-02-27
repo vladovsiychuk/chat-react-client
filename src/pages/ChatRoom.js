@@ -6,8 +6,9 @@ import { addNewMessage, loadChats } from '../state/chats/actions';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import { currentUserConnected, currentUserJoined } from '../state/users/actions';
-import { Avatar, Button, Divider, Fab, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from '@mui/material';
+import { Avatar, Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from '@mui/material';
 import { ArrowBackRounded, Send } from '@mui/icons-material';
+import UserSearch from '../components/user/UserSearch';
 
 var stompClient = null;
 
@@ -116,6 +117,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                             width: "300px",
                             boxShadow: "0px 0px 1px black",
                         }}>
+                            <UserSearch/>
                             <List>
                                 {chats.map(chat => chat.companion).map((id, index) => (
                                     <React.Fragment>
