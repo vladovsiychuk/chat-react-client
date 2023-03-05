@@ -6,7 +6,7 @@ export const initialState = {
         isLoading: null,
         error: null,
     },
-}
+};
 
 export default function chatsReducer(state = initialState, action) {
     switch (action.type) {
@@ -30,16 +30,25 @@ export default function chatsReducer(state = initialState, action) {
         }
         case types.CHATS_ADD_MESSAGE : {
             const clonedState = JSON.parse(JSON.stringify(state));
-            const message = action.data.message
-            const companion = action.data.companion
+            const message = action.data.message;
+            const companion = action.data.companion;
             const index = clonedState.chats.findIndex(x => x.companion === companion);
 
             index === -1 ?
-                clonedState.chats.push({companion: companion, messages: [message]})
+                clonedState.chats.push({ companion: companion, messages: [message] })
                 :
-                clonedState.chats.find(chat => chat.companion === companion).messages.push(message)
+                clonedState.chats.find(chat => chat.companion === companion)
+                    .messages
+                    .push(message);
 
-            return clonedState
+            return clonedState;
+        }
+        case types.CHATS_ADD_CHAT : {
+            const clonedState = JSON.parse(JSON.stringify(state));
+            const newChat = { companion: action.data.companion, messages: [] };
+            clonedState.chats.push(newChat)
+
+            return clonedState;
         }
         default:
             return state;

@@ -29,6 +29,15 @@ export function addNewMessage(message, companion) {
     }
 }
 
+export function addNewChat(companion) {
+    return {
+        type: types.CHATS_ADD_CHAT,
+        data: {
+            companion,
+        }
+    }
+}
+
 export function loadChats() {
     return async dispatch => {
         const endpoint = EndpointConstants.CHATS_GET;

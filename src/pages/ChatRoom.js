@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addNewMessage, loadChats } from '../state/chats/actions';
+import { addNewChat, addNewMessage, loadChats } from '../state/chats/actions';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import { currentUserConnected, currentUserJoined } from '../state/users/actions';
@@ -12,14 +12,14 @@ import UserSearch from '../components/user/UserSearch';
 
 var stompClient = null;
 
-function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMessage }) {
+function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMessage, addNewChat }) {
     const [tab, setTab] = useState(null);
     const [message, setMessage] = useState('');
+    const [searchUsers, setSearchUsers] = useState([]);
 
     const chats = useSelector(state => state.chats.chats);
     const chatsAsync = useSelector(state => state.chats.async);
     const currentUser = useSelector(state => state.users.currentUser);
-    const [searchUsers, setSearchUsers] = useState([]);
 
 
     useEffect(() => {
@@ -101,6 +101,11 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
             : setMessage(e.target.value);
     };
 
+    const handleSearchUsersClick = (userId) => {
+        setTab(userId);
+        addNewChat(userId);
+    };
+
     return (
         <div>
             {chatsAsync.isLoading ? (
@@ -118,40 +123,26 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                             width: '300px',
                             boxShadow: '0px 0px 1px black',
                         }}>
-                            <UserSearch setSearchUses={setSearchUsers} />
+                            <UserSearch setSearchUses={setSearchUsers} tab={tab} />
 
                             {searchUsers.length > 0 && (
                                 <List>
-                                    {searchUsers.map((id, email, index) => (
+                                    {searchUsers.map((user, index) => (
                                         <React.Fragment>
                                             <ListItemButton
                                                 onClick={() => {
-                                                    setTab(id);
+                                                    handleSearchUsersClick(user.id);
                                                 }}
-                                                selected={tab === id}
+                                                selected={tab === user.id}
                                                 key={index}
                                                 alignItems="flex-start">
 
                                                 <ListItemAvatar>
                                                     <Avatar alt="Remy Sharp">
-                                                        A
+                                                        {user.email.charAt(0)
+                                                            .toUpperCase()}
                                                     </Avatar>
                                                 </ListItemAvatar>
-                                                <ListItemIcon>
-                                                    <Avatar alt="Remy Sharp"
-                                                            style={{
-                                                                backgroundColor: '#3A4691',
-                                                                fontSize: '15px',
-                                                                color: 'white',
-                                                                position: 'absolute',
-                                                                height: '25px',
-                                                                width: '25px',
-                                                                top: '35px',
-                                                                right: '10px',
-                                                            }}>
-                                                        1
-                                                    </Avatar>
-                                                </ListItemIcon>
                                             </ListItemButton>
                                             <Divider></Divider>
                                         </React.Fragment>
@@ -159,7 +150,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                 </List>
                             )}
 
-                            {searchUsers.length === 1 && (
+                            {searchUsers.length === 0 && (
                                 <List>
                                     {chats.map(chat => chat.companion)
                                         .map((id, index) => (
@@ -331,13 +322,15 @@ ChatRoom.propTypes = {
     currentUserConnected: PropTypes.func.isRequired,
     currentUserJoined: PropTypes.func.isRequired,
     addNewMessage: PropTypes.func.isRequired,
+    addNewChat: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {
     loadChats: loadChats,
     currentUserConnected: currentUserConnected,
     currentUserJoined: currentUserJoined,
-    addNewMessage: addNewMessage
+    addNewMessage: addNewMessage,
+    addNewChat: addNewChat,
 };
 
 export default connect(null, mapDispatchToProps)(ChatRoom);

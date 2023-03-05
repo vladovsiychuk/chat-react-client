@@ -38,7 +38,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserSearch({ setSearchUses }) {
+function UserSearch({ setSearchUses, tab }) {
     const classes = useStyles();
     const [query, setQuery] = useState('');
 
@@ -62,6 +62,12 @@ function UserSearch({ setSearchUses }) {
             setSearchUses([]);
         }
     }, [query]);
+
+    useEffect(() => {
+        if (query) {
+            setQuery('');
+        }
+    }, [tab]);
 
     function handleInputChange(event) {
         setQuery(event.target.value);
