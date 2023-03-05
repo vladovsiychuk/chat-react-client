@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNewMessage, loadChats } from '../state/chats/actions';
@@ -14,16 +14,17 @@ var stompClient = null;
 
 function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMessage }) {
     const [tab, setTab] = useState(null);
-    const [message, setMessage] = useState("")
+    const [message, setMessage] = useState('');
 
-    const chats = useSelector(state => state.chats.chats)
-    const chatsAsync = useSelector(state => state.chats.async)
-    const currentUser = useSelector(state => state.users.currentUser)
+    const chats = useSelector(state => state.chats.chats);
+    const chatsAsync = useSelector(state => state.chats.async);
+    const currentUser = useSelector(state => state.users.currentUser);
+    const [searchUsers, setSearchUsers] = useState([]);
 
 
     useEffect(() => {
-        loadChats()
-        connect()
+        loadChats();
+        connect();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -52,7 +53,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
         const payloadData = JSON.parse(payload.body);
         switch (payloadData.status) {
             case 'JOIN':
-                currentUserJoined(true)
+                currentUserJoined(true);
                 break;
             default:
                 return;
@@ -61,11 +62,11 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
 
     const onPrivateMessage = (payload) => {
         const payloadData = JSON.parse(payload.body);
-        const sender = payloadData.sender
-        const receiver = payloadData.receiver
-        const companion = sender === currentUser.data.id ? receiver : sender
+        const sender = payloadData.sender;
+        const receiver = payloadData.receiver;
+        const companion = sender === currentUser.data.id ? receiver : sender;
 
-        addNewMessage(payloadData, companion)
+        addNewMessage(payloadData, companion);
     };
 
     const onError = (err) => {
@@ -84,13 +85,13 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
 
             stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
 
-            const sender = chatMessage.sender
-            const receiver = chatMessage.receiver
-            const companion = sender === currentUser.data.id ? receiver : sender
+            const sender = chatMessage.sender;
+            const receiver = chatMessage.receiver;
+            const companion = sender === currentUser.data.id ? receiver : sender;
 
-            addNewMessage(chatMessage, companion)
+            addNewMessage(chatMessage, companion);
 
-            setMessage("")
+            setMessage('');
         }
     };
 
@@ -102,7 +103,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
 
     return (
         <div>
-            { chatsAsync.isLoading ? (
+            {chatsAsync.isLoading ? (
                 <div>
                     Loading ...
                 </div>
@@ -110,138 +111,190 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                 currentUser.socketData.connected && (
                     <div>
                         <main style={{
-                            height: "calc(100% - 70px)",
-                            position: "absolute",
-                            top: "70px",
-                            left: "0",
-                            width: "300px",
-                            boxShadow: "0px 0px 1px black",
+                            height: 'calc(100% - 70px)',
+                            position: 'absolute',
+                            top: '70px',
+                            left: '0',
+                            width: '300px',
+                            boxShadow: '0px 0px 1px black',
                         }}>
-                            <UserSearch/>
-                            <List>
-                                {chats.map(chat => chat.companion).map((id, index) => (
-                                    <React.Fragment>
-                                        <ListItemButton
-                                            onClick={() => {setTab(id)}}
-                                            selected={tab === id}
-                                            key={index}
-                                            alignItems="flex-start">
+                            <UserSearch setSearchUses={setSearchUsers} />
 
-                                            <ListItemAvatar>
-                                                <Avatar alt="Remy Sharp">
-                                                    A
-                                                </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText
-                                                primary={id}
-                                                secondary={
-                                                    <React.Fragment>
-                                                        <Typography component="span" color="textPrimary">
-                                                           Some last message here
-                                                        </Typography>
-                                                    </React.Fragment>
-                                                }
-                                            />
-                                            <ListItemIcon>
-                                                <Avatar alt="Remy Sharp"
-                                                    style={{
-                                                        backgroundColor: "#3A4691",
-                                                        fontSize: "15px",
-                                                        color: "white",
-                                                        position: "absolute",
-                                                        height: "25px",
-                                                        width: "25px",
-                                                        top: "35px",
-                                                        right: "10px", }}>
-                                                    1
-                                                </Avatar>
-                                            </ListItemIcon>
-                                        </ListItemButton>
-                                        <Divider></Divider>
-                                    </React.Fragment>
-                                ))}
-                            </List>
+                            {searchUsers.length > 0 && (
+                                <List>
+                                    {searchUsers.map((id, email, index) => (
+                                        <React.Fragment>
+                                            <ListItemButton
+                                                onClick={() => {
+                                                    setTab(id);
+                                                }}
+                                                selected={tab === id}
+                                                key={index}
+                                                alignItems="flex-start">
+
+                                                <ListItemAvatar>
+                                                    <Avatar alt="Remy Sharp">
+                                                        A
+                                                    </Avatar>
+                                                </ListItemAvatar>
+                                                <ListItemIcon>
+                                                    <Avatar alt="Remy Sharp"
+                                                            style={{
+                                                                backgroundColor: '#3A4691',
+                                                                fontSize: '15px',
+                                                                color: 'white',
+                                                                position: 'absolute',
+                                                                height: '25px',
+                                                                width: '25px',
+                                                                top: '35px',
+                                                                right: '10px',
+                                                            }}>
+                                                        1
+                                                    </Avatar>
+                                                </ListItemIcon>
+                                            </ListItemButton>
+                                            <Divider></Divider>
+                                        </React.Fragment>
+                                    ))}
+                                </List>
+                            )}
+
+                            {searchUsers.length === 1 && (
+                                <List>
+                                    {chats.map(chat => chat.companion)
+                                        .map((id, index) => (
+                                            <React.Fragment>
+                                                <ListItemButton
+                                                    onClick={() => {
+                                                        setTab(id);
+                                                    }}
+                                                    selected={tab === id}
+                                                    key={index}
+                                                    alignItems="flex-start">
+
+                                                    <ListItemAvatar>
+                                                        <Avatar alt="Remy Sharp">
+                                                            A
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText
+                                                        primary={id}
+                                                        secondary={
+                                                            <React.Fragment>
+                                                                <Typography component="span" color="textPrimary">
+                                                                    Some last message here
+                                                                </Typography>
+                                                            </React.Fragment>
+                                                        }
+                                                    />
+                                                    <ListItemIcon>
+                                                        <Avatar alt="Remy Sharp"
+                                                                style={{
+                                                                    backgroundColor: '#3A4691',
+                                                                    fontSize: '15px',
+                                                                    color: 'white',
+                                                                    position: 'absolute',
+                                                                    height: '25px',
+                                                                    width: '25px',
+                                                                    top: '35px',
+                                                                    right: '10px',
+                                                                }}>
+                                                            1
+                                                        </Avatar>
+                                                    </ListItemIcon>
+                                                </ListItemButton>
+                                                <Divider></Divider>
+                                            </React.Fragment>
+                                        ))}
+                                </List>
+                            )}
                         </main>
                         {tab != null &&
                             <div>
                                 <div style={{
-                                    width: "calc(100% - 301px)",
-                                    height: "70px",
-                                    backgroundColor: "#344195",
-                                    position: "fixed",
-                                    marginLeft: "301px",
-                                    boxSizing: "border-box",
+                                    width: 'calc(100% - 301px)',
+                                    height: '70px',
+                                    backgroundColor: '#344195',
+                                    position: 'fixed',
+                                    marginLeft: '301px',
+                                    boxSizing: 'border-box',
                                 }}>
-                                    <Button  size="large" style={{
-                                        position: "fixed",
-                                        height: "70px",
-                                        width: "100px",
-                                        right: "0px", }}>
+                                    <Button size="large" style={{
+                                        position: 'fixed',
+                                        height: '70px',
+                                        width: '100px',
+                                        right: '0px',
+                                    }}>
 
                                         <ArrowBackRounded style={{
-                                            color: "white",
-                                            height: "35px",
-                                            width: "35px",}} />
+                                            color: 'white',
+                                            height: '35px',
+                                            width: '35px',
+                                        }} />
                                     </Button>
                                     <div style={{
-                                        backgroundColor: "#344195",
-                                        position: "fixed",
-                                        marginTop: "25px",
-                                        marginLeft: "85px",
-                                        fontSize: "18px",
-                                        textAlign: "center",
-                                        color: "white",
-                                        boxSizing: "border-box", }}>
+                                        backgroundColor: '#344195',
+                                        position: 'fixed',
+                                        marginTop: '25px',
+                                        marginLeft: '85px',
+                                        fontSize: '18px',
+                                        textAlign: 'center',
+                                        color: 'white',
+                                        boxSizing: 'border-box',
+                                    }}>
 
                                         some.email@mail.com
                                     </div>
                                     <Avatar style={{
-                                        marginTop: "10px",
-                                        marginLeft: "25px",
-                                        height: "50px",
-                                        width: "50px", }}
+                                        marginTop: '10px',
+                                        marginLeft: '25px',
+                                        height: '50px',
+                                        width: '50px',
+                                    }}
                                             alt="Remy Sharp">
                                         B
                                     </Avatar>
                                 </div>
-                                <main  style={{
-                                    height: "calc(100vh - 100px)",
-                                    overflow: "auto",
-                                    padding: "25px",
-                                    marginLeft: "300px",
-                                    boxSizing: "border-box",
-                                    overflowY: "scroll",
-                                    top: "70px",
-                                    paddingBottom: "50px",
-                                    width: "calc(100% - 300px)",
-                                    position: "absolute",
+                                <main style={{
+                                    height: 'calc(100vh - 100px)',
+                                    overflow: 'auto',
+                                    padding: '25px',
+                                    marginLeft: '300px',
+                                    boxSizing: 'border-box',
+                                    overflowY: 'scroll',
+                                    top: '70px',
+                                    paddingBottom: '50px',
+                                    width: 'calc(100% - 300px)',
+                                    position: 'absolute',
                                 }}>
-                                    {chats.find(chat => chat.companion === tab).messages.map((message, index) => (
-                                        <ListItem key={index}>
-                                            <Grid container>
-                                                <Grid item xs={12}>
-                                                    <ListItemText align={message.sender === currentUser.data.id ? "right" : "left"} primary={message.message}/>
+                                    {chats.find(chat => chat.companion === tab)
+                                        .messages
+                                        .map((message, index) => (
+                                            <ListItem key={index}>
+                                                <Grid container>
+                                                    <Grid item xs={12}>
+                                                        <ListItemText align={message.sender === currentUser.data.id ? 'right' : 'left'} primary={message.message} />
+                                                    </Grid>
+                                                    <Grid item xs={12}>
+                                                        <ListItemText align={message.sender === currentUser.data.id ? 'right' : 'left'} secondary={message.date} />
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid item xs={12}>
-                                                    <ListItemText align={message.sender === currentUser.data.id ? "right" : "left"} secondary={message.date}/>
-                                                </Grid>
-                                            </Grid>
-                                        </ListItem>
-                                    ))}
+                                            </ListItem>
+                                        ))}
                                 </main>
                                 <div style={{
-                                    position: "absolute",
-                                    bottom: "15px",
-                                    left: "315px",
-                                    boxSizing: "border-box",
-                                    overflow: "auto",
-                                    width: "calc(100% - 300px - 50px)",
-                                    height: "50px",
-                                    backgroundColor: "#d3d4db",
-                                    borderRadius: "10px",
-                                    padding: "5px",
-                                    display: "flex",
-                                    alignItems: "center"
+                                    position: 'absolute',
+                                    bottom: '15px',
+                                    left: '315px',
+                                    boxSizing: 'border-box',
+                                    overflow: 'auto',
+                                    width: 'calc(100% - 300px - 50px)',
+                                    height: '50px',
+                                    backgroundColor: '#d3d4db',
+                                    borderRadius: '10px',
+                                    padding: '5px',
+                                    display: 'flex',
+                                    alignItems: 'center'
                                 }}>
 
                                     <TextField
@@ -251,16 +304,17 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                         onKeyUp={(e) => userTyping(e)}
                                         size={'small'}
                                         style={{
-                                            width: "calc(100% - 40px)",
-                                            height: "40px",
-                                            marginRight: "10px",
+                                            width: 'calc(100% - 40px)',
+                                            height: '40px',
+                                            marginRight: '10px',
                                         }}
-                                        onFocus={() => {}}
+                                        onFocus={() => {
+                                        }}
                                     ></TextField>
                                     <Send onClick={sendPrivateValue} style={{
-                                        color: "blue",
-                                        cursor: "pointer",
-                                        marginLeft: "auto",
+                                        color: 'blue',
+                                        cursor: 'pointer',
+                                        marginLeft: 'auto',
                                     }}></Send>
                                 </div>
                             </div>

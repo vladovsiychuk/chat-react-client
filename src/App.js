@@ -47,7 +47,7 @@ const App = ({ loadCurrentUser, createCurrentUser }) => {
 };
 
 App.propTypes = {
-    loadChats: PropTypes.func.isRequired,
+    loadCurrentUser: PropTypes.func.isRequired,
     createCurrentUser: PropTypes.func.isRequired
 };
 

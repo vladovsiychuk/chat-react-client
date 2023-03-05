@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { InputBase, List, ListItem, ListItemText, Paper, Popper, ClickAwayListener } from '@mui/material';
+import { InputBase } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { createStyles, makeStyles } from '@mui/styles';
+import EndpointConstants from '../../constants/EndpointConstants';
+import { authorized } from '../../state/httpClient';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -36,36 +38,33 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserSearch() {
+function UserSearch({ setSearchUses }) {
     const classes = useStyles();
     const [query, setQuery] = useState('');
-    const [users, setUsers] = useState([]);
-    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         async function fetchUsers() {
-            const response = await fetch(`https://your-backend-api.com/users?query=${query}`);
-            const data = await response.json();
-            setUsers(data);
+            const { method, path } = EndpointConstants.SEARCH_USERS_GET;
+            try {
+                const response = await authorized({
+                    method,
+                    path: path(query),
+                });
+                setSearchUses(response);
+            } catch {
+                setSearchUses([]);
+            }
         }
 
         if (query) {
             fetchUsers();
         } else {
-            setUsers([]);
+            setSearchUses([]);
         }
     }, [query]);
 
     function handleInputChange(event) {
         setQuery(event.target.value);
-    }
-
-    function handleListItemClick(user) {
-        console.log(user);
-    }
-
-    function handleClose() {
-        setAnchorEl(null);
     }
 
     return (
@@ -80,22 +79,6 @@ function UserSearch() {
                     inputProps={{ 'aria-label': 'search users' }}
                 />
             </div>
-
-            {users.length > 0 && (
-                <ClickAwayListener onClickAway={handleClose}>
-                    <Popper open={Boolean(anchorEl)} anchorEl={anchorEl} placement="bottom-start">
-                        <Paper >
-                            <List className={classes.list}>
-                                {users.map((user) => (
-                                    <ListItem key={user.id} className={classes.listItem} onClick={() => handleListItemClick(user)}>
-                                        <ListItemText primary={user.name} />
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </Paper>
-                    </Popper>
-                </ClickAwayListener>
-            )}
         </>
     );
 }
