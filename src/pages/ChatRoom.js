@@ -6,9 +6,11 @@ import { addNewChat, addNewMessage, loadChats } from '../state/chats/actions';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import { currentUserConnected, currentUserJoined } from '../state/users/actions';
-import { Avatar, Button, Divider, Grid, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from '@mui/material';
+import { Avatar, Button, Grid, List, ListItem, ListItemText, TextField } from '@mui/material';
 import { ArrowBackRounded, Send } from '@mui/icons-material';
 import UserSearch from '../components/user/UserSearch';
+import UserSearchItem from '../components/user/UserSearchItem';
+import UserListItem from '../components/user/UserListItem';
 
 var stompClient = null;
 
@@ -125,77 +127,27 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                         }}>
                             <UserSearch setSearchUses={setSearchUsers} tab={tab} />
 
-                            {searchUsers.length > 0 && (
+                            {searchUsers.length > 0 ? (
                                 <List>
                                     {searchUsers.map((user, index) => (
-                                        <React.Fragment>
-                                            <ListItemButton
-                                                onClick={() => {
-                                                    handleSearchUsersClick(user.id);
-                                                }}
-                                                selected={tab === user.id}
-                                                key={index}
-                                                alignItems="flex-start">
-
-                                                <ListItemAvatar>
-                                                    <Avatar alt="Remy Sharp">
-                                                        {user.email.charAt(0)
-                                                            .toUpperCase()}
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                            </ListItemButton>
-                                            <Divider></Divider>
-                                        </React.Fragment>
+                                        <UserSearchItem
+                                            key={index}
+                                            user={user}
+                                            tab={tab}
+                                            handleSearchUsersClick={handleSearchUsersClick}
+                                        />
                                     ))}
                                 </List>
-                            )}
-
-                            {searchUsers.length === 0 && (
+                            ) : (
                                 <List>
                                     {chats.map(chat => chat.companion)
                                         .map((id, index) => (
-                                            <React.Fragment>
-                                                <ListItemButton
-                                                    onClick={() => {
-                                                        setTab(id);
-                                                    }}
-                                                    selected={tab === id}
-                                                    key={index}
-                                                    alignItems="flex-start">
-
-                                                    <ListItemAvatar>
-                                                        <Avatar alt="Remy Sharp">
-                                                            A
-                                                        </Avatar>
-                                                    </ListItemAvatar>
-                                                    <ListItemText
-                                                        primary={id}
-                                                        secondary={
-                                                            <React.Fragment>
-                                                                <Typography component="span" color="textPrimary">
-                                                                    Some last message here
-                                                                </Typography>
-                                                            </React.Fragment>
-                                                        }
-                                                    />
-                                                    <ListItemIcon>
-                                                        <Avatar alt="Remy Sharp"
-                                                                style={{
-                                                                    backgroundColor: '#3A4691',
-                                                                    fontSize: '15px',
-                                                                    color: 'white',
-                                                                    position: 'absolute',
-                                                                    height: '25px',
-                                                                    width: '25px',
-                                                                    top: '35px',
-                                                                    right: '10px',
-                                                                }}>
-                                                            1
-                                                        </Avatar>
-                                                    </ListItemIcon>
-                                                </ListItemButton>
-                                                <Divider></Divider>
-                                            </React.Fragment>
+                                            <UserListItem
+                                                key={index}
+                                                userId={id}
+                                                tab={tab}
+                                                setTab={setTab}
+                                            />
                                         ))}
                                 </List>
                             )}
