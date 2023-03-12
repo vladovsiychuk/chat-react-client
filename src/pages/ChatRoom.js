@@ -6,11 +6,9 @@ import { addNewChat, addNewMessage, loadChats } from '../state/chats/actions';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import { currentUserConnected, currentUserJoined } from '../state/users/actions';
-import { Avatar, Button, Grid, List, ListItem, ListItemText, TextField } from '@mui/material';
+import { Avatar, Button, Grid, ListItem, ListItemText, TextField } from '@mui/material';
 import { ArrowBackRounded, Send } from '@mui/icons-material';
-import UserSearch from '../components/user/UserSearch';
-import UserSearchItem from '../components/user/UserSearchItem';
-import UserListItem from '../components/user/UserListItem';
+import UserListSidebar from '../components/user/UserListSidebar';
 
 var stompClient = null;
 
@@ -117,41 +115,14 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
             ) : (
                 currentUser.socketData.connected && (
                     <div>
-                        <main style={{
-                            height: 'calc(100% - 70px)',
-                            position: 'absolute',
-                            top: '70px',
-                            left: '0',
-                            width: '300px',
-                            boxShadow: '0px 0px 1px black',
-                        }}>
-                            <UserSearch setSearchUses={setSearchUsers} tab={tab} />
-
-                            {searchUsers.length > 0 ? (
-                                <List>
-                                    {searchUsers.map((user, index) => (
-                                        <UserSearchItem
-                                            key={index}
-                                            user={user}
-                                            tab={tab}
-                                            handleSearchUsersClick={handleSearchUsersClick}
-                                        />
-                                    ))}
-                                </List>
-                            ) : (
-                                <List>
-                                    {chats.map(chat => chat.companion)
-                                        .map((id, index) => (
-                                            <UserListItem
-                                                key={index}
-                                                userId={id}
-                                                tab={tab}
-                                                setTab={setTab}
-                                            />
-                                        ))}
-                                </List>
-                            )}
-                        </main>
+                        <UserListSidebar
+                            setSearchUsers={setSearchUsers}
+                            tab={tab}
+                            searchUsers={searchUsers}
+                            handleSearchUsersClick={handleSearchUsersClick}
+                            chats={chats}
+                            setTab={setTab}
+                        />
                         {tab != null &&
                             <div>
                                 <div style={{
