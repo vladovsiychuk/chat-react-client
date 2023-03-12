@@ -9,8 +9,7 @@ import {
     Divider,
 } from "@mui/material";
 
-function UserListItem(props) {
-    const { userId, tab, setTab } = props;
+function UserListItem({ userId, tab, setTab }) {
 
     return (
         <React.Fragment>
