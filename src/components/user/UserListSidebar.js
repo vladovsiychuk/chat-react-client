@@ -42,7 +42,7 @@ function UserListSidebar({ setSearchUsers, tab, searchUsers, handleSearchUsersCl
                         .map((id, index) => (
                             <UserListItem
                                 key={index}
-                                userId={id}
+                                user={user}
                                 tab={tab}
                                 setTab={setTab}
                             />
