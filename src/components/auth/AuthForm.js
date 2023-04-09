@@ -1,5 +1,5 @@
-import React from 'react'
-import GoogleButton from 'react-google-button'
+import React from 'react';
+import GoogleButton from 'react-google-button';
 
 const AuthForm = () => {
     return (
@@ -20,11 +20,13 @@ const AuthForm = () => {
                 alignItems: 'center',
             }}>
                 <GoogleButton
-                    onClick={() => { window.location.replace("http://localhost:8082/oauth/login/google"); }}
+                    onClick={() => {
+                        window.location.replace('http://localhost:8082/oauth/login/google');
+                    }}
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default AuthForm
+export default AuthForm;
