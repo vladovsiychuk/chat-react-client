@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Typography } from '@mui/material';
-import GoogleButton from 'react-google-button'
+import GoogleButton from 'react-google-button';
 
 const AuthForm = () => {
     const [primaryLanguage, setPrimaryLanguage] = useState('');
@@ -25,7 +25,18 @@ const AuthForm = () => {
         }
     };
 
-    const isButtonClickable = primaryLanguage && userType && (userType === 'Regular User' || languages.length > 0);
+    const languagesEnum = {
+        ENGLISH: { value: 'English' },
+        UKRAINIAN: { value: 'Ukrainian' },
+        ITALIAN: { value: 'Italian' },
+    };
+
+    const userTypeEnum = {
+        REGULAR_USER: { value: 'Regular User' },
+        TRANSLATOR: { value: 'Translator' },
+    };
+
+    const isButtonClickable = primaryLanguage && userType && (userType === 'REGULAR_USER' || languages.length > 0);
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
@@ -43,10 +54,12 @@ const AuthForm = () => {
                         label="Primary Language"
                     >
                         <MenuItem value="">Select a language</MenuItem>
-                        <MenuItem value="English">English</MenuItem>
-                        <MenuItem value="Ukrainian">Ukrainian</MenuItem>
-                        <MenuItem value="German">German</MenuItem>
-                        <MenuItem value="Italian">Italian</MenuItem>
+                        {
+                            Object.keys(languagesEnum)
+                                .map((language) => (
+                                    <MenuItem value={language.toUpperCase()}>{languagesEnum[language].value}</MenuItem>
+                                ))
+                        }
                     </Select>
                 </FormControl>
                 <FormControl variant="outlined" margin="normal" style={{ width: 400 }}>
@@ -59,31 +72,41 @@ const AuthForm = () => {
                         label="User Type"
                     >
                         <MenuItem value="">Select a user type</MenuItem>
-                        <MenuItem value="Regular User">Regular User</MenuItem>
-                        <MenuItem value="Translator">Translator</MenuItem>
+
+                        {
+                            Object.keys(userTypeEnum)
+                                .map((userType) => (
+                                    <MenuItem value={userType.toUpperCase()}>{userTypeEnum[userType].value}</MenuItem>
+                                ))
+                        }
                     </Select>
                 </FormControl>
-                {userType === 'Translator' && (
+                {userType === userTypeEnum.TRANSLATOR.value.toUpperCase() && (
                     <Box mt={2}>
                         <Typography variant="subtitle1" component="p">
                             Languages
                         </Typography>
-                        <FormControlLabel
-                            control={<Checkbox checked={languages.includes('English')} onChange={handleLanguageChange} name="English" value="English" />}
-                            label="English"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={languages.includes('Ukrainian')} onChange={handleLanguageChange} name="Ukrainian" value="Ukrainian" />}
-                            label="Ukrainian"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={languages.includes('German')} onChange={handleLanguageChange} name="German" value="German" />}
-                            label="German"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={languages.includes('Italian')} onChange={handleLanguageChange} name="Italian" value="Italian" />}
-                            label="Italian"
-                        />
+
+                        {
+                            Object.keys(languagesEnum)
+                                .filter(
+                                    (language) => languagesEnum[language].value.toUpperCase() !== primaryLanguage.toUpperCase()
+                                )
+                                .map((language) => (
+
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={languages.includes(languagesEnum[language].value.toUpperCase())}
+                                                onChange={handleLanguageChange}
+                                                name={languagesEnum[language].value}
+                                                value={languagesEnum[language].value.toUpperCase()}
+                                            />
+                                        }
+                                        label={languagesEnum[language].value}
+                                    />
+                                ))
+                        }
                     </Box>
                 )}
                 <Box mt={4}>
