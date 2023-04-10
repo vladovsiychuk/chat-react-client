@@ -26,7 +26,7 @@ export function currentUserConnected(connected) {
         data: {
             connected,
         }
-    }
+    };
 }
 
 export function currentUserJoined(joined) {
@@ -35,7 +35,7 @@ export function currentUserJoined(joined) {
         data: {
             joined
         }
-    }
+    };
 }
 
 export function createCurrentUser() {
@@ -44,9 +44,12 @@ export function createCurrentUser() {
 
         dispatch(updateAsync(true));
         try {
+            const userCreateProperties = JSON.parse(localStorage.getItem("newUserProps"))
+
             const res = await authorized({
                 method: endpoint.method,
                 path: endpoint.path,
+                body: userCreateProperties,
             });
 
             dispatch(currentUserLoaded(res || []));
@@ -54,7 +57,7 @@ export function createCurrentUser() {
         } catch (err) {
             dispatch(updateAsync(false, err, null));
         }
-    }
+    };
 }
 
 export function loadCurrentUser() {
@@ -71,7 +74,7 @@ export function loadCurrentUser() {
             dispatch(currentUserLoaded(res || []));
             dispatch(updateAsync(false, null, true));
         } catch (err) {
-            console.log("err", err)
+            console.log('err', err);
 
             if (err.status === 404) {
                 dispatch(updateAsync(false, err, false));
@@ -79,5 +82,5 @@ export function loadCurrentUser() {
                 dispatch(updateAsync(false, err, null));
             }
         }
-    }
+    };
 }

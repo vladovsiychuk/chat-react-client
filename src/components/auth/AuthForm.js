@@ -5,7 +5,7 @@ import GoogleButton from 'react-google-button';
 const AuthForm = () => {
     const [primaryLanguage, setPrimaryLanguage] = useState('');
     const [userType, setUserType] = useState('');
-    const [languages, setLanguages] = useState([]);
+    const [translationLanguages, setTranslationLanguages] = useState([]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -14,14 +14,14 @@ const AuthForm = () => {
 
     const handleUserTypeChange = (event) => {
         setUserType(event.target.value);
-        setLanguages([]);
+        setTranslationLanguages([]);
     };
 
     const handleLanguageChange = (event) => {
         if (event.target.checked) {
-            setLanguages([...languages, event.target.value]);
+            setTranslationLanguages([...translationLanguages, event.target.value]);
         } else {
-            setLanguages(languages.filter(language => language !== event.target.value));
+            setTranslationLanguages(translationLanguages.filter(language => language !== event.target.value));
         }
     };
 
@@ -36,7 +36,7 @@ const AuthForm = () => {
         TRANSLATOR: { value: 'Translator' },
     };
 
-    const isButtonClickable = primaryLanguage && userType && (userType === 'REGULAR_USER' || languages.length > 0);
+    const isButtonClickable = primaryLanguage && userType && (userType === 'REGULAR_USER' || translationLanguages.length > 0);
 
     return (
         <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
@@ -57,7 +57,7 @@ const AuthForm = () => {
                         {
                             Object.keys(languagesEnum)
                                 .map((language) => (
-                                    <MenuItem value={language.toUpperCase()}>{languagesEnum[language].value}</MenuItem>
+                                    <MenuItem key={language} value={language.toUpperCase()}>{languagesEnum[language].value}</MenuItem>
                                 ))
                         }
                     </Select>
@@ -76,7 +76,7 @@ const AuthForm = () => {
                         {
                             Object.keys(userTypeEnum)
                                 .map((userType) => (
-                                    <MenuItem value={userType.toUpperCase()}>{userTypeEnum[userType].value}</MenuItem>
+                                    <MenuItem key={userType} value={userType.toUpperCase()}>{userTypeEnum[userType].value}</MenuItem>
                                 ))
                         }
                     </Select>
@@ -97,7 +97,7 @@ const AuthForm = () => {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={languages.includes(languagesEnum[language].value.toUpperCase())}
+                                                checked={translationLanguages.includes(languagesEnum[language].value.toUpperCase())}
                                                 onChange={handleLanguageChange}
                                                 name={languagesEnum[language].value}
                                                 value={languagesEnum[language].value.toUpperCase()}
@@ -113,6 +113,15 @@ const AuthForm = () => {
                     <GoogleButton
                         disabled={!isButtonClickable}
                         onClick={() => {
+                            const payload = {
+                                type: userType,
+                                primaryLanguage: primaryLanguage,
+                                translationLanguages: translationLanguages.length === 0 ? null : translationLanguages
+                            }
+
+                            localStorage.setItem("newUserProps", JSON.stringify(payload))
+
+
                             window.location.replace('http://localhost:8082/oauth/login/google');
                         }}
                     />

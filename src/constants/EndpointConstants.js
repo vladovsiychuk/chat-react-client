@@ -5,12 +5,12 @@ export default {
     },
     CURRENT_USER_GET: {
         method: 'GET',
-        path: 'http://localhost:8082/v1/users/getCurrentUser',
+        path: 'http://localhost:8082/v1/users/currentUser',
     },
 
     CURRENT_USER_POST: {
         method: 'POST',
-        path: 'http://localhost:8082/v1/users/createCurrentUser',
+        path: 'http://localhost:8082/v1/users/currentUser',
     },
 
     SEARCH_USERS_GET: {
