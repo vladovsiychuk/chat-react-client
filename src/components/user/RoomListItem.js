@@ -9,22 +9,22 @@ import {
     Divider,
 } from "@mui/material";
 
-function UserListItem({ user, tab, setTab }) {
+function RoomListItem({ room, tab, setTab }) {
 
     return (
         <React.Fragment>
             <ListItemButton
                 onClick={() => {
-                    setTab(user.id);
+                    setTab(room.id);
                 }}
-                selected={tab === user.id}
+                selected={tab === room.id}
                 alignItems="flex-start"
             >
                 <ListItemAvatar>
                     <Avatar alt="Remy Sharp">A</Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                    primary={user.email}
+                    primary={"primary text"}
                     secondary={
                         <React.Fragment>
                             <Typography component="span" color="textPrimary">
@@ -56,4 +56,4 @@ function UserListItem({ user, tab, setTab }) {
     );
 }
 
-export default UserListItem;
+export default RoomListItem;

@@ -3,7 +3,7 @@ import { createStyles, makeStyles } from '@mui/styles';
 import UserSearch from './UserSearch';
 import { List } from '@mui/material';
 import UserSearchItem from './UserSearchItem';
-import UserListItem from './UserListItem';
+import RoomListItem from './RoomListItem';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -38,11 +38,11 @@ function UserListSidebar({ setSearchUsers, tab, searchUsers, handleSearchUsersCl
                 </List>
             ) : (
                 <List>
-                    {rooms.map(room => room.companion)
-                        .map((id, index) => (
-                            <UserListItem
+                    {rooms
+                        .map((room, index) => (
+                            <RoomListItem
                                 key={index}
-                                user={user}
+                                room={room}
                                 tab={tab}
                                 setTab={setTab}
                             />
