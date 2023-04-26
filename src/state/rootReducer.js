@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import chatsReducer from './chats/reducer';
+import roomsReducer from './rooms/reducer';
 import userReducer from './users/reducer';
 
 const appReducer = combineReducers({
-    chats: chatsReducer,
+    rooms: roomsReducer,
     users: userReducer,
 });
 

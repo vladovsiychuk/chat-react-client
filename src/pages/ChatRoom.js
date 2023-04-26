@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addNewChat, addNewMessage, loadChats } from '../state/chats/actions';
+import { addNewChat, addNewMessage, loadRooms } from '../state/rooms/actions';
 import { currentUserConnected, currentUserJoined } from '../state/users/actions';
 import { Avatar, Button, Grid, ListItem, ListItemText, TextField } from '@mui/material';
 import { ArrowBackRounded, Send } from '@mui/icons-material';
@@ -10,12 +10,12 @@ import UserListSidebar from '../components/user/UserListSidebar';
 import { getAccessToken } from '../state/middleware/authMiddleware';
 
 
-function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMessage, addNewChat }) {
+function ChatRoom({ loadRooms, currentUserConnected, currentUserJoined, addNewMessage, addNewChat }) {
     const [tab, setTab] = useState(null);
     const [searchUsers, setSearchUsers] = useState([]);
 
-    const chats = useSelector(state => state.chats.chats);
-    const chatsAsync = useSelector(state => state.chats.async);
+    const rooms = useSelector(state => state.rooms.rooms);
+    const chatsAsync = useSelector(state => state.rooms.async);
     const currentUser = useSelector(state => state.users.currentUser);
 
     const [message, setMessage] = useState('');
@@ -24,7 +24,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
 
 
     useEffect(() => {
-        loadChats();
+        loadRooms();
         connect();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -75,7 +75,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                             tab={tab}
                             searchUsers={searchUsers}
                             handleSearchUsersClick={handleSearchUsersClick}
-                            chats={chats}
+                            rooms={rooms}
                             setTab={setTab}
                         />
                         {tab != null &&
@@ -136,7 +136,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                     width: 'calc(100% - 300px)',
                                     position: 'absolute',
                                 }}>
-                                    {chats.find(chat => chat.companion === tab)
+                                    {rooms.find(chat => chat.companion === tab)
                                         .messages
                                         .map((message, index) => (
                                             <ListItem key={index}>
@@ -196,7 +196,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
 }
 
 ChatRoom.propTypes = {
-    loadChats: PropTypes.func.isRequired,
+    loadRooms: PropTypes.func.isRequired,
     currentUserConnected: PropTypes.func.isRequired,
     currentUserJoined: PropTypes.func.isRequired,
     addNewMessage: PropTypes.func.isRequired,
@@ -204,7 +204,7 @@ ChatRoom.propTypes = {
 };
 
 const mapDispatchToProps = {
-    loadChats: loadChats,
+    loadRooms: loadRooms,
     currentUserConnected: currentUserConnected,
     currentUserJoined: currentUserJoined,
     addNewMessage: addNewMessage,

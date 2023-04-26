@@ -4,7 +4,7 @@ import types from './types';
 
 function updateAsync(isLoading, error = null) {
     return {
-        type: types.CHATS_ASYNC,
+        type: types.ROOMS_ASYNC,
         data: {
             isLoading,
             error,
@@ -12,10 +12,10 @@ function updateAsync(isLoading, error = null) {
     };
 }
 
-function chatsLoaded(chats) {
+function roomsLoaded(rooms) {
     return {
-        type: types.CHATS_GET,
-        data: chats,
+        type: types.ROOMS_GET,
+        data: rooms,
     };
 }
 
@@ -38,9 +38,9 @@ export function addNewChat(companion) {
     }
 }
 
-export function loadChats() {
+export function loadRooms() {
     return async dispatch => {
-        const endpoint = EndpointConstants.CHATS_GET;
+        const endpoint = EndpointConstants.ROOMS_GET;
 
         dispatch(updateAsync(true));
         try {
@@ -49,7 +49,7 @@ export function loadChats() {
                 path: endpoint.path,
             });
 
-            dispatch(chatsLoaded(res || []));
+            dispatch(roomsLoaded(res || []));
             dispatch(updateAsync(false));
         } catch (err) {
             dispatch(updateAsync(false, err));

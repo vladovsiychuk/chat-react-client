@@ -1,7 +1,7 @@
 export default {
-    CHATS_GET: {
+    ROOMS_GET: {
         method: 'GET',
-        path: 'http://localhost:8082/v1/chats',
+        path: 'http://localhost:8082/v1/rooms',
     },
     CURRENT_USER_GET: {
         method: 'GET',

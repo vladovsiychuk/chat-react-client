@@ -1,16 +1,16 @@
 import types from './types';
 
 export const initialState = {
-    chats: [],
+    rooms: [],
     async: {
         isLoading: null,
         error: null,
     },
 };
 
-export default function chatsReducer(state = initialState, action) {
+export default function roomsReducer(state = initialState, action) {
     switch (action.type) {
-        case types.CHATS_ASYNC: {
+        case types.ROOMS_ASYNC: {
             return {
                 ...state,
                 async: {
@@ -19,25 +19,25 @@ export default function chatsReducer(state = initialState, action) {
                 },
             };
         }
-        case types.CHATS_GET: {
+        case types.ROOMS_GET: {
             return {
                 ...state,
                 async: {
                     ...state.async,
                 },
-                chats: action.data,
+                rooms: action.data,
             };
         }
         case types.CHATS_ADD_MESSAGE : {
             const clonedState = JSON.parse(JSON.stringify(state));
             const message = action.data.message;
             const companion = action.data.companion;
-            const index = clonedState.chats.findIndex(x => x.companion === companion);
+            const index = clonedState.rooms.findIndex(x => x.companion === companion);
 
             index === -1 ?
-                clonedState.chats.push({ companion: companion, messages: [message] })
+                clonedState.rooms.push({ companion: companion, messages: [message] })
                 :
-                clonedState.chats.find(chat => chat.companion === companion)
+                clonedState.rooms.find(chat => chat.companion === companion)
                     .messages
                     .push(message);
 
@@ -46,7 +46,7 @@ export default function chatsReducer(state = initialState, action) {
         case types.CHATS_ADD_CHAT : {
             const clonedState = JSON.parse(JSON.stringify(state));
             const newChat = { companion: action.data.companion, messages: [] };
-            clonedState.chats.push(newChat)
+            clonedState.rooms.push(newChat)
 
             return clonedState;
         }

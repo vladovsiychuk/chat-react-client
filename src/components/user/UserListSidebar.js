@@ -18,7 +18,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserListSidebar({ setSearchUsers, tab, searchUsers, handleSearchUsersClick, chats, setTab }) {
+function UserListSidebar({ setSearchUsers, tab, searchUsers, handleSearchUsersClick, rooms, setTab }) {
     const classes = useStyles();
 
     return (
@@ -38,7 +38,7 @@ function UserListSidebar({ setSearchUsers, tab, searchUsers, handleSearchUsersCl
                 </List>
             ) : (
                 <List>
-                    {chats.map(chat => chat.companion)
+                    {rooms.map(room => room.companion)
                         .map((id, index) => (
                             <UserListItem
                                 key={index}
