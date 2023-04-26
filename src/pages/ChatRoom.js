@@ -30,9 +30,10 @@ function ChatRoom({ loadRooms, currentUserConnected, currentUserJoined, addNewMe
     }, []);
 
     const connect = () => {
-        const ws = new WebSocket(`ws://localhost:8082/ws/chat/${currentUser.id}?access_token=${token}`);
+        const ws = new WebSocket(`ws://localhost:8082/ws/chat/${currentUser.data.id}?access_token=${token}`);
 
         ws.onopen = () => {
+            currentUserConnected(true);
             console.log('Connected to WebSocket server');
         };
 
