@@ -3,23 +3,24 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNewChat, addNewMessage, loadChats } from '../state/chats/actions';
-import { over } from 'stompjs';
-import SockJS from 'sockjs-client';
 import { currentUserConnected, currentUserJoined } from '../state/users/actions';
 import { Avatar, Button, Grid, ListItem, ListItemText, TextField } from '@mui/material';
 import { ArrowBackRounded, Send } from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
+import { getAccessToken } from '../state/middleware/authMiddleware';
 
-var stompClient = null;
 
 function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMessage, addNewChat }) {
     const [tab, setTab] = useState(null);
-    const [message, setMessage] = useState('');
     const [searchUsers, setSearchUsers] = useState([]);
 
     const chats = useSelector(state => state.chats.chats);
     const chatsAsync = useSelector(state => state.chats.async);
     const currentUser = useSelector(state => state.users.currentUser);
+
+    const [message, setMessage] = useState('');
+
+    const token = getAccessToken();
 
 
     useEffect(() => {
@@ -29,75 +30,29 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
     }, []);
 
     const connect = () => {
-        let Sock = new SockJS('http://localhost:8080/ws');
-        stompClient = over(Sock);
-        stompClient.connect({}, onConnected, onError);
-    };
+        const ws = new WebSocket(`ws://localhost:8082/ws/chat/${currentUser.id}?access_token=${token}`);
 
-    const onConnected = () => {
-        currentUserConnected(true);
-        stompClient.subscribe('/chatroom/public', onMessageReceived);
-        stompClient.subscribe('/user/' + currentUser.id + '/private', onPrivateMessage);
-        userJoin();
-    };
-
-    const userJoin = () => {
-        const chatMessage = {
-            sender: currentUser.data.id,
-            status: 'JOIN'
+        ws.onopen = () => {
+            console.log('Connected to WebSocket server');
         };
-        stompClient.send('/app/message', {}, JSON.stringify(chatMessage));
+
+        ws.onmessage = (event) => {
+            console.log(`Received message: ${event.data}`);
+        };
+
+        ws.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+        };
+
+        return () => {
+            ws.close();
+        };
     };
 
-    const onMessageReceived = (payload) => {
-        const payloadData = JSON.parse(payload.body);
-        switch (payloadData.status) {
-            case 'JOIN':
-                currentUserJoined(true);
-                break;
-            default:
-                return;
-        }
-    };
-
-    const onPrivateMessage = (payload) => {
-        const payloadData = JSON.parse(payload.body);
-        const sender = payloadData.sender;
-        const receiver = payloadData.receiver;
-        const companion = sender === currentUser.data.id ? receiver : sender;
-
-        addNewMessage(payloadData, companion);
-    };
-
-    const onError = (err) => {
-        console.log(err);
-    };
-
-    const sendPrivateValue = () => {
-        if (stompClient) {
-            const chatMessage = {
-                sender: currentUser.data.id,
-                receiver: tab,
-                date: Date.now(),
-                message: message,
-                status: 'MESSAGE'
-            };
-
-            stompClient.send('/app/private-message', {}, JSON.stringify(chatMessage));
-
-            const sender = chatMessage.sender;
-            const receiver = chatMessage.receiver;
-            const companion = sender === currentUser.data.id ? receiver : sender;
-
-            addNewMessage(chatMessage, companion);
-
-            setMessage('');
-        }
-    };
 
     const userTyping = (e) => {
         e.keyCode === 13
-            ? sendPrivateValue()
+            ? console.log("Pressed Enter")
             : setMessage(e.target.value);
     };
 
@@ -225,7 +180,7 @@ function ChatRoom({ loadChats, currentUserConnected, currentUserJoined, addNewMe
                                         onFocus={() => {
                                         }}
                                     ></TextField>
-                                    <Send onClick={sendPrivateValue} style={{
+                                    <Send style={{
                                         color: 'blue',
                                         cursor: 'pointer',
                                         marginLeft: 'auto',
