@@ -1,7 +1,7 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@mui/styles';
+import {createStyles, makeStyles} from '@mui/styles';
 import UserSearch from './UserSearch';
-import { List } from '@mui/material';
+import {List} from '@mui/material';
 import UserSearchItem from './UserSearchItem';
 import RoomListItem from './RoomListItem';
 
@@ -18,12 +18,12 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserListSidebar({ setSearchUsers, tab, searchUsers, handleSearchUsersClick, rooms, setTab }) {
+function UserListSidebar({setSearchUsers, tab, searchUsers, handleSearchUsersClick, rooms, setTab}) {
     const classes = useStyles();
 
     return (
         <main className={classes.main}>
-            <UserSearch setSearchUses={setSearchUsers} tab={tab} />
+            <UserSearch setSearchUses={setSearchUsers} tab={tab}/>
 
             {searchUsers.length > 0 ? (
                 <List>
