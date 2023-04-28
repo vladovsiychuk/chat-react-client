@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { addNewChat, addNewMessage, loadRooms } from '../state/rooms/actions';
-import { currentUserConnected, currentUserJoined } from '../state/users/actions';
-import { Avatar, Button, Grid, ListItem, ListItemText, TextField } from '@mui/material';
-import { ArrowBackRounded, Send } from '@mui/icons-material';
+import {connect} from 'react-redux';
+import {addNewChat, addNewMessage, loadRooms} from '../state/rooms/actions';
+import {currentUserConnected, currentUserJoined} from '../state/users/actions';
+import {Avatar, Button, Grid, ListItem, ListItemText, TextField} from '@mui/material';
+import {ArrowBackRounded, Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
-import { getAccessToken } from '../state/middleware/authMiddleware';
+import {getAccessToken} from '../state/middleware/authMiddleware';
 
 
-function ChatRoom({ loadRooms, currentUserConnected, currentUserJoined, addNewMessage, addNewChat }) {
+function ChatRoom({loadRooms, currentUserConnected, currentUserJoined, addNewMessage, addNewChat}) {
     const [tab, setTab] = useState(null);
     const [searchUsers, setSearchUsers] = useState([]);
 
@@ -100,7 +100,7 @@ function ChatRoom({ loadRooms, currentUserConnected, currentUserJoined, addNewMe
                                             color: 'white',
                                             height: '35px',
                                             width: '35px',
-                                        }} />
+                                        }}/>
                                     </Button>
                                     <div style={{
                                         backgroundColor: '#344195',
@@ -143,10 +143,14 @@ function ChatRoom({ loadRooms, currentUserConnected, currentUserJoined, addNewMe
                                             <ListItem key={index}>
                                                 <Grid container>
                                                     <Grid item xs={12}>
-                                                        <ListItemText align={message.sender === currentUser.data.id ? 'right' : 'left'} primary={message.message} />
+                                                        <ListItemText
+                                                            align={message.sender === currentUser.data.id ? 'right' : 'left'}
+                                                            primary={message.message}/>
                                                     </Grid>
                                                     <Grid item xs={12}>
-                                                        <ListItemText align={message.sender === currentUser.data.id ? 'right' : 'left'} secondary={message.date} />
+                                                        <ListItemText
+                                                            align={message.sender === currentUser.data.id ? 'right' : 'left'}
+                                                            secondary={message.date}/>
                                                     </Grid>
                                                 </Grid>
                                             </ListItem>
