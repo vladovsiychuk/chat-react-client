@@ -1,4 +1,4 @@
-import { authorized } from '../httpClient';
+import {authorized} from '../httpClient';
 import EndpointConstants from '../../constants/EndpointConstants';
 import types from './types';
 
