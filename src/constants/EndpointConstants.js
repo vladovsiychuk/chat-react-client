@@ -3,6 +3,10 @@ export default {
         method: 'GET',
         path: 'http://localhost:8082/v1/rooms',
     },
+    MESSAGES_GET: {
+        method: 'GET',
+        path: (roomLimit) => `http://localhost:8082/v1/messages?roomLimit=${roomLimit}`,
+    },
     CURRENT_USER_GET: {
         method: 'GET',
         path: 'http://localhost:8082/v1/users/currentUser',

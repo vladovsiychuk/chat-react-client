@@ -1,3 +1,4 @@
 export default {
-
+    MESSAGES_ASYNC: 'MESSAGES_ASYNC',
+    MESSAGES_GET: 'MESSAGES_GET',
 };
