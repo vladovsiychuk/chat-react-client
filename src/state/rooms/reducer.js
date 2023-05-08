@@ -35,7 +35,7 @@ export default function roomsReducer(state = initialState, action) {
             const index = clonedState.rooms.findIndex(x => x.companion === companion);
 
             index === -1 ?
-                clonedState.rooms.push({ companion: companion, messages: [message] })
+                clonedState.rooms.push({companion: companion, messages: [message]})
                 :
                 clonedState.rooms.find(chat => chat.companion === companion)
                     .messages
@@ -45,7 +45,7 @@ export default function roomsReducer(state = initialState, action) {
         }
         case types.CHATS_ADD_CHAT : {
             const clonedState = JSON.parse(JSON.stringify(state));
-            const newChat = { companion: action.data.companion, messages: [] };
+            const newChat = {companion: action.data.companion, messages: []};
             clonedState.rooms.push(newChat)
 
             return clonedState;
