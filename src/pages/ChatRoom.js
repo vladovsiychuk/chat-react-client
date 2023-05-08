@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {addNewChat, addNewMessage, loadRooms} from '../state/rooms/actions';
-import {currentUserConnected, currentUserJoined} from '../state/users/actions';
+import {currentUserConnected, currentUserJoined, loadUsers} from '../state/users/actions';
 import {Avatar, Button, Grid, ListItem, ListItemText, TextField} from '@mui/material';
 import {ArrowBackRounded, Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
@@ -11,7 +11,16 @@ import {getAccessToken} from '../state/middleware/authMiddleware';
 import {loadMessages} from "../state/messages/actions";
 
 
-function ChatRoom({loadRooms, loadMessages, currentUserConnected, currentUserJoined, addNewMessage, addNewChat}) {
+function ChatRoom({
+                      loadRooms,
+                      loadMessages,
+                      loadUsers,
+                      currentUserConnected,
+                      currentUserJoined,
+                      addNewMessage,
+                      addNewChat
+                  }) {
+
     const [tab, setTab] = useState(null);
     const [searchUsers, setSearchUsers] = useState([]);
 
@@ -27,7 +36,7 @@ function ChatRoom({loadRooms, loadMessages, currentUserConnected, currentUserJoi
     useEffect(() => {
         loadRooms();
         loadMessages();
-        // loadUsers();
+        loadUsers();
         connect();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -206,6 +215,7 @@ function ChatRoom({loadRooms, loadMessages, currentUserConnected, currentUserJoi
 ChatRoom.propTypes = {
     loadRooms: PropTypes.func.isRequired,
     loadMessages: PropTypes.func.isRequired,
+    loadUsers: PropTypes.func.isRequired,
     currentUserConnected: PropTypes.func.isRequired,
     currentUserJoined: PropTypes.func.isRequired,
     addNewMessage: PropTypes.func.isRequired,
@@ -215,6 +225,7 @@ ChatRoom.propTypes = {
 const mapDispatchToProps = {
     loadRooms: loadRooms,
     loadMessages: loadMessages,
+    loadUsers: loadUsers,
     currentUserConnected: currentUserConnected,
     currentUserJoined: currentUserJoined,
     addNewMessage: addNewMessage,

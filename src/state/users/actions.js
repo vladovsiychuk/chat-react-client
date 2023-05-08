@@ -1,4 +1,4 @@
-import { authorized } from '../httpClient';
+import {authorized} from '../httpClient';
 import EndpointConstants from '../../constants/EndpointConstants';
 import types from './types';
 
@@ -10,6 +10,13 @@ function updateAsync(isLoading, error = null, currentUserIsFound = null) {
             isLoading,
             error,
         },
+    };
+}
+
+function usersLoaded(users) {
+    return {
+        type: types.USER_GET,
+        data: users,
     };
 }
 
@@ -53,6 +60,25 @@ export function createCurrentUser() {
             });
 
             dispatch(currentUserLoaded(res || []));
+            dispatch(updateAsync(false, null, true));
+        } catch (err) {
+            dispatch(updateAsync(false, err, null));
+        }
+    };
+}
+
+export function loadUsers() {
+    return async dispatch => {
+        const {method, path} = EndpointConstants.USER_GET;
+
+        dispatch(updateAsync(true, null, true));
+        try {
+            const res = await authorized({
+                method: method,
+                path: path(null, 30),
+            });
+
+            dispatch(usersLoaded(res || []));
             dispatch(updateAsync(false, null, true));
         } catch (err) {
             dispatch(updateAsync(false, err, null));

@@ -40,6 +40,12 @@ export default function userReducer(state = initialState, action) {
                 },
             }
         }
+        case types.USER_GET: {
+            return {
+                ...state,
+                users: action.data
+            }
+        }
         case types.CURRENT_USER_GET: {
             return {
                 ...state,

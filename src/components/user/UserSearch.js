@@ -44,11 +44,11 @@ function UserSearch({ setSearchUses, tab }) {
 
     useEffect(() => {
         async function fetchUsers() {
-            const { method, path } = EndpointConstants.SEARCH_USERS_GET;
+            const { method, path } = EndpointConstants.USER_GET;
             try {
                 const response = await authorized({
                     method,
-                    path: path(query),
+                    path: path(query, null),
                 });
                 setSearchUses(response);
             } catch {

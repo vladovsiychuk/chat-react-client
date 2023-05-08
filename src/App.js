@@ -13,6 +13,8 @@ const App = ({ loadCurrentUser, createCurrentUser }) => {
     const { isLoading } = useSelector(state => state.users.async)
 
     useEffect(() => {
+        console.log("Inside App.useEffect()")
+
         if (isLoading !== true) {
             if (!!token && currentUserIsFound == null) {
                 loadCurrentUser()
