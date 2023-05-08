@@ -8,9 +8,10 @@ import {Avatar, Button, Grid, ListItem, ListItemText, TextField} from '@mui/mate
 import {ArrowBackRounded, Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
+import {loadMessages} from "../state/messages/actions";
 
 
-function ChatRoom({loadRooms, currentUserConnected, currentUserJoined, addNewMessage, addNewChat}) {
+function ChatRoom({loadRooms, loadMessages, currentUserConnected, currentUserJoined, addNewMessage, addNewChat}) {
     const [tab, setTab] = useState(null);
     const [searchUsers, setSearchUsers] = useState([]);
 
@@ -25,6 +26,8 @@ function ChatRoom({loadRooms, currentUserConnected, currentUserJoined, addNewMes
 
     useEffect(() => {
         loadRooms();
+        loadMessages();
+        // loadUsers();
         connect();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -202,6 +205,7 @@ function ChatRoom({loadRooms, currentUserConnected, currentUserJoined, addNewMes
 
 ChatRoom.propTypes = {
     loadRooms: PropTypes.func.isRequired,
+    loadMessages: PropTypes.func.isRequired,
     currentUserConnected: PropTypes.func.isRequired,
     currentUserJoined: PropTypes.func.isRequired,
     addNewMessage: PropTypes.func.isRequired,
@@ -210,6 +214,7 @@ ChatRoom.propTypes = {
 
 const mapDispatchToProps = {
     loadRooms: loadRooms,
+    loadMessages: loadMessages,
     currentUserConnected: currentUserConnected,
     currentUserJoined: currentUserJoined,
     addNewMessage: addNewMessage,
