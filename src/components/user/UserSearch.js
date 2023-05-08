@@ -44,7 +44,7 @@ function UserSearch({setSearchUses, tab}) {
 
     useEffect(() => {
         async function fetchUsers() {
-            const {method, path} = EndpointConstants.USER_GET;
+            const {method, path} = EndpointConstants.USER_LIST;
             try {
                 const response = await authorized({
                     method,

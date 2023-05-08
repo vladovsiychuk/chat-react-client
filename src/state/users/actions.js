@@ -69,7 +69,7 @@ export function createCurrentUser() {
 
 export function loadUsers() {
     return async dispatch => {
-        const {method, path} = EndpointConstants.USER_GET;
+        const {method, path} = EndpointConstants.USER_LIST;
 
         dispatch(updateAsync(true, null, true));
         try {

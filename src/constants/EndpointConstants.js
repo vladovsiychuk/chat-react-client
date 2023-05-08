@@ -18,7 +18,7 @@ export default {
         path: 'http://localhost:8082/v1/users/currentUser',
     },
 
-    USER_GET: {
+    USER_LIST: {
         method: 'GET',
         path: (query, roomLimit) => `http://localhost:8082/v1/users/?query=${query}&roomLimit=${roomLimit}`,
     },
