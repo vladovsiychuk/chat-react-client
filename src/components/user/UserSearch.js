@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { InputBase } from '@mui/material';
-import { Search } from '@mui/icons-material';
-import { createStyles, makeStyles } from '@mui/styles';
+import React, {useState, useEffect} from 'react';
+import {InputBase} from '@mui/material';
+import {Search} from '@mui/icons-material';
+import {createStyles, makeStyles} from '@mui/styles';
 import EndpointConstants from '../../constants/EndpointConstants';
-import { authorized } from '../../state/httpClient';
+import {authorized} from '../../state/httpClient';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -38,13 +38,13 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserSearch({ setSearchUses, tab }) {
+function UserSearch({setSearchUses, tab}) {
     const classes = useStyles();
     const [query, setQuery] = useState('');
 
     useEffect(() => {
         async function fetchUsers() {
-            const { method, path } = EndpointConstants.USER_GET;
+            const {method, path} = EndpointConstants.USER_GET;
             try {
                 const response = await authorized({
                     method,
@@ -76,13 +76,13 @@ function UserSearch({ setSearchUses, tab }) {
     return (
         <>
             <div className={classes.searchContainer}>
-                <Search className={classes.search} />
+                <Search className={classes.search}/>
                 <InputBase
                     placeholder="Search users"
                     value={query}
                     onChange={handleInputChange}
                     className={classes.input}
-                    inputProps={{ 'aria-label': 'search users' }}
+                    inputProps={{'aria-label': 'search users'}}
                 />
             </div>
         </>
