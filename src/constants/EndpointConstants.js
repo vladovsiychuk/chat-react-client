@@ -4,6 +4,11 @@ export default {
         path: 'http://localhost:8082/v1/rooms',
     },
 
+    ROOMS_POST: {
+        method: 'POST',
+        path: 'http://localhost:8082/v1/rooms',
+    },
+
     MESSAGES_GET: {
         method: 'GET',
         path: (roomLimit) => `http://localhost:8082/v1/messages?roomLimit=${roomLimit}`,
@@ -21,5 +26,10 @@ export default {
     USER_LIST: {
         method: 'GET',
         path: (query, roomLimit) => `http://localhost:8082/v1/users/?query=${query}&roomLimit=${roomLimit}`,
+    },
+
+    USER_GET: {
+        method: 'GET',
+        path: id => `http://localhost:8082/v1/users/${id}`,
     },
 }

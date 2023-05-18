@@ -2,23 +2,25 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {addNewChat, addNewMessage, loadRooms} from '../state/rooms/actions';
-import {currentUserConnected, currentUserJoined, loadUsers} from '../state/users/actions';
+import {addNewMessage, createRoom, loadRooms} from '../state/rooms/actions';
+import {currentUserConnected, currentUserJoined, getUser, loadUsers} from '../state/users/actions';
 import {Avatar, Button, Grid, ListItem, ListItemText, TextField} from '@mui/material';
 import {ArrowBackRounded, Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
 import {loadMessages} from "../state/messages/actions";
+import {roomMessagesSelector} from "../state/messages/selectors";
 
 
 function ChatRoom({
                       loadRooms,
+                      createRoom,
                       loadMessages,
                       loadUsers,
                       currentUserConnected,
                       currentUserJoined,
                       addNewMessage,
-                      addNewChat
+                      getUser,
                   }) {
 
     const [tab, setTab] = useState(null);
@@ -31,6 +33,11 @@ function ChatRoom({
     const [message, setMessage] = useState('');
 
     const token = getAccessToken();
+
+
+    const roomMessages = useSelector((state) =>
+        roomMessagesSelector(state, {roomId: tab})
+    );
 
 
     useEffect(() => {
@@ -70,8 +77,14 @@ function ChatRoom({
     };
 
     const handleSearchUsersClick = (userId) => {
-        setTab(userId);
-        addNewChat(userId);
+        const room = rooms.find(room => room.members.includes(userId))
+
+        if (room)
+            setTab(userId);
+        else
+            createRoom(userId, setTab)
+
+        getUser(userId)
     };
 
     return (
@@ -149,20 +162,19 @@ function ChatRoom({
                                     width: 'calc(100% - 300px)',
                                     position: 'absolute',
                                 }}>
-                                    {rooms.find(chat => chat.companion === tab)
-                                        .messages
+                                    {roomMessages
                                         .map((message, index) => (
                                             <ListItem key={index}>
                                                 <Grid container>
                                                     <Grid item xs={12}>
                                                         <ListItemText
-                                                            align={message.sender === currentUser.data.id ? 'right' : 'left'}
-                                                            primary={message.message}/>
+                                                            align={message.senderId === currentUser.data.id ? 'right' : 'left'}
+                                                            primary={message.content}/>
                                                     </Grid>
                                                     <Grid item xs={12}>
                                                         <ListItemText
-                                                            align={message.sender === currentUser.data.id ? 'right' : 'left'}
-                                                            secondary={message.date}/>
+                                                            align={message.senderId === currentUser.data.id ? 'right' : 'left'}
+                                                            secondary={message.dateCreated}/>
                                                     </Grid>
                                                 </Grid>
                                             </ListItem>
@@ -214,22 +226,24 @@ function ChatRoom({
 
 ChatRoom.propTypes = {
     loadRooms: PropTypes.func.isRequired,
+    createRoom: PropTypes.func.isRequired,
     loadMessages: PropTypes.func.isRequired,
     loadUsers: PropTypes.func.isRequired,
     currentUserConnected: PropTypes.func.isRequired,
     currentUserJoined: PropTypes.func.isRequired,
     addNewMessage: PropTypes.func.isRequired,
-    addNewChat: PropTypes.func.isRequired,
+    getUser: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {
     loadRooms: loadRooms,
+    createRoom: createRoom,
     loadMessages: loadMessages,
     loadUsers: loadUsers,
     currentUserConnected: currentUserConnected,
     currentUserJoined: currentUserJoined,
     addNewMessage: addNewMessage,
-    addNewChat: addNewChat,
+    getUser: getUser,
 };
 
 export default connect(null, mapDispatchToProps)(ChatRoom);

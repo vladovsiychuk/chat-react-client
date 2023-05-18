@@ -19,20 +19,18 @@ function roomsLoaded(rooms) {
     };
 }
 
+function addNewRoom(room) {
+    return {
+        type: types.ROOMS_ADD,
+        data: room,
+    };
+}
+
 export function addNewMessage(message, companion) {
     return {
         type: types.CHATS_ADD_MESSAGE,
         data: {
             message,
-            companion,
-        }
-    }
-}
-
-export function addNewChat(companion) {
-    return {
-        type: types.CHATS_ADD_CHAT,
-        data: {
             companion,
         }
     }
@@ -50,6 +48,31 @@ export function loadRooms() {
             });
 
             dispatch(roomsLoaded(res || []));
+            dispatch(updateAsync(false));
+        } catch (err) {
+            dispatch(updateAsync(false, err));
+        }
+    };
+}
+
+export function createRoom(companionUserId, setTab) {
+    return async dispatch => {
+        const endpoint = EndpointConstants.ROOMS_POST;
+
+        dispatch(updateAsync(true));
+        try {
+            const res = await authorized({
+                path: endpoint.path,
+                method: endpoint.method,
+                body: {
+                    userId: companionUserId
+                }
+            });
+
+            if (res) {
+                setTab(res.id)
+                dispatch(addNewRoom(res));
+            }
             dispatch(updateAsync(false));
         } catch (err) {
             dispatch(updateAsync(false, err));

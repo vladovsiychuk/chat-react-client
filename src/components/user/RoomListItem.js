@@ -9,7 +9,7 @@ import {
     Divider,
 } from "@mui/material";
 
-function RoomListItem({ room, tab, setTab }) {
+function RoomListItem({room, tab, setTab}) {
 
     return (
         <React.Fragment>
@@ -51,7 +51,7 @@ function RoomListItem({ room, tab, setTab }) {
                     </Avatar>
                 </ListItemIcon>
             </ListItemButton>
-            <Divider />
+            <Divider/>
         </React.Fragment>
     );
 }

@@ -13,9 +13,16 @@ function updateAsync(isLoading, error = null, currentUserIsFound = null) {
     };
 }
 
-function usersLoaded(users) {
+function addUser(user) {
     return {
         type: types.USER_GET,
+        data: user,
+    };
+}
+
+function usersLoaded(users) {
+    return {
+        type: types.USER_LIST,
         data: users,
     };
 }
@@ -60,6 +67,26 @@ export function createCurrentUser() {
             });
 
             dispatch(currentUserLoaded(res || []));
+            dispatch(updateAsync(false, null, true));
+        } catch (err) {
+            dispatch(updateAsync(false, err, null));
+        }
+    };
+}
+
+export function getUser(userId) {
+    return async dispatch => {
+        const {method, path} = EndpointConstants.USER_GET;
+
+        dispatch(updateAsync(true, null, true));
+        try {
+            const res = await authorized({
+                method: method,
+                path: path(userId),
+            });
+
+            if (res)
+                dispatch(addUser(res));
             dispatch(updateAsync(false, null, true));
         } catch (err) {
             dispatch(updateAsync(false, err, null));

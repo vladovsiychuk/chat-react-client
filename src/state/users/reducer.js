@@ -41,6 +41,13 @@ export default function userReducer(state = initialState, action) {
             }
         }
         case types.USER_GET: {
+            const clonedState = JSON.parse(JSON.stringify(state));
+
+            clonedState.users.push(action.data)
+
+            return clonedState
+        }
+        case types.USER_LIST: {
             return {
                 ...state,
                 users: action.data
