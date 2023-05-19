@@ -8,8 +8,17 @@ import {
     Typography,
     Divider,
 } from "@mui/material";
+import {useSelector} from "react-redux";
 
 function RoomListItem({room, tab, setTab}) {
+
+    const currentUser = useSelector(state => state.users.currentUser);
+    const users = useSelector(state => state.users.users);
+    const members = room.members.filter(member => member !== currentUser.data.id)
+
+    const avatar = members.length === 1 ?
+        (users.length > 0 ? users.find(user => user.id === members[0]).username.charAt(0) : null)
+        : null;
 
     return (
         <React.Fragment>
@@ -21,7 +30,7 @@ function RoomListItem({room, tab, setTab}) {
                 alignItems="flex-start"
             >
                 <ListItemAvatar>
-                    <Avatar alt="Remy Sharp">A</Avatar>
+                    <Avatar>{avatar}</Avatar>
                 </ListItemAvatar>
                 <ListItemText
                     primary={"primary text"}
