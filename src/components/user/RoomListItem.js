@@ -17,7 +17,7 @@ function RoomListItem({room, tab, setTab}) {
     const members = room.members.filter(member => member !== currentUser.data.id)
 
     const avatar = members.length === 1 ?
-        (users.length > 0 ? users.find(user => user.id === members[0]).username.charAt(0) : null)
+        (users.length > 0 ? users.find(user => user.id === members[0]).email.charAt(0) : null)
         : null;
 
     return (
