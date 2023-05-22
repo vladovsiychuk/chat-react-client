@@ -28,6 +28,7 @@ function ChatRoom({
     const [searchUsers, setSearchUsers] = useState([]);
     const [message, setMessage] = useState('');
     const [headerAvatar, setHeaderAvatar] = useState(null)
+    const [headerUsername, setHeaderUsername] = useState('')
 
     const rooms = useSelector(state => state.rooms.rooms);
     const users = useSelector(state => state.users.users);
@@ -52,14 +53,15 @@ function ChatRoom({
 
     useEffect(() => {
         if (selectedRoom !== null) {
-            const room = rooms.find(room => room.id === selectedRoom)
-            const members = room.members.filter(member => member !== currentUser.data.id)
+            const room = rooms.find(room => room.id === selectedRoom);
+            const members = room.members.filter(member => member !== currentUser.data.id);
+            const user = users.find(user => user.id === members[0]);
 
-            const avatar = members.length === 1 ?
-                (users.length > 0 ? users.find(user => user.id === members[0]).email.charAt(0) : null)
-                : null;
+            const avatar = members.length === 1 && user ? user.email.charAt(0) : null;
+            const username = members.length === 1 && user ? user.email : '';
 
-            setHeaderAvatar(avatar)
+            setHeaderAvatar(avatar);
+            setHeaderUsername(username);
         }
     }, [selectedRoom, currentUser, rooms, users])
 
@@ -125,7 +127,7 @@ function ChatRoom({
                         />
                         {selectedRoom != null &&
                             <div>
-                                <Header avatar={headerAvatar}/>
+                                <Header avatar={headerAvatar} username={headerUsername}/>
                                 <MessagesList roomMessages={roomMessages} currentUser={currentUser}/>
                                 <MessageInput
                                     message={message}
