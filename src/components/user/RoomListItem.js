@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     ListItemButton,
     ListItemAvatar,
@@ -9,16 +9,37 @@ import {
     Divider,
 } from "@mui/material";
 import {useSelector} from "react-redux";
+import {roomMessagesSelector} from "../../state/messages/selectors";
 
 function RoomListItem({room, selectedRoom, setSelectedRoom}) {
 
+    const [lastMessage, setLastMessage] = useState('')
+    const [avatar, setAvatar] = useState('')
+    const [userName, setUserName] = useState('')
+
     const currentUser = useSelector(state => state.users.currentUser);
     const users = useSelector(state => state.users.users);
-    const members = room.members.filter(member => member !== currentUser.data.id)
 
-    const avatar = members.length === 1 ?
-        (users.length > 0 ? users.find(user => user.id === members[0]).email.charAt(0) : null)
-        : null;
+    const roomMessages = useSelector((state) =>
+        roomMessagesSelector(state, {roomId: room.id})
+    );
+
+    useEffect(() => {
+        const lastMessage = roomMessages.length > 0 ? roomMessages[roomMessages.length - 1].content : '';
+        setLastMessage(lastMessage)
+    }, [roomMessages])
+
+    useEffect(() => {
+        const members = room.members.filter(member => member !== currentUser.data.id)
+
+        const user = users.find(user => user.id === members[0]);
+
+        const avatar = members.length === 1 && user ? user.email.charAt(0) : null;
+        const username = members.length === 1 && user ? user.email : '';
+
+        setAvatar(avatar)
+        setUserName(username)
+    }, [users, currentUser, room]);
 
     return (
         <React.Fragment>
@@ -33,11 +54,11 @@ function RoomListItem({room, selectedRoom, setSelectedRoom}) {
                     <Avatar>{avatar}</Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                    primary={"primary text"}
+                    primary={truncateString(userName)}
                     secondary={
                         <React.Fragment>
                             <Typography component="span" color="textPrimary">
-                                Some last message here
+                                {lastMessage}
                             </Typography>
                         </React.Fragment>
                     }
@@ -63,6 +84,13 @@ function RoomListItem({room, selectedRoom, setSelectedRoom}) {
             <Divider/>
         </React.Fragment>
     );
+}
+
+function truncateString(str) {
+    if (str.length > 25) {
+        str = str.substring(0, 22) + '...';
+    }
+    return str;
 }
 
 export default RoomListItem;
