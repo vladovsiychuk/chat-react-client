@@ -25,20 +25,23 @@ function ChatRoom({
                       getUser,
                   }) {
 
-    const [tab, setTab] = useState(null);
+    const [selectedRoom, setSelectedRoom] = useState(null);
     const [searchUsers, setSearchUsers] = useState([]);
 
     const rooms = useSelector(state => state.rooms.rooms);
+    const users = useSelector(state => state.users.users);
     const chatsAsync = useSelector(state => state.rooms.async);
     const currentUser = useSelector(state => state.users.currentUser);
 
     const [message, setMessage] = useState('');
 
+    const [headerAvatar, setHeaderAvatar] = useState(null)
+
     const token = getAccessToken();
 
 
     const roomMessages = useSelector((state) =>
-        roomMessagesSelector(state, {roomId: tab})
+        roomMessagesSelector(state, {roomId: selectedRoom})
     );
 
 
@@ -72,9 +75,21 @@ function ChatRoom({
         };
     };
 
+    useEffect(() => {
+        if (selectedRoom !== null) {
+            const room = rooms.find(room => room.id === selectedRoom)
+            const members = room.members.filter(member => member !== currentUser.data.id)
+
+            const avatar = members.length === 1 ?
+                (users.length > 0 ? users.find(user => user.id === members[0]).email.charAt(0) : null)
+                : null;
+
+            setHeaderAvatar(avatar)
+        }
+    }, [selectedRoom, currentUser, rooms, users])
 
     function sendNewMessage() {
-        sendMessage(tab, message)
+        sendMessage(selectedRoom, message)
         setMessage('')
     }
 
@@ -82,9 +97,9 @@ function ChatRoom({
         const room = rooms.find(room => room.members.includes(userId))
 
         if (room)
-            setTab(userId);
+            setSelectedRoom(userId);
         else
-            createRoom(userId, setTab)
+            createRoom(userId, setSelectedRoom)
 
         getUser(userId)
     };
@@ -105,15 +120,15 @@ function ChatRoom({
                     <div>
                         <UserListSidebar
                             setSearchUsers={setSearchUsers}
-                            tab={tab}
+                            selectedRoom={selectedRoom}
                             searchUsers={searchUsers}
                             handleSearchUsersClick={handleSearchUsersClick}
                             rooms={rooms}
-                            setTab={setTab}
+                            setSelectedRoom={setSelectedRoom}
                         />
-                        {tab != null &&
+                        {selectedRoom != null &&
                             <div>
-                                <Header/>
+                                <Header avatar={headerAvatar} />
                                 <MessagesList roomMessages={roomMessages} currentUser={currentUser}/>
                                 <MessageInput
                                     message={message}

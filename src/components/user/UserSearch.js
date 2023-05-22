@@ -38,7 +38,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserSearch({setSearchUses, tab}) {
+function UserSearch({setSearchUsers, selectedRoom}) {
     const classes = useStyles();
     const [query, setQuery] = useState('');
 
@@ -50,24 +50,24 @@ function UserSearch({setSearchUses, tab}) {
                     method,
                     path: path(query, null),
                 });
-                setSearchUses(response);
+                setSearchUsers(response);
             } catch {
-                setSearchUses([]);
+                setSearchUsers([]);
             }
         }
 
         if (query) {
             fetchUsers();
         } else {
-            setSearchUses([]);
+            setSearchUsers([]);
         }
-    }, [query]);
+    }, [query, setSearchUsers]);
 
     useEffect(() => {
         if (query) {
             setQuery('');
         }
-    }, [tab]);
+    }, [selectedRoom, query]);
 
     function handleInputChange(event) {
         setQuery(event.target.value);

@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Header = () => {
+const Header = ({avatar}) => {
     const classes = useStyles();
 
     return (
@@ -38,7 +38,7 @@ const Header = () => {
                 some.email@mail.com
             </div>
             <Avatar className={classes.avatar} alt="Remy Sharp">
-                B
+                {avatar}
             </Avatar>
         </div>
     );

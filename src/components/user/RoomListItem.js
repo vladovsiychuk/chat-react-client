@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {useSelector} from "react-redux";
 
-function RoomListItem({room, tab, setTab}) {
+function RoomListItem({room, selectedRoom, setSelectedRoom}) {
 
     const currentUser = useSelector(state => state.users.currentUser);
     const users = useSelector(state => state.users.users);
@@ -24,9 +24,9 @@ function RoomListItem({room, tab, setTab}) {
         <React.Fragment>
             <ListItemButton
                 onClick={() => {
-                    setTab(room.id);
+                    setSelectedRoom(room.id);
                 }}
-                selected={tab === room.id}
+                selected={selectedRoom === room.id}
                 alignItems="flex-start"
             >
                 <ListItemAvatar>

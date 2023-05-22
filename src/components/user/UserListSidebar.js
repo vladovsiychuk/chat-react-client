@@ -18,12 +18,12 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserListSidebar({setSearchUsers, tab, searchUsers, handleSearchUsersClick, rooms, setTab}) {
+function UserListSidebar({setSearchUsers, selectedRoom, searchUsers, handleSearchUsersClick, rooms, setSelectedRoom}) {
     const classes = useStyles();
 
     return (
         <main className={classes.main}>
-            <UserSearch setSearchUses={setSearchUsers} tab={tab}/>
+            <UserSearch setSearchUsers={setSearchUsers} selectedRoom={selectedRoom}/>
 
             {searchUsers.length > 0 ? (
                 <List>
@@ -31,7 +31,7 @@ function UserListSidebar({setSearchUsers, tab, searchUsers, handleSearchUsersCli
                         <UserSearchItem
                             key={index}
                             user={user}
-                            tab={tab}
+                            selectedRoom={selectedRoom}
                             handleSearchUsersClick={handleSearchUsersClick}
                         />
                     ))}
@@ -43,8 +43,8 @@ function UserListSidebar({setSearchUsers, tab, searchUsers, handleSearchUsersCli
                             <RoomListItem
                                 key={index}
                                 room={room}
-                                tab={tab}
-                                setTab={setTab}
+                                selectedRoom={selectedRoom}
+                                setSelectedRoom={setSelectedRoom}
                             />
                         ))}
                 </List>
