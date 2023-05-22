@@ -38,7 +38,7 @@ function ChatRoom({
     const token = getAccessToken();
 
 
-    const roomMessages = useSelector((state) =>
+    const selectedRoomMessages = useSelector((state) =>
         roomMessagesSelector(state, {roomId: selectedRoom})
     );
 
@@ -128,7 +128,7 @@ function ChatRoom({
                         {selectedRoom != null &&
                             <div>
                                 <Header avatar={headerAvatar} username={headerUsername}/>
-                                <MessagesList roomMessages={roomMessages} currentUser={currentUser}/>
+                                <MessagesList roomMessages={selectedRoomMessages} currentUser={currentUser}/>
                                 <MessageInput
                                     message={message}
                                     setMessage={setMessage}
