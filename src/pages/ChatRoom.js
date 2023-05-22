@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createRoom, loadRooms} from '../state/rooms/actions';
 import {currentUserConnected, currentUserJoined, getUser, loadUsers} from '../state/users/actions';
-import { Grid, ListItem, ListItemText, TextField} from '@mui/material';
-import { Send} from '@mui/icons-material';
+import {TextField} from '@mui/material';
+import {Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
 import {addNewMessage, loadMessages, sendMessage} from "../state/messages/actions";
 import {roomMessagesSelector} from "../state/messages/selectors";
 import Header from "../components/room/Header";
+import MessagesList from "../components/message/MessagesList";
 
 
 function ChatRoom({
@@ -114,36 +115,7 @@ function ChatRoom({
                         {tab != null &&
                             <div>
                                 <Header/>
-                                <main style={{
-                                    height: 'calc(100vh - 100px)',
-                                    overflow: 'auto',
-                                    padding: '25px',
-                                    marginLeft: '300px',
-                                    boxSizing: 'border-box',
-                                    overflowY: 'scroll',
-                                    top: '70px',
-                                    paddingBottom: '50px',
-                                    width: 'calc(100% - 300px)',
-                                    position: 'absolute',
-                                }}>
-                                    {roomMessages
-                                        .map((message, index) => (
-                                            <ListItem key={index}>
-                                                <Grid container>
-                                                    <Grid item xs={12}>
-                                                        <ListItemText
-                                                            align={message.senderId === currentUser.data.id ? 'right' : 'left'}
-                                                            primary={message.content}/>
-                                                    </Grid>
-                                                    <Grid item xs={12}>
-                                                        <ListItemText
-                                                            align={message.senderId === currentUser.data.id ? 'right' : 'left'}
-                                                            secondary={message.dateCreated}/>
-                                                    </Grid>
-                                                </Grid>
-                                            </ListItem>
-                                        ))}
-                                </main>
+                                <MessagesList roomMessages={roomMessages} currentUser={currentUser}/>
                                 <div style={{
                                     position: 'absolute',
                                     bottom: '15px',
