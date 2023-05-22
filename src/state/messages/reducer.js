@@ -28,6 +28,14 @@ export default function messagesReducer(state = initialState, action) {
                 messages: action.data,
             };
         }
+        case types.MESSAGES_ADD : {
+            const clonedState = JSON.parse(JSON.stringify(state));
+            const message = JSON.parse(action.data);
+
+            clonedState.messages.push(message)
+
+            return clonedState;
+        }
         default:
             return state;
     }

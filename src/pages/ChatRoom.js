@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {addNewMessage, createRoom, loadRooms} from '../state/rooms/actions';
+import {createRoom, loadRooms} from '../state/rooms/actions';
 import {currentUserConnected, currentUserJoined, getUser, loadUsers} from '../state/users/actions';
 import {Avatar, Button, Grid, ListItem, ListItemText, TextField} from '@mui/material';
 import {ArrowBackRounded, Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
-import {loadMessages, sendMessage} from "../state/messages/actions";
+import {addNewMessage, loadMessages, sendMessage} from "../state/messages/actions";
 import {roomMessagesSelector} from "../state/messages/selectors";
 
 
@@ -59,6 +59,7 @@ function ChatRoom({
 
         ws.onmessage = (event) => {
             console.log(`Received message: ${event.data}`);
+            addNewMessage(event.data)
         };
 
         ws.onclose = () => {

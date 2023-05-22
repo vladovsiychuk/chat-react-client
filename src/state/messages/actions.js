@@ -19,6 +19,14 @@ function messagesLoaded(messages) {
     };
 }
 
+export function addNewMessage(message) {
+    return {
+        type: types.MESSAGES_ADD,
+        data: message,
+
+    }
+}
+
 export function loadMessages() {
     return async dispatch => {
         const {method, path} = EndpointConstants.MESSAGES_GET;

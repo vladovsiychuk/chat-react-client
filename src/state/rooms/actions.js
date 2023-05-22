@@ -26,16 +26,6 @@ function addNewRoom(room) {
     };
 }
 
-export function addNewMessage(message, companion) {
-    return {
-        type: types.CHATS_ADD_MESSAGE,
-        data: {
-            message,
-            companion,
-        }
-    }
-}
-
 export function loadRooms() {
     return async dispatch => {
         const endpoint = EndpointConstants.ROOMS_GET;
