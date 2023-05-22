@@ -26,15 +26,13 @@ function ChatRoom({
 
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [searchUsers, setSearchUsers] = useState([]);
+    const [message, setMessage] = useState('');
+    const [headerAvatar, setHeaderAvatar] = useState(null)
 
     const rooms = useSelector(state => state.rooms.rooms);
     const users = useSelector(state => state.users.users);
     const chatsAsync = useSelector(state => state.rooms.async);
     const currentUser = useSelector(state => state.users.currentUser);
-
-    const [message, setMessage] = useState('');
-
-    const [headerAvatar, setHeaderAvatar] = useState(null)
 
     const token = getAccessToken();
 
@@ -51,6 +49,19 @@ function ChatRoom({
         connect();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (selectedRoom !== null) {
+            const room = rooms.find(room => room.id === selectedRoom)
+            const members = room.members.filter(member => member !== currentUser.data.id)
+
+            const avatar = members.length === 1 ?
+                (users.length > 0 ? users.find(user => user.id === members[0]).email.charAt(0) : null)
+                : null;
+
+            setHeaderAvatar(avatar)
+        }
+    }, [selectedRoom, currentUser, rooms, users])
 
     const connect = () => {
         const ws = new WebSocket(`ws://localhost:8082/ws/chat/${currentUser.data.id}?access_token=${token}`);
@@ -73,19 +84,6 @@ function ChatRoom({
             ws.close();
         };
     };
-
-    useEffect(() => {
-        if (selectedRoom !== null) {
-            const room = rooms.find(room => room.id === selectedRoom)
-            const members = room.members.filter(member => member !== currentUser.data.id)
-
-            const avatar = members.length === 1 ?
-                (users.length > 0 ? users.find(user => user.id === members[0]).email.charAt(0) : null)
-                : null;
-
-            setHeaderAvatar(avatar)
-        }
-    }, [selectedRoom, currentUser, rooms, users])
 
     function sendNewMessage() {
         sendMessage(selectedRoom, message)

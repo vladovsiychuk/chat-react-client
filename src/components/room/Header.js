@@ -29,13 +29,13 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Header = ({avatar}) => {
+const Header = ({avatar, username}) => {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             <div className={classes.emailText}>
-                some.email@mail.com
+                {username}
             </div>
             <Avatar className={classes.avatar} alt="Remy Sharp">
                 {avatar}
