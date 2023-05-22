@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createRoom, loadRooms} from '../state/rooms/actions';
-import {currentUserConnected, currentUserJoined, getUser, loadUsers} from '../state/users/actions';
+import {currentUserConnected, getUser, loadUsers} from '../state/users/actions';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
 import {addNewMessage, loadMessages, sendMessage} from "../state/messages/actions";
@@ -20,7 +20,6 @@ function ChatRoom({
                       sendMessage,
                       loadUsers,
                       currentUserConnected,
-                      currentUserJoined,
                       addNewMessage,
                       getUser,
                   }) {
@@ -152,7 +151,6 @@ ChatRoom.propTypes = {
     sendMessage: PropTypes.func.isRequired,
     loadUsers: PropTypes.func.isRequired,
     currentUserConnected: PropTypes.func.isRequired,
-    currentUserJoined: PropTypes.func.isRequired,
     addNewMessage: PropTypes.func.isRequired,
     getUser: PropTypes.func.isRequired,
 };
@@ -164,7 +162,6 @@ const mapDispatchToProps = {
     sendMessage: sendMessage,
     loadUsers: loadUsers,
     currentUserConnected: currentUserConnected,
-    currentUserJoined: currentUserJoined,
     addNewMessage: addNewMessage,
     getUser: getUser,
 };
