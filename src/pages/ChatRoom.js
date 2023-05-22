@@ -128,7 +128,7 @@ function ChatRoom({
                         />
                         {selectedRoom != null &&
                             <div>
-                                <Header avatar={headerAvatar} />
+                                <Header avatar={headerAvatar}/>
                                 <MessagesList roomMessages={roomMessages} currentUser={currentUser}/>
                                 <MessageInput
                                     message={message}
