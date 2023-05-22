@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createRoom, loadRooms} from '../state/rooms/actions';
 import {currentUserConnected, currentUserJoined, getUser, loadUsers} from '../state/users/actions';
-import {Avatar, Button, Grid, ListItem, ListItemText, TextField} from '@mui/material';
-import {ArrowBackRounded, Send} from '@mui/icons-material';
+import { Grid, ListItem, ListItemText, TextField} from '@mui/material';
+import { Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
 import {addNewMessage, loadMessages, sendMessage} from "../state/messages/actions";
 import {roomMessagesSelector} from "../state/messages/selectors";
+import Header from "../components/room/Header";
 
 
 function ChatRoom({
@@ -112,50 +113,7 @@ function ChatRoom({
                         />
                         {tab != null &&
                             <div>
-                                <div style={{
-                                    width: 'calc(100% - 301px)',
-                                    height: '70px',
-                                    backgroundColor: '#344195',
-                                    position: 'fixed',
-                                    marginLeft: '301px',
-                                    boxSizing: 'border-box',
-                                }}>
-                                    <Button size="large" style={{
-                                        position: 'fixed',
-                                        height: '70px',
-                                        width: '100px',
-                                        right: '0px',
-                                    }}>
-
-                                        <ArrowBackRounded style={{
-                                            color: 'white',
-                                            height: '35px',
-                                            width: '35px',
-                                        }}/>
-                                    </Button>
-                                    <div style={{
-                                        backgroundColor: '#344195',
-                                        position: 'fixed',
-                                        marginTop: '25px',
-                                        marginLeft: '85px',
-                                        fontSize: '18px',
-                                        textAlign: 'center',
-                                        color: 'white',
-                                        boxSizing: 'border-box',
-                                    }}>
-
-                                        some.email@mail.com
-                                    </div>
-                                    <Avatar style={{
-                                        marginTop: '10px',
-                                        marginLeft: '25px',
-                                        height: '50px',
-                                        width: '50px',
-                                    }}
-                                            alt="Remy Sharp">
-                                        B
-                                    </Avatar>
-                                </div>
+                                <Header/>
                                 <main style={{
                                     height: 'calc(100vh - 100px)',
                                     overflow: 'auto',
