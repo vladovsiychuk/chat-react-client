@@ -9,6 +9,6 @@ export const roomMessagesSelector = createSelector(
     (messagesStore, roomId) => {
         return messagesStore
             .filter(message => message.roomId === roomId)
-            .sort((a, b) => b.dateCreated - a.dateCreated);
+            .sort((a, b) => a.dateCreated - b.dateCreated);
     }
 );

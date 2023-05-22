@@ -37,3 +37,28 @@ export function loadMessages() {
         }
     };
 }
+
+export function sendMessage(roomId, content) {
+    return async dispatch => {
+        if (content === '')
+            return
+
+        const {method, path} = EndpointConstants.MESSAGES_POST;
+
+        dispatch(updateAsync(true));
+        try {
+            await authorized({
+                method,
+                path,
+                body: {
+                    roomId,
+                    content,
+                }
+            });
+
+            dispatch(updateAsync(false));
+        } catch (err) {
+            dispatch(updateAsync(false, err));
+        }
+    }
+}

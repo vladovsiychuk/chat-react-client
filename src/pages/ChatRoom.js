@@ -8,7 +8,7 @@ import {Avatar, Button, Grid, ListItem, ListItemText, TextField} from '@mui/mate
 import {ArrowBackRounded, Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
-import {loadMessages} from "../state/messages/actions";
+import {loadMessages, sendMessage} from "../state/messages/actions";
 import {roomMessagesSelector} from "../state/messages/selectors";
 
 
@@ -16,6 +16,7 @@ function ChatRoom({
                       loadRooms,
                       createRoom,
                       loadMessages,
+                      sendMessage,
                       loadUsers,
                       currentUserConnected,
                       currentUserJoined,
@@ -70,11 +71,10 @@ function ChatRoom({
     };
 
 
-    const userTyping = (e) => {
-        e.keyCode === 13
-            ? console.log("Pressed Enter")
-            : setMessage(e.target.value);
-    };
+    function sendNewMessage() {
+        sendMessage(tab, message)
+        setMessage('')
+    }
 
     const handleSearchUsersClick = (userId) => {
         const room = rooms.find(room => room.members.includes(userId))
@@ -87,6 +87,11 @@ function ChatRoom({
         getUser(userId)
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            sendNewMessage()
+        }
+    };
     return (
         <div>
             {chatsAsync.isLoading ? (
@@ -197,9 +202,11 @@ function ChatRoom({
 
                                     <TextField
                                         id="chattextbox"
+                                        value={message}
                                         autoComplete="off"
                                         placeholder="Type your message ..."
-                                        onKeyUp={(e) => userTyping(e)}
+                                        onChange={(e) => setMessage(e.target.value)}
+                                        onKeyDown={handleKeyPress}
                                         size={'small'}
                                         style={{
                                             width: 'calc(100% - 40px)',
@@ -208,8 +215,8 @@ function ChatRoom({
                                         }}
                                         onFocus={() => {
                                         }}
-                                    ></TextField>
-                                    <Send style={{
+                                    />
+                                    <Send onClick={sendNewMessage} style={{
                                         color: 'blue',
                                         cursor: 'pointer',
                                         marginLeft: 'auto',
@@ -228,6 +235,7 @@ ChatRoom.propTypes = {
     loadRooms: PropTypes.func.isRequired,
     createRoom: PropTypes.func.isRequired,
     loadMessages: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
     loadUsers: PropTypes.func.isRequired,
     currentUserConnected: PropTypes.func.isRequired,
     currentUserJoined: PropTypes.func.isRequired,
@@ -239,6 +247,7 @@ const mapDispatchToProps = {
     loadRooms: loadRooms,
     createRoom: createRoom,
     loadMessages: loadMessages,
+    sendMessage: sendMessage,
     loadUsers: loadUsers,
     currentUserConnected: currentUserConnected,
     currentUserJoined: currentUserJoined,
