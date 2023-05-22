@@ -2,7 +2,7 @@ import React from 'react';
 import {makeStyles} from "@mui/styles";
 import {Grid, ListItem, ListItemText} from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     main: {
         height: 'calc(100vh - 100px)',
         overflow: 'auto',

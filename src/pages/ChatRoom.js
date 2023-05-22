@@ -4,14 +4,13 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createRoom, loadRooms} from '../state/rooms/actions';
 import {currentUserConnected, currentUserJoined, getUser, loadUsers} from '../state/users/actions';
-import {TextField} from '@mui/material';
-import {Send} from '@mui/icons-material';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
 import {addNewMessage, loadMessages, sendMessage} from "../state/messages/actions";
 import {roomMessagesSelector} from "../state/messages/selectors";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
+import MessageInput from "../components/message/MessageInput";
 
 
 function ChatRoom({
@@ -116,43 +115,12 @@ function ChatRoom({
                             <div>
                                 <Header/>
                                 <MessagesList roomMessages={roomMessages} currentUser={currentUser}/>
-                                <div style={{
-                                    position: 'absolute',
-                                    bottom: '15px',
-                                    left: '315px',
-                                    boxSizing: 'border-box',
-                                    overflow: 'auto',
-                                    width: 'calc(100% - 300px - 50px)',
-                                    height: '50px',
-                                    backgroundColor: '#d3d4db',
-                                    borderRadius: '10px',
-                                    padding: '5px',
-                                    display: 'flex',
-                                    alignItems: 'center'
-                                }}>
-
-                                    <TextField
-                                        id="chattextbox"
-                                        value={message}
-                                        autoComplete="off"
-                                        placeholder="Type your message ..."
-                                        onChange={(e) => setMessage(e.target.value)}
-                                        onKeyDown={handleKeyPress}
-                                        size={'small'}
-                                        style={{
-                                            width: 'calc(100% - 40px)',
-                                            height: '40px',
-                                            marginRight: '10px',
-                                        }}
-                                        onFocus={() => {
-                                        }}
-                                    />
-                                    <Send onClick={sendNewMessage} style={{
-                                        color: 'blue',
-                                        cursor: 'pointer',
-                                        marginLeft: 'auto',
-                                    }}></Send>
-                                </div>
+                                <MessageInput
+                                    message={message}
+                                    setMessage={setMessage}
+                                    handleKeyPress={handleKeyPress}
+                                    sendNewMessage={sendNewMessage}
+                                />
                             </div>
                         }
                     </div>
