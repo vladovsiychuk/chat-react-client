@@ -17,8 +17,9 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const MessagesList = ({ roomMessages, currentUser }) => {
+const MessagesList = ({roomMessages, currentUser}) => {
     const classes = useStyles();
+    const timestampToDate = require("timestamp-to-date");
 
     return (
         <main className={classes.main}>
@@ -34,7 +35,7 @@ const MessagesList = ({ roomMessages, currentUser }) => {
                         <Grid item xs={12}>
                             <ListItemText
                                 align={message.senderId === currentUser.data.id ? 'right' : 'left'}
-                                secondary={message.dateCreated}
+                                secondary={timestampToDate(message.dateCreated, 'yyyy-MM-dd HH:mm')}
                             />
                         </Grid>
                     </Grid>
