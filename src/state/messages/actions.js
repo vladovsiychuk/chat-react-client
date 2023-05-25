@@ -23,7 +23,6 @@ export function addNewMessage(message) {
     return {
         type: types.MESSAGES_ADD,
         data: message,
-
     }
 }
 
