@@ -96,7 +96,7 @@ function ChatRoom({
         const room = rooms.find(room => room.members.includes(userId))
 
         if (room)
-            setSelectedRoom(userId);
+            setSelectedRoom(room.id);
         else
             createRoom(userId, setSelectedRoom)
 

@@ -64,14 +64,11 @@ function UserSearch({setSearchUsers, selectedRoom}) {
     }, [query, setSearchUsers]);
 
     useEffect(() => {
-        if (query) {
+        if (selectedRoom) {
             setQuery('');
         }
-    }, [selectedRoom, query]);
+    }, [selectedRoom]);
 
-    function handleInputChange(event) {
-        setQuery(event.target.value);
-    }
 
     return (
         <>
@@ -80,7 +77,7 @@ function UserSearch({setSearchUsers, selectedRoom}) {
                 <InputBase
                     placeholder="Search users"
                     value={query}
-                    onChange={handleInputChange}
+                    onChange={(event) => setQuery(event.target.value)}
                     className={classes.input}
                     inputProps={{'aria-label': 'search users'}}
                 />

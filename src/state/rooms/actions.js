@@ -60,8 +60,8 @@ export function createRoom(companionUserId, setTab) {
             });
 
             if (res) {
-                setTab(res.id)
                 dispatch(addNewRoom(res));
+                setTab(res.id)
             }
             dispatch(updateAsync(false));
         } catch (err) {
