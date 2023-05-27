@@ -1,7 +1,12 @@
 export default {
-    ROOMS_GET: {
+    ROOMS_LIST: {
         method: 'GET',
         path: 'http://localhost:8082/v1/rooms',
+    },
+
+    ROOMS_GET: {
+        method: 'GET',
+        path: (id) => `http://localhost:8082/v1/rooms/${id}`,
     },
 
     ROOMS_POST: {

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {createRoom, loadRooms} from '../state/rooms/actions';
+import {createRoom, getRoom, loadRooms} from '../state/rooms/actions';
 import {currentUserConnected, getUser, loadUsers} from '../state/users/actions';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
@@ -15,6 +15,7 @@ import MessageInput from "../components/message/MessageInput";
 
 function ChatRoom({
                       loadRooms,
+                      getRoom,
                       createRoom,
                       loadMessages,
                       sendMessage,
@@ -76,6 +77,8 @@ function ChatRoom({
         ws.onmessage = (event) => {
             console.log(`Received message: ${event.data}`);
             addNewMessage(event.data)
+            getRoom(JSON.parse(event.data).roomId)
+            getUser(JSON.parse(event.data).senderId)
         };
 
         ws.onclose = () => {
@@ -146,6 +149,7 @@ function ChatRoom({
 
 ChatRoom.propTypes = {
     loadRooms: PropTypes.func.isRequired,
+    getRoom: PropTypes.func.isRequired,
     createRoom: PropTypes.func.isRequired,
     loadMessages: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
@@ -157,6 +161,7 @@ ChatRoom.propTypes = {
 
 const mapDispatchToProps = {
     loadRooms: loadRooms,
+    getRoom: getRoom,
     createRoom: createRoom,
     loadMessages: loadMessages,
     sendMessage: sendMessage,

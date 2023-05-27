@@ -41,11 +41,25 @@ export default function userReducer(state = initialState, action) {
             }
         }
         case types.USER_GET: {
-            const clonedState = JSON.parse(JSON.stringify(state));
+            const existingUserIndex = state.users.findIndex(
+                (user) => user.id === action.data.id
+            );
 
-            clonedState.users.push(action.data)
-
-            return clonedState
+            if (existingUserIndex !== -1) {
+                return {
+                    ...state,
+                    users: [
+                        ...state.users.slice(0, existingUserIndex),
+                        action.data,
+                        ...state.users.slice(existingUserIndex + 1),
+                    ],
+                };
+            } else {
+                return {
+                    ...state,
+                    users: [...state.users, action.data],
+                };
+            }
         }
         case types.USER_LIST: {
             return {

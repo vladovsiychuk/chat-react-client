@@ -19,7 +19,7 @@ export default function roomsReducer(state = initialState, action) {
                 },
             };
         }
-        case types.ROOMS_GET: {
+        case types.ROOMS_LIST: {
             return {
                 ...state,
                 async: {
@@ -29,12 +29,28 @@ export default function roomsReducer(state = initialState, action) {
             };
         }
         case types.ROOMS_ADD : {
-            const clonedState = JSON.parse(JSON.stringify(state));
-            const room = action.data;
+            // Check if the room already exists in the state
+            const existingRoomIndex = state.rooms.findIndex(
+                (room) => room.id === action.data.id
+            );
 
-            clonedState.rooms.push(room)
-
-            return clonedState;
+            if (existingRoomIndex !== -1) {
+                // Room with the same ID already exists, replace it
+                return {
+                    ...state,
+                    rooms: [
+                        ...state.rooms.slice(0, existingRoomIndex),
+                        action.data,
+                        ...state.rooms.slice(existingRoomIndex + 1),
+                    ],
+                };
+            } else {
+                // Room doesn't exist, add it to the list
+                return {
+                    ...state,
+                    rooms: [...state.rooms, action.data],
+                };
+            }
         }
         default:
             return state;

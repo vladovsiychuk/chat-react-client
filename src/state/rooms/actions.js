@@ -14,7 +14,7 @@ function updateAsync(isLoading, error = null) {
 
 function roomsLoaded(rooms) {
     return {
-        type: types.ROOMS_GET,
+        type: types.ROOMS_LIST,
         data: rooms,
     };
 }
@@ -28,7 +28,7 @@ function addNewRoom(room) {
 
 export function loadRooms() {
     return async dispatch => {
-        const endpoint = EndpointConstants.ROOMS_GET;
+        const endpoint = EndpointConstants.ROOMS_LIST;
 
         dispatch(updateAsync(true));
         try {
@@ -43,6 +43,25 @@ export function loadRooms() {
             dispatch(updateAsync(false, err));
         }
     };
+}
+
+export function getRoom(roomId) {
+    return async dispatch => {
+        const endpoint = EndpointConstants.ROOMS_GET;
+
+        dispatch(updateAsync(true));
+        try {
+            const res = await authorized({
+                path: endpoint.path(roomId),
+                method: endpoint.method,
+            });
+
+            dispatch(addNewRoom(res));
+            dispatch(updateAsync(false));
+        } catch (err) {
+            dispatch(updateAsync(false, err));
+        }
+    }
 }
 
 export function createRoom(companionUserId, setTab) {
