@@ -18,12 +18,12 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserListSidebar({setSearchUsers, selectedRoom, searchUsers, handleSearchUsersClick, rooms, setSelectedRoom}) {
+function UserListSidebar({setSearchUsers, selectedRoom, searchUsers, handleSearchUsersClick, rooms, setSelectedRoom, triggerQueryUpdate}) {
     const classes = useStyles();
 
     return (
         <main className={classes.main}>
-            <UserSearch setSearchUsers={setSearchUsers} selectedRoom={selectedRoom}/>
+            <UserSearch setSearchUsers={setSearchUsers} selectedRoom={selectedRoom} triggerQueryUpdate={triggerQueryUpdate}/>
 
             {searchUsers.length > 0 ? (
                 <List>

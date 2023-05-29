@@ -38,7 +38,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserSearch({setSearchUsers, selectedRoom}) {
+function UserSearch({setSearchUsers, selectedRoom, triggerQueryUpdate}) {
     const classes = useStyles();
     const [query, setQuery] = useState('');
 
@@ -67,7 +67,7 @@ function UserSearch({setSearchUsers, selectedRoom}) {
         if (selectedRoom) {
             setQuery('');
         }
-    }, [selectedRoom]);
+    }, [selectedRoom, triggerQueryUpdate]);
 
 
     return (

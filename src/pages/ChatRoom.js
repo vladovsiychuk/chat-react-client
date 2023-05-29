@@ -30,6 +30,7 @@ function ChatRoom({
     const [message, setMessage] = useState('');
     const [headerAvatar, setHeaderAvatar] = useState(null)
     const [headerUsername, setHeaderUsername] = useState('')
+    const [triggerQueryUpdate, setTriggerQueryUpdate] = useState(0);
 
     const rooms = useSelector(state => state.rooms.rooms);
     const users = useSelector(state => state.users.users);
@@ -98,9 +99,10 @@ function ChatRoom({
     const handleSearchUsersClick = (userId) => {
         const room = rooms.find(room => room.members.includes(userId))
 
-        if (room)
+        if (room) {
             setSelectedRoom(room.id);
-        else
+            setTriggerQueryUpdate(prevTrigger => prevTrigger + 1);
+        }else
             createRoom(userId, setSelectedRoom)
 
         getUser(userId)
@@ -127,6 +129,7 @@ function ChatRoom({
                             handleSearchUsersClick={handleSearchUsersClick}
                             rooms={rooms}
                             setSelectedRoom={setSelectedRoom}
+                            triggerQueryUpdate={triggerQueryUpdate}
                         />
                         {selectedRoom != null &&
                             <div>
