@@ -16,6 +16,7 @@ function RoomListItem({room, selectedRoom, setSelectedRoom}) {
     const [lastMessage, setLastMessage] = useState('')
     const [avatar, setAvatar] = useState('')
     const [userName, setUserName] = useState('')
+    const [unreadMessages, setUnreadMessages] = useState([]);
 
     const currentUser = useSelector(state => state.users.currentUser);
     const users = useSelector(state => state.users.users);
@@ -23,6 +24,13 @@ function RoomListItem({room, selectedRoom, setSelectedRoom}) {
     const roomMessages = useSelector((state) =>
         roomMessagesSelector(state, {roomId: room.id})
     );
+
+    useEffect(() => {
+        const newUnreadMessages = roomMessages.filter(
+            (message) => message.senderId !== currentUser.data.id && !message.read.includes(currentUser.id)
+        );
+        setUnreadMessages(newUnreadMessages);
+    }, [roomMessages, currentUser]);
 
     useEffect(() => {
         const lastMessage = roomMessages.length > 0 ? roomMessages[roomMessages.length - 1].content : '';
@@ -63,23 +71,25 @@ function RoomListItem({room, selectedRoom, setSelectedRoom}) {
                         </React.Fragment>
                     }
                 />
-                <ListItemIcon>
-                    <Avatar
-                        alt="Remy Sharp"
-                        style={{
-                            backgroundColor: "#3A4691",
-                            fontSize: "15px",
-                            color: "white",
-                            position: "absolute",
-                            height: "25px",
-                            width: "25px",
-                            top: "35px",
-                            right: "10px",
-                        }}
-                    >
-                        1
-                    </Avatar>
-                </ListItemIcon>
+                {unreadMessages.length > 0 &&
+                    <ListItemIcon>
+                        <Avatar
+                            alt="Remy Sharp"
+                            style={{
+                                backgroundColor: "#3A4691",
+                                fontSize: "15px",
+                                color: "white",
+                                position: "absolute",
+                                height: "25px",
+                                width: "25px",
+                                top: "35px",
+                                right: "10px",
+                            }}
+                        >
+                            {unreadMessages.length}
+                        </Avatar>
+                    </ListItemIcon>
+                }
             </ListItemButton>
             <Divider/>
         </React.Fragment>
