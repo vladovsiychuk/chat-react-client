@@ -29,12 +29,28 @@ export default function messagesReducer(state = initialState, action) {
             };
         }
         case types.MESSAGES_ADD : {
-            const clonedState = JSON.parse(JSON.stringify(state));
-            const message = JSON.parse(action.data);
+            // Check if the message already exists in the state
+            const existingMessageIndex = state.messages.findIndex(
+                (message) => message.id === action.data.id
+            );
 
-            clonedState.messages.push(message)
-
-            return clonedState;
+            if (existingMessageIndex !== -1) {
+                // Message with the same ID already exists, replace it
+                return {
+                    ...state,
+                    messages: [
+                        ...state.messages.slice(0, existingMessageIndex),
+                        action.data,
+                        ...state.messages.slice(existingMessageIndex + 1),
+                    ],
+                };
+            } else {
+                // Message doesn't exist, add it to the list
+                return {
+                    ...state,
+                    messages: [...state.messages, action.data],
+                };
+            }
         }
         default:
             return state;

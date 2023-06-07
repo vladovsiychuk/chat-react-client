@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
@@ -6,7 +6,7 @@ import {createRoom, getRoom, loadRooms} from '../state/rooms/actions';
 import {currentUserConnected, getUser, loadUsers} from '../state/users/actions';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
-import {addNewMessage, loadMessages, sendMessage} from "../state/messages/actions";
+import {addNewMessage, loadMessages, readMessage, sendMessage} from "../state/messages/actions";
 import {roomMessagesSelector} from "../state/messages/selectors";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
@@ -23,9 +23,11 @@ function ChatRoom({
                       currentUserConnected,
                       addNewMessage,
                       getUser,
+                      readMessage,
                   }) {
 
     const [selectedRoom, setSelectedRoom] = useState(null);
+    const selectedRoomRef = useRef(selectedRoom);
     const [searchUsers, setSearchUsers] = useState([]);
     const [message, setMessage] = useState('');
     const [headerAvatar, setHeaderAvatar] = useState(null)
@@ -54,6 +56,10 @@ function ChatRoom({
     }, []);
 
     useEffect(() => {
+        selectedRoomRef.current = selectedRoom; // Update the ref when the state changes
+    }, [selectedRoom]);
+
+    useEffect(() => {
         if (selectedRoom !== null) {
             const room = rooms.find(room => room.id === selectedRoom);
             const members = room.members.filter(member => member !== currentUser.data.id);
@@ -77,9 +83,18 @@ function ChatRoom({
 
         ws.onmessage = (event) => {
             console.log(`Received message: ${event.data}`);
-            addNewMessage(event.data)
-            getRoom(JSON.parse(event.data).roomId)
-            getUser(JSON.parse(event.data).senderId)
+            const receivedMessage = JSON.parse(event.data)
+
+            addNewMessage(receivedMessage)
+            getRoom(receivedMessage.roomId)
+            getUser(receivedMessage.senderId)
+
+
+            if (currentUser.data.id !== receivedMessage.senderId &&
+                selectedRoomRef.current === receivedMessage.roomId &&
+                !receivedMessage.read.includes(currentUser.data.id)
+            )
+                readMessage(JSON.parse(event.data).id)
         };
 
         ws.onclose = () => {
@@ -102,7 +117,7 @@ function ChatRoom({
         if (room) {
             setSelectedRoom(room.id);
             setTriggerQueryUpdate(prevTrigger => prevTrigger + 1);
-        }else
+        } else
             createRoom(userId, setSelectedRoom)
 
         getUser(userId)
@@ -160,6 +175,7 @@ ChatRoom.propTypes = {
     currentUserConnected: PropTypes.func.isRequired,
     addNewMessage: PropTypes.func.isRequired,
     getUser: PropTypes.func.isRequired,
+    readMessage: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
@@ -172,6 +188,7 @@ const mapDispatchToProps = {
     currentUserConnected: currentUserConnected,
     addNewMessage: addNewMessage,
     getUser: getUser,
+    readMessage: readMessage,
 };
 
 export default connect(null, mapDispatchToProps)(ChatRoom);

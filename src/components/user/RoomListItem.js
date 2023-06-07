@@ -8,10 +8,11 @@ import {
     Typography,
     Divider,
 } from "@mui/material";
-import {useSelector} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {roomMessagesSelector} from "../../state/messages/selectors";
+import {readMessage} from "../../state/messages/actions";
 
-function RoomListItem({room, selectedRoom, setSelectedRoom}) {
+function RoomListItem({room, selectedRoom, setSelectedRoom, readMessage}) {
 
     const [lastMessage, setLastMessage] = useState('')
     const [avatar, setAvatar] = useState('')
@@ -27,7 +28,7 @@ function RoomListItem({room, selectedRoom, setSelectedRoom}) {
 
     useEffect(() => {
         const newUnreadMessages = roomMessages.filter(
-            (message) => message.senderId !== currentUser.data.id && !message.read.includes(currentUser.id)
+            (message) => message.senderId !== currentUser.data.id && !message.read.includes(currentUser.data.id)
         );
         setUnreadMessages(newUnreadMessages);
     }, [roomMessages, currentUser]);
@@ -48,6 +49,16 @@ function RoomListItem({room, selectedRoom, setSelectedRoom}) {
         setAvatar(avatar)
         setUserName(username)
     }, [users, currentUser, room]);
+
+    useEffect(() => {
+        if (selectedRoom === room.id && unreadMessages.length > 0) {
+            unreadMessages.forEach(message => {
+                    readMessage(message.id)
+                }
+            )
+        }
+        // eslint-disable-next-line
+    }, [selectedRoom])
 
     return (
         <React.Fragment>
@@ -103,4 +114,8 @@ function truncateString(str) {
     return str;
 }
 
-export default RoomListItem;
+const mapDispatchToProps = {
+    readMessage: readMessage
+};
+
+export default connect(null, mapDispatchToProps)(RoomListItem);

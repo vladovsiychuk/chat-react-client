@@ -69,3 +69,21 @@ export function sendMessage(roomId, content) {
         }
     }
 }
+
+export function readMessage(messageId) {
+    return async dispatch => {
+        const {method, path} = EndpointConstants.MESSAGES_READ;
+
+        dispatch(updateAsync(true));
+        try {
+            await authorized({
+                method,
+                path: path(messageId),
+            });
+
+            dispatch(updateAsync(false));
+        } catch (err) {
+            dispatch(updateAsync(false, err));
+        }
+    }
+}
