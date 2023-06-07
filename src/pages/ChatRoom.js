@@ -130,36 +130,30 @@ function ChatRoom({
     };
     return (
         <div>
-            {chatsAsync.isLoading ? (
+            {currentUser.socketData.connected && (
                 <div>
-                    Loading ...
+                    <UserListSidebar
+                        setSearchUsers={setSearchUsers}
+                        selectedRoom={selectedRoom}
+                        searchUsers={searchUsers}
+                        handleSearchUsersClick={handleSearchUsersClick}
+                        rooms={rooms}
+                        setSelectedRoom={setSelectedRoom}
+                        triggerQueryUpdate={triggerQueryUpdate}
+                    />
+                    {selectedRoom != null &&
+                        <div>
+                            <Header avatar={headerAvatar} username={headerUsername}/>
+                            <MessagesList roomMessages={selectedRoomMessages} currentUser={currentUser}/>
+                            <MessageInput
+                                message={message}
+                                setMessage={setMessage}
+                                handleKeyPress={handleKeyPress}
+                                sendNewMessage={sendNewMessage}
+                            />
+                        </div>
+                    }
                 </div>
-            ) : (
-                currentUser.socketData.connected && (
-                    <div>
-                        <UserListSidebar
-                            setSearchUsers={setSearchUsers}
-                            selectedRoom={selectedRoom}
-                            searchUsers={searchUsers}
-                            handleSearchUsersClick={handleSearchUsersClick}
-                            rooms={rooms}
-                            setSelectedRoom={setSelectedRoom}
-                            triggerQueryUpdate={triggerQueryUpdate}
-                        />
-                        {selectedRoom != null &&
-                            <div>
-                                <Header avatar={headerAvatar} username={headerUsername}/>
-                                <MessagesList roomMessages={selectedRoomMessages} currentUser={currentUser}/>
-                                <MessageInput
-                                    message={message}
-                                    setMessage={setMessage}
-                                    handleKeyPress={handleKeyPress}
-                                    sendNewMessage={sendNewMessage}
-                                />
-                            </div>
-                        }
-                    </div>
-                )
             )}
         </div>
     );
