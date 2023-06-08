@@ -9,34 +9,28 @@ import {
     Divider,
 } from "@mui/material";
 import {connect, useSelector} from "react-redux";
-import {roomMessagesSelector} from "../../state/messages/selectors";
+import {
+    lastRoomMessageSelector,
+    roomMessagesSelector,
+    roomUnreadMessagesSelector
+} from "../../state/messages/selectors";
 import {readMessage} from "../../state/messages/actions";
 
 function RoomListItem({room, selectedRoom, setSelectedRoom, readMessage}) {
 
-    const [lastMessage, setLastMessage] = useState('')
     const [avatar, setAvatar] = useState('')
     const [userName, setUserName] = useState('')
-    const [unreadMessages, setUnreadMessages] = useState([]);
 
     const currentUser = useSelector(state => state.users.currentUser);
     const users = useSelector(state => state.users.users);
 
-    const roomMessages = useSelector((state) =>
-        roomMessagesSelector(state, {roomId: room.id})
+    const lastRoomMessage = useSelector((state) =>
+        lastRoomMessageSelector(state, {roomId: room.id})
     );
 
-    useEffect(() => {
-        const newUnreadMessages = roomMessages.filter(
-            (message) => message.senderId !== currentUser.data.id && !message.read.includes(currentUser.data.id)
-        );
-        setUnreadMessages(newUnreadMessages);
-    }, [roomMessages, currentUser]);
-
-    useEffect(() => {
-        const lastMessage = roomMessages.length > 0 ? roomMessages[roomMessages.length - 1].content : '';
-        setLastMessage(lastMessage)
-    }, [roomMessages])
+    const unreadMessages = useSelector((state) =>
+        roomUnreadMessagesSelector(state, {roomId: room.id})
+    );
 
     useEffect(() => {
         const members = room.members.filter(member => member !== currentUser.data.id)
@@ -77,7 +71,7 @@ function RoomListItem({room, selectedRoom, setSelectedRoom, readMessage}) {
                     secondary={
                         <React.Fragment>
                             <Typography component="span" color="textPrimary">
-                                {lastMessage}
+                                {lastRoomMessage?.content ? lastRoomMessage.content : ''}
                             </Typography>
                         </React.Fragment>
                     }

@@ -2,6 +2,8 @@ import {createSelector} from "reselect";
 
 const getMessagesStore = (state) => state.messages.messages;
 
+const getCurrentUserStore = (state) => state.users.currentUser.data;
+
 const getRoomId = (state, props) => props.roomId;
 
 export const roomMessagesSelector = createSelector(
@@ -11,4 +13,16 @@ export const roomMessagesSelector = createSelector(
             .filter(message => message.roomId === roomId)
             .sort((a, b) => a.dateCreated - b.dateCreated);
     }
+);
+
+export const lastRoomMessageSelector = createSelector(
+    roomMessagesSelector,
+    (roomMessages) => roomMessages[roomMessages.length - 1]
+);
+
+export const roomUnreadMessagesSelector = createSelector(
+    [roomMessagesSelector, getCurrentUserStore],
+    (roomMessages, currentUser) => roomMessages.filter(
+        (message) => message.senderId !== currentUser.id && !message.read.includes(currentUser.id)
+    )
 );
