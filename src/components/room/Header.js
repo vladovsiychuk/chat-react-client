@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
     },
     avatar: {
-        marginTop: '10px',
+        marginTop: '15px',
         marginLeft: '25px',
         height: '50px',
         width: '50px',
