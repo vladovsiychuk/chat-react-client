@@ -11,6 +11,7 @@ import {roomMessagesSelector} from "../state/messages/selectors";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
+import MyHeader from "../components/room/MyHeader";
 
 
 function ChatRoom({
@@ -143,7 +144,7 @@ function ChatRoom({
                     />
                     {selectedRoom != null &&
                         <div>
-                            <Header avatar={headerAvatar} username={headerUsername}/>
+                            <MyHeader avatar={headerAvatar} username={headerUsername}/>
                             <MessagesList roomMessages={selectedRoomMessages} currentUser={currentUser}/>
                             <MessageInput
                                 message={message}
