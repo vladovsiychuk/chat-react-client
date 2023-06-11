@@ -1,6 +1,6 @@
 import React from 'react';
 import {makeStyles} from "@mui/styles";
-import {Avatar} from "@mui/material";
+import {Avatar, Divider} from "@mui/material";
 import MemberAvatars from "../user/MemberAvatars";
 import TranslatorAvatars from "../user/TranslatorAvatars";
 
@@ -26,7 +26,12 @@ const useStyles = makeStyles(() => ({
         height: '50px',
         width: '50px',
         marginRight: '10px',
-    }
+    },
+    divider: {
+        width: '2px',
+        margin: 'auto 10px',
+        backgroundColor: 'white',
+    },
 }));
 
 const Header = () => {
@@ -46,6 +51,7 @@ const Header = () => {
             </Avatar>
             <div className={classes.roomNameText}>{roomName}</div>
             <MemberAvatars users={listOfMembers}/>
+            <Divider sx={{height: '50%'}} orientation="vertical" className={classes.divider}/>
             <TranslatorAvatars users={listOfTranslators}/>
         </div>
     );
