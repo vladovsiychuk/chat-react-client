@@ -2,6 +2,7 @@ import React from 'react';
 import {makeStyles} from "@mui/styles";
 import {Avatar} from "@mui/material";
 import MemberAvatars from "../user/MemberAvatars";
+import TranslatorAvatars from "../user/TranslatorAvatars";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -44,6 +45,7 @@ const Header = () => {
             </Avatar>
             <div className={classes.roomNameText}>{roomName}</div>
             <MemberAvatars users={listOfUsers}/>
+            <TranslatorAvatars users={listOfUsers}/>
         </div>
     );
 };
