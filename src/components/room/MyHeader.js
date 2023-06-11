@@ -33,7 +33,8 @@ const Header = () => {
     const classes = useStyles();
     const roomAvatar = 'R';
     const roomName = 'test-room-name';
-    const listOfUsers = ['a', 'b', 'c', 'd', 'e'];
+    const listOfMembers = ['a', 'b', 'c', 'd', 'e'];
+    const listOfTranslators = ['a', 'b', 'c', 'd', 'e'];
 
     return (
         <div className={classes.root}>
@@ -44,8 +45,8 @@ const Header = () => {
                 {roomAvatar}
             </Avatar>
             <div className={classes.roomNameText}>{roomName}</div>
-            <MemberAvatars users={listOfUsers}/>
-            <TranslatorAvatars users={listOfUsers}/>
+            <MemberAvatars users={listOfMembers}/>
+            <TranslatorAvatars users={listOfTranslators}/>
         </div>
     );
 };
