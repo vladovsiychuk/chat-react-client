@@ -7,6 +7,7 @@ const useStyles = makeStyles(() => ({
     avatarsContainer: {
         display: 'flex',
         alignItems: 'center',
+        marginLeft: '10px',
     },
     avatar: {
         marginLeft: '-15px',
@@ -49,7 +50,7 @@ const TranslatorAvatars = ({users}) => {
                 <>
                     {users.slice(0, 2).map((user, index) => (
                         <Avatar
-                            sx={{width: 20, height: 20}}
+                            sx={{width: 30, height: 30}}
                             key={index}
                             className={classes.avatar}
                             alt={user}
@@ -57,7 +58,7 @@ const TranslatorAvatars = ({users}) => {
                             {user}
                         </Avatar>
                     ))}
-                    <Avatar sx={{width: 20, height: 20}} className={classes.avatarNumber}>
+                    <Avatar sx={{width: 30, height: 30}} className={classes.avatarNumber}>
                         2+
                     </Avatar>
                 </>
