@@ -1,7 +1,7 @@
 import React from 'react';
 import {makeStyles} from "@mui/styles";
 import {Avatar} from "@mui/material";
-import UserAvatars from "../user/UserAvatars";
+import MemberAvatars from "../user/MemberAvatars";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -43,7 +43,7 @@ const Header = () => {
                 {roomAvatar}
             </Avatar>
             <div className={classes.roomNameText}>{roomName}</div>
-            <UserAvatars users={listOfUsers}/>
+            <MemberAvatars users={listOfUsers}/>
         </div>
     );
 };

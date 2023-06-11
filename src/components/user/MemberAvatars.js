@@ -31,7 +31,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const UserAvatars = ({users}) => {
+const MemberAvatars = ({users}) => {
     const classes = useStyles();
 
     const renderAvatars = () => {
@@ -72,7 +72,7 @@ const UserAvatars = ({users}) => {
 
     return (
         <div className={classes.avatarsContainer}>
-            <span style={{color: 'white', marginRight: '20px'}}>Users: </span>
+            <span style={{color: 'white', marginRight: '20px'}}>Members: </span>
             {renderAvatars()}
             <IconButton
                 className={classes.addButton}
@@ -85,4 +85,4 @@ const UserAvatars = ({users}) => {
     );
 };
 
-export default UserAvatars;
+export default MemberAvatars;
