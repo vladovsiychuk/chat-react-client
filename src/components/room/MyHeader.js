@@ -1,6 +1,7 @@
 import React from 'react';
 import {makeStyles} from "@mui/styles";
 import {Avatar} from "@mui/material";
+import UserAvatars from "../user/UserAvatars";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -24,25 +25,7 @@ const useStyles = makeStyles(() => ({
         height: '50px',
         width: '50px',
         marginRight: '10px',
-    },
-    avatarsContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: 'auto',
-    },
-    avatar: {
-        marginLeft: '-15px',
-        zIndex: '1',
-        border: '2px solid #344195',
-    },
-    avatarNumber: {
-        marginLeft: '-15px',
-        zIndex: '1',
-        backgroundColor: 'white',
-        color: '#344195',
-        fontWeight: 'bold',
-        border: '2px solid #344195',
-    },
+    }
 }));
 
 const Header = () => {
@@ -60,23 +43,7 @@ const Header = () => {
                 {roomAvatar}
             </Avatar>
             <div className={classes.roomNameText}>{roomName}</div>
-            <div className={classes.avatarsContainer}>
-                <span style={{color: 'white', marginRight: '20px'}}>Users: </span>
-                {listOfUsers.slice(0, 2).map((user, index) => (
-                    <Avatar
-                        key={index}
-                        className={classes.avatar}
-                        alt={user}
-                    >
-                        {user}
-                    </Avatar>
-                ))}
-                {listOfUsers.length > 2 && (
-                    <Avatar className={classes.avatarNumber}>
-                        2+
-                    </Avatar>
-                )}
-            </div>
+            <UserAvatars users={listOfUsers}/>
         </div>
     );
 };
