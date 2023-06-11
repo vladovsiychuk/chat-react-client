@@ -1,6 +1,7 @@
 import React from 'react';
 import {makeStyles} from "@mui/styles";
-import {Avatar} from "@mui/material";
+import {Avatar, IconButton} from "@mui/material";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const useStyles = makeStyles(() => ({
     avatarsContainer: {
@@ -20,6 +21,13 @@ const useStyles = makeStyles(() => ({
         color: '#344195',
         fontWeight: 'bold',
         border: '2px solid #344195',
+    },
+    addButton: {
+        color: 'white',
+        marginRight: '10px',
+    },
+    addIcon: {
+        color: 'white',
     },
 }));
 
@@ -50,19 +58,31 @@ const UserAvatars = ({users}) => {
                         </Avatar>
                     ))}
                     <Avatar className={classes.avatarNumber}>
-                        2+
+                        {users.length - 2}+
                     </Avatar>
                 </>
             );
         }
     };
 
+    const handleAddUser = () => {
+        // Add logic for adding a new user
+        console.log('Add user clicked');
+    };
+
     return (
         <div className={classes.avatarsContainer}>
             <span style={{color: 'white', marginRight: '20px'}}>Users: </span>
             {renderAvatars()}
+            <IconButton
+                className={classes.addButton}
+                onClick={handleAddUser}
+                aria-label="Add User"
+            >
+                <PersonAddIcon className={classes.addIcon}/>
+            </IconButton>
         </div>
     );
 };
 
-export default UserAvatars
+export default UserAvatars;
