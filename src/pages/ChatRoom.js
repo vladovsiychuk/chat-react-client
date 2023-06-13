@@ -11,7 +11,6 @@ import {roomMessagesSelector} from "../state/messages/selectors";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
-import MyHeader from "../components/room/MyHeader";
 
 
 function ChatRoom({
@@ -31,13 +30,9 @@ function ChatRoom({
     const selectedRoomRef = useRef(selectedRoom);
     const [searchUsers, setSearchUsers] = useState([]);
     const [message, setMessage] = useState('');
-    const [headerAvatar, setHeaderAvatar] = useState(null)
-    const [headerUsername, setHeaderUsername] = useState('')
     const [triggerQueryUpdate, setTriggerQueryUpdate] = useState(0);
 
     const rooms = useSelector(state => state.rooms.rooms);
-    const users = useSelector(state => state.users.users);
-    const chatsAsync = useSelector(state => state.rooms.async);
     const currentUser = useSelector(state => state.users.currentUser);
 
     const token = getAccessToken();
@@ -59,20 +54,6 @@ function ChatRoom({
     useEffect(() => {
         selectedRoomRef.current = selectedRoom; // Update the ref when the state changes
     }, [selectedRoom]);
-
-    useEffect(() => {
-        if (selectedRoom !== null) {
-            const room = rooms.find(room => room.id === selectedRoom);
-            const members = room.members.filter(member => member !== currentUser.data.id);
-            const user = users.find(user => user.id === members[0]);
-
-            const avatar = members.length === 1 && user ? user.email.charAt(0) : null;
-            const username = members.length === 1 && user ? user.email : '';
-
-            setHeaderAvatar(avatar);
-            setHeaderUsername(username);
-        }
-    }, [selectedRoom, currentUser, rooms, users])
 
     const connect = () => {
         const ws = new WebSocket(`ws://localhost:8082/ws/chat/${currentUser.data.id}?access_token=${token}`);
@@ -144,7 +125,7 @@ function ChatRoom({
                     />
                     {selectedRoom != null &&
                         <div>
-                            <MyHeader avatar={headerAvatar} username={headerUsername}/>
+                            <Header selectedRoomId={selectedRoom}/>
                             <MessagesList roomMessages={selectedRoomMessages} currentUser={currentUser}/>
                             <MessageInput
                                 message={message}

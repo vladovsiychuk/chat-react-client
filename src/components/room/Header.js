@@ -1,6 +1,9 @@
 import React from 'react';
 import {makeStyles} from "@mui/styles";
 import {Avatar} from "@mui/material";
+import {useSelector} from "react-redux";
+import {roomMessagesSelector} from "../../state/messages/selectors";
+import {getUsers} from "../../state/users/selectors";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -29,19 +32,60 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Header = ({avatar, username}) => {
+const Header = ({selectedRoomId}) => {
     const classes = useStyles();
+
+    const currentUser = useSelector(state => state.users.currentUser.data);
+
+    const selectedRoom = useSelector((state) =>
+        roomMessagesSelector(state, {roomId: selectedRoomId})
+    );
+
+    function listOfMembers(memberIds) {
+        const roomMembers = useSelector((state) =>
+            getUsers(state, {userIds: memberIds})
+        );
+
+        return capitalizeAndJoin(roomMembers.map(member => member.username ? member.username : member.email))
+    }
+
+    const roomName = selectedRoom.name ?
+        selectedRoom.name :
+        selectedRoom.members.length === 2 ?
+            selectedRoom.members.find(member => member.id !== currentUser.id).email :
+            listOfMembers(selectedRoom.members)
+
+    const roomAvatar = selectedRoom.members.length === 2 ?
+        selectedRoom.members.find(member => member.id !== currentUser.id).email.substring(0, 1) :
+        'i'
+
 
     return (
         <div className={classes.root}>
             <div className={classes.emailText}>
-                {username}
+                {roomName}
             </div>
             <Avatar className={classes.avatar} alt="Remy Sharp">
-                {avatar}
+                {roomAvatar}
             </Avatar>
         </div>
     );
 };
+
+function capitalizeAndJoin(list) {
+    const result = [];
+
+    for (let i = 0; i < list.length; i++) {
+        const word = list[i];
+
+        if (word.length >= 3) {
+            const substring = word.substring(0, 3);
+            const capitalized = substring.charAt(0).toUpperCase() + substring.slice(1);
+            result.push(capitalized);
+        }
+    }
+
+    return result.join(", ");
+}
 
 export default Header;
