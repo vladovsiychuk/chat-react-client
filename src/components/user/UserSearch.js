@@ -4,6 +4,7 @@ import {Search} from '@mui/icons-material';
 import {createStyles, makeStyles} from '@mui/styles';
 import EndpointConstants from '../../constants/EndpointConstants';
 import {authorized} from '../../state/httpClient';
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -38,9 +39,10 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserSearch({setSearchUsers, selectedRoom, triggerQueryUpdate}) {
+function UserSearch({setSearchUsers, triggerQueryUpdate}) {
     const classes = useStyles();
     const [query, setQuery] = useState('');
+    const selectedRoom = useSelector(state => state.rooms.selectedRoomId)
 
     useEffect(() => {
         async function fetchUsers() {

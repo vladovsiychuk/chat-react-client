@@ -1,6 +1,8 @@
 import React from 'react';
 import {makeStyles} from "@mui/styles";
 import {Grid, ListItem, ListItemText} from "@mui/material";
+import {useSelector} from "react-redux";
+import {getSelectedRoomMessages} from "../../state/messages/selectors";
 
 const useStyles = makeStyles(() => ({
     main: {
@@ -17,8 +19,12 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const MessagesList = ({roomMessages, currentUser}) => {
+const MessagesList = () => {
     const classes = useStyles();
+
+    const currentUser = useSelector(state => state.users.currentUser)
+    const roomMessages = useSelector(state => getSelectedRoomMessages(state))
+
     const timestampToDate = require("timestamp-to-date");
 
     return (

@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from "@mui/styles";
 import {Avatar} from "@mui/material";
 import {useSelector} from "react-redux";
-import {roomMessagesSelector} from "../../state/messages/selectors";
-import {getUsers} from "../../state/users/selectors";
+import {getSelectedRoomSelector} from "../../state/rooms/selectors";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -32,32 +31,41 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const Header = ({selectedRoomId}) => {
+const Header = () => {
     const classes = useStyles();
+
+    const [roomName, setRoomName] = useState('')
+    const [roomAvatar, setRoomAvatar] = useState('')
 
     const currentUser = useSelector(state => state.users.currentUser.data);
 
-    const selectedRoom = useSelector((state) =>
-        roomMessagesSelector(state, {roomId: selectedRoomId})
-    );
+    const selectedRoom = useSelector(state => getSelectedRoomSelector(state))
 
-    function listOfMembers(memberIds) {
-        const roomMembers = useSelector((state) =>
-            getUsers(state, {userIds: memberIds})
-        );
+    const allUsers = useSelector(state => state.users.users)
 
-        return capitalizeAndJoin(roomMembers.map(member => member.username ? member.username : member.email))
-    }
 
-    const roomName = selectedRoom.name ?
-        selectedRoom.name :
-        selectedRoom.members.length === 2 ?
-            selectedRoom.members.find(member => member.id !== currentUser.id).email :
-            listOfMembers(selectedRoom.members)
+    useEffect(() => {
+        function listOfMembers(memberIds) {
+            const roomMembers = allUsers.filter(user => memberIds.includes(user.id))
 
-    const roomAvatar = selectedRoom.members.length === 2 ?
-        selectedRoom.members.find(member => member.id !== currentUser.id).email.substring(0, 1) :
-        'i'
+            return capitalizeAndJoin(roomMembers.map(member => member.username ? member.username : member.email))
+        }
+
+        if (selectedRoom) {
+            const calculatedRoomName = selectedRoom.name ?
+                selectedRoom.name :
+                selectedRoom.members.length === 2 ?
+                    allUsers.find(user => user.id === selectedRoom.members.find(member => member !== currentUser.id))?.email :
+                    listOfMembers(selectedRoom.members)
+
+            const calculatedRoomAvatar = selectedRoom.members.length === 2 ?
+                allUsers.find(user => user.id === selectedRoom.members.find(member => member !== currentUser.id))?.email?.substring(0, 1) :
+                'i'
+
+            setRoomName(calculatedRoomName)
+            setRoomAvatar(calculatedRoomAvatar)
+        }
+    }, [selectedRoom, currentUser.id, allUsers])
 
 
     return (

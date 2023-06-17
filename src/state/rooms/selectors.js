@@ -4,6 +4,8 @@ const getRoomId = (state, props) => props.roomId;
 
 const getRoomsStore = (state) => state.rooms.rooms;
 
+const getSelectedRoomId = (state) => state.rooms.selectedRoomId
+
 export const roomSelector = createSelector(
     [getRoomsStore, getRoomId],
     (roomStore, roomId) => {
@@ -11,3 +13,8 @@ export const roomSelector = createSelector(
             .filter(room => room.id === roomId)
     }
 );
+
+export const getSelectedRoomSelector = createSelector(
+    [getRoomsStore, getSelectedRoomId,],
+    (roomsStore, selectedRoomId) => roomsStore.find(room => room.id === selectedRoomId)
+)

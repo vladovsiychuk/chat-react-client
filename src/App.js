@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import {getAccessToken} from './state/middleware/authMiddleware';
-import ChatRoom from './pages/ChatRoom';
+import ChatRoom from './pages/Chat';
 import AuthPage from './pages/AuthPage';
 import PropTypes from 'prop-types';
 import {connect, useSelector} from 'react-redux';

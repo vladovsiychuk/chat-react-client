@@ -1,7 +1,7 @@
 import React from 'react';
-import { ListItemButton, ListItemAvatar, Avatar, Divider, ListItemText } from '@mui/material';
+import {ListItemButton, ListItemAvatar, Avatar, Divider, ListItemText} from '@mui/material';
 
-function UserSearchItem({ user, selectedRoom, handleSearchUsersClick }) {
+function UserSearchItem({user, handleSearchUsersClick}) {
 
     return (
         <React.Fragment>
@@ -9,7 +9,6 @@ function UserSearchItem({ user, selectedRoom, handleSearchUsersClick }) {
                 onClick={() => {
                     handleSearchUsersClick(user.id);
                 }}
-                selected={selectedRoom === user.id}
                 alignItems="flex-start"
             >
                 <ListItemAvatar>

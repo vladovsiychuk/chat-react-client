@@ -4,6 +4,8 @@ const getMessagesStore = (state) => state.messages.messages;
 
 const getCurrentUserStore = (state) => state.users.currentUser.data;
 
+const getSelectedRoomId = (state) => state.rooms.selectedRoomId
+
 const getRoomId = (state, props) => props.roomId;
 
 export const roomMessagesSelector = createSelector(
@@ -25,4 +27,13 @@ export const roomUnreadMessagesSelector = createSelector(
     (roomMessages, currentUser) => roomMessages.filter(
         (message) => message.senderId !== currentUser.id && !message.read.includes(currentUser.id)
     )
+);
+
+export const getSelectedRoomMessages = createSelector(
+    [getMessagesStore, getSelectedRoomId],
+    (messagesStore, selectedRoomId) => {
+        return messagesStore
+            .filter(message => message.roomId === selectedRoomId)
+            .sort((a, b) => a.dateCreated - b.dateCreated);
+    }
 );

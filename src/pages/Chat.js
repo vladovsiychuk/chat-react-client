@@ -2,46 +2,40 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {createRoom, getRoom, loadRooms} from '../state/rooms/actions';
+import {createRoom, getRoom, loadRooms, setSelectedRoom} from '../state/rooms/actions';
 import {currentUserConnected, getUser, loadUsers} from '../state/users/actions';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
 import {addNewMessage, loadMessages, readMessage, sendMessage} from "../state/messages/actions";
-import {roomMessagesSelector} from "../state/messages/selectors";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
 
 
-function ChatRoom({
-                      loadRooms,
-                      getRoom,
-                      createRoom,
-                      loadMessages,
-                      sendMessage,
-                      loadUsers,
-                      currentUserConnected,
-                      addNewMessage,
-                      getUser,
-                      readMessage,
-                  }) {
+function Chat({
+                  loadRooms,
+                  getRoom,
+                  setSelectedRoom,
+                  createRoom,
+                  loadMessages,
+                  sendMessage,
+                  loadUsers,
+                  currentUserConnected,
+                  addNewMessage,
+                  getUser,
+                  readMessage,
+              }) {
 
-    const [selectedRoom, setSelectedRoom] = useState(null);
-    const selectedRoomRef = useRef(selectedRoom);
     const [searchUsers, setSearchUsers] = useState([]);
     const [message, setMessage] = useState('');
     const [triggerQueryUpdate, setTriggerQueryUpdate] = useState(0);
 
     const rooms = useSelector(state => state.rooms.rooms);
     const currentUser = useSelector(state => state.users.currentUser);
+    const selectedRoom = useSelector(state => state.rooms.selectedRoomId)
+    const selectedRoomRef = useRef(selectedRoom);
 
     const token = getAccessToken();
-
-
-    const selectedRoomMessages = useSelector((state) =>
-        roomMessagesSelector(state, {roomId: selectedRoom})
-    );
-
 
     useEffect(() => {
         loadRooms();
@@ -100,7 +94,7 @@ function ChatRoom({
             setSelectedRoom(room.id);
             setTriggerQueryUpdate(prevTrigger => prevTrigger + 1);
         } else
-            createRoom(userId, setSelectedRoom)
+            createRoom(userId)
 
         getUser(userId)
     };
@@ -116,17 +110,15 @@ function ChatRoom({
                 <div>
                     <UserListSidebar
                         setSearchUsers={setSearchUsers}
-                        selectedRoom={selectedRoom}
                         searchUsers={searchUsers}
                         handleSearchUsersClick={handleSearchUsersClick}
                         rooms={rooms}
-                        setSelectedRoom={setSelectedRoom}
                         triggerQueryUpdate={triggerQueryUpdate}
                     />
-                    {selectedRoom != null &&
+                    {selectedRoom &&
                         <div>
-                            <Header selectedRoomId={selectedRoom}/>
-                            <MessagesList roomMessages={selectedRoomMessages} currentUser={currentUser}/>
+                            <Header/>
+                            <MessagesList/>
                             <MessageInput
                                 message={message}
                                 setMessage={setMessage}
@@ -141,9 +133,10 @@ function ChatRoom({
     );
 }
 
-ChatRoom.propTypes = {
+Chat.propTypes = {
     loadRooms: PropTypes.func.isRequired,
     getRoom: PropTypes.func.isRequired,
+    setSelectedRoom: PropTypes.func.isRequired,
     createRoom: PropTypes.func.isRequired,
     loadMessages: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
@@ -157,6 +150,7 @@ ChatRoom.propTypes = {
 const mapDispatchToProps = {
     loadRooms: loadRooms,
     getRoom: getRoom,
+    setSelectedRoom: setSelectedRoom,
     createRoom: createRoom,
     loadMessages: loadMessages,
     sendMessage: sendMessage,
@@ -167,4 +161,4 @@ const mapDispatchToProps = {
     readMessage: readMessage,
 };
 
-export default connect(null, mapDispatchToProps)(ChatRoom);
+export default connect(null, mapDispatchToProps)(Chat);

@@ -2,6 +2,7 @@ import types from './types';
 
 export const initialState = {
     rooms: [],
+    selectedRoomId: '',
     async: {
         isLoading: null,
         error: null,
@@ -51,6 +52,15 @@ export default function roomsReducer(state = initialState, action) {
                     rooms: [...state.rooms, action.data],
                 };
             }
+        }
+        case types.SET_SELECTED_ROOM: {
+            return {
+                ...state,
+                async: {
+                    ...state.async,
+                },
+                selectedRoomId: action.data,
+            };
         }
         default:
             return state;

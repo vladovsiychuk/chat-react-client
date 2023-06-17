@@ -26,6 +26,13 @@ function addNewRoom(room) {
     };
 }
 
+export function setSelectedRoom(selectedRoomId) {
+    return {
+        type: types.SET_SELECTED_ROOM,
+        data: selectedRoomId,
+    };
+}
+
 export function loadRooms() {
     return async dispatch => {
         const endpoint = EndpointConstants.ROOMS_LIST;
@@ -64,7 +71,7 @@ export function getRoom(roomId) {
     }
 }
 
-export function createRoom(companionUserId, setTab) {
+export function createRoom(companionUserId) {
     return async dispatch => {
         const endpoint = EndpointConstants.ROOMS_POST;
 
@@ -80,7 +87,7 @@ export function createRoom(companionUserId, setTab) {
 
             if (res) {
                 dispatch(addNewRoom(res));
-                setTab(res.id)
+                dispatch(setSelectedRoom(res.id))
             }
             dispatch(updateAsync(false));
         } catch (err) {

@@ -11,18 +11,19 @@ import {
 import {connect, useSelector} from "react-redux";
 import {
     lastRoomMessageSelector,
-    roomMessagesSelector,
     roomUnreadMessagesSelector
 } from "../../state/messages/selectors";
 import {readMessage} from "../../state/messages/actions";
+import {setSelectedRoom} from "../../state/rooms/actions";
 
-function RoomListItem({room, selectedRoom, setSelectedRoom, readMessage}) {
+function RoomListItem({room, setSelectedRoom, readMessage}) {
 
     const [avatar, setAvatar] = useState('')
     const [userName, setUserName] = useState('')
 
     const currentUser = useSelector(state => state.users.currentUser);
     const users = useSelector(state => state.users.users);
+    const selectedRoom = useSelector(state => state.rooms.selectedRoomId)
 
     const lastRoomMessage = useSelector((state) =>
         lastRoomMessageSelector(state, {roomId: room.id})
@@ -109,7 +110,8 @@ function truncateString(str) {
 }
 
 const mapDispatchToProps = {
-    readMessage: readMessage
+    readMessage: readMessage,
+    setSelectedRoom: setSelectedRoom
 };
 
 export default connect(null, mapDispatchToProps)(RoomListItem);
