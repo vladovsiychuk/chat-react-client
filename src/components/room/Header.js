@@ -5,6 +5,7 @@ import {useSelector} from "react-redux";
 import {getSelectedRoomSelector} from "../../state/rooms/selectors";
 import MemberAvatars from "../user/MemberAvatars";
 import TranslatorAvatars from "../user/TranslatorAvatars";
+import SearchDialog from "../dialogs/SearchDialog";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -79,6 +80,7 @@ const Header = () => {
 
     return (
         <div className={classes.root}>
+            <SearchDialog/>
             <Avatar className={classes.roomAvatar} alt="Remy Sharp">
                 {roomAvatar}
             </Avatar>
