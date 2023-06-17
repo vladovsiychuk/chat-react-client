@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {makeStyles} from "@mui/styles";
-import {Avatar} from "@mui/material";
+import {Avatar, Divider} from "@mui/material";
 import {useSelector} from "react-redux";
 import {getSelectedRoomSelector} from "../../state/rooms/selectors";
+import MemberAvatars from "../user/MemberAvatars";
+import TranslatorAvatars from "../user/TranslatorAvatars";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -12,22 +14,25 @@ const useStyles = makeStyles(() => ({
         position: 'fixed',
         marginLeft: '301px',
         boxSizing: 'border-box',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 10px',
     },
-    emailText: {
-        backgroundColor: '#344195',
-        position: 'fixed',
-        marginTop: '25px',
-        marginLeft: '85px',
+    roomNameText: {
         fontSize: '18px',
         textAlign: 'center',
         color: 'white',
-        boxSizing: 'border-box',
     },
-    avatar: {
-        marginTop: '15px',
-        marginLeft: '25px',
+    roomAvatar: {
         height: '50px',
         width: '50px',
+        marginRight: '10px',
+    },
+    divider: {
+        width: '2px',
+        margin: 'auto 10px',
+        backgroundColor: 'white',
     },
 }));
 
@@ -68,14 +73,23 @@ const Header = () => {
     }, [selectedRoom, currentUser.id, allUsers])
 
 
+    function selectedRoomMembers(type) {
+        return allUsers.filter(user => selectedRoom.members.includes(user.id) && user.type === type)
+    }
+
     return (
         <div className={classes.root}>
-            <div className={classes.emailText}>
-                {roomName}
-            </div>
-            <Avatar className={classes.avatar} alt="Remy Sharp">
+            <Avatar className={classes.roomAvatar} alt="Remy Sharp">
                 {roomAvatar}
             </Avatar>
+            <div className={classes.roomNameText}>
+                {roomName}
+            </div>
+            <MemberAvatars
+                users={selectedRoomMembers('REGULAR_USER').map(user => user.email).map(email => email.substring(0, 1))}/>
+            <Divider sx={{height: '50%'}} orientation="vertical" className={classes.divider}/>
+            <TranslatorAvatars
+                users={selectedRoomMembers('TRANSLATOR').map(user => user.email).map(email => email.substring(0, 1))}/>
         </div>
     );
 };

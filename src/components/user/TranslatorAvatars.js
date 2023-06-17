@@ -38,6 +38,7 @@ const TranslatorAvatars = ({users}) => {
         if (users.length <= 2) {
             return users.map((user, index) => (
                 <Avatar
+                    sx={{width: 30, height: 30}}
                     key={index}
                     className={classes.avatar}
                     alt={user}
