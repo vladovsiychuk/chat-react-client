@@ -10,8 +10,6 @@ import {addNewMessage, loadMessages, readMessage, sendMessage} from "../state/me
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
-import SearchDialog from "../components/dialogs/SearchDialog";
-
 
 function Chat({
                   loadRooms,

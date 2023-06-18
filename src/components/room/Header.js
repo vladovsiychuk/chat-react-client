@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 import {getSelectedRoomSelector} from "../../state/rooms/selectors";
 import MemberAvatars from "../user/MemberAvatars";
 import TranslatorAvatars from "../user/TranslatorAvatars";
-import SearchDialog from "../dialogs/SearchDialog";
+import UserTypes from "../../constants/UserTypes";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -39,6 +39,7 @@ const useStyles = makeStyles(() => ({
 
 const Header = () => {
     const classes = useStyles();
+    const {REGULAR_USER, TRANSLATOR} = UserTypes
 
     const [roomName, setRoomName] = useState('')
     const [roomAvatar, setRoomAvatar] = useState('')
@@ -80,7 +81,6 @@ const Header = () => {
 
     return (
         <div className={classes.root}>
-            <SearchDialog/>
             <Avatar className={classes.roomAvatar} alt="Remy Sharp">
                 {roomAvatar}
             </Avatar>
@@ -88,10 +88,10 @@ const Header = () => {
                 {roomName}
             </div>
             <MemberAvatars
-                users={selectedRoomMembers('REGULAR_USER').map(user => user.email).map(email => email.substring(0, 1))}/>
+                users={selectedRoomMembers(REGULAR_USER).map(user => user.email).map(email => email.substring(0, 1))}/>
             <Divider sx={{height: '50%'}} orientation="vertical" className={classes.divider}/>
             <TranslatorAvatars
-                users={selectedRoomMembers('TRANSLATOR').map(user => user.email).map(email => email.substring(0, 1))}/>
+                users={selectedRoomMembers(TRANSLATOR).map(user => user.email).map(email => email.substring(0, 1))}/>
         </div>
     );
 };

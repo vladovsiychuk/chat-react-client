@@ -1,39 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { makeStyles } from "@mui/styles";
-import { Dialog, DialogContent, TextField, List, ListItem, ListItemText } from "@mui/material";
+import React, {useState, useEffect, useRef} from 'react';
+import {makeStyles} from "@mui/styles";
+import {Dialog, DialogContent, List} from "@mui/material";
+import UserSearch from "../user/UserSearch";
+import UserSearchItem from "../user/UserSearchItem";
+import {useSelector} from "react-redux";
+import {getUsersByType} from "../../state/users/selectors";
 
 const useStyles = makeStyles(() => ({
     dialogContent: {
         padding: '16px',
+        width: '300px',
+        height: '600px',
     },
     searchInput: {
         marginBottom: '16px',
     },
 }));
 
-const SearchDialog = () => {
+const SearchDialog = ({type, handleSearchDialogOpen}) => {
     const classes = useStyles();
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState(['testA', 'testB', 'testC']);
+
+    const usersFromStore = useSelector(state => getUsersByType(state, {type}))
+
     const dialogRef = useRef(null);
-
-    const handleSearch = () => {
-        // Simulating server request to get search results
-        // Replace with actual server request implementation
-        // Example: axios.get('/search', { params: { query: searchQuery }})
-        //       .then(response => setSearchResults(response.data.results))
-        setSearchResults(['result1', 'result2', 'result3']);
-    };
-
-    const handleClose = () => {
-        // Handle dialog close logic here
-    };
+    const [searchUsers, setSearchUsers] = useState([]);
+    const [triggerQueryUpdate, setTriggerQueryUpdate] = useState(0);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dialogRef.current && !dialogRef.current.contains(event.target)) {
-                console.log("Clicked outside the SearchDialog");
-                handleClose();
+                handleSearchDialogOpen()
             }
         };
 
@@ -44,22 +40,43 @@ const SearchDialog = () => {
         };
     }, []);
 
+    const handleSearchUsersClick = (userId) => {
+        // const room = rooms.find(room => room.members.includes(userId))
+        //
+        // if (room) {
+        //     setSelectedRoom(room.id);
+        //     setTriggerQueryUpdate(prevTrigger => prevTrigger + 1);
+        // } else
+        //     createRoom(userId)
+        //
+        // getUser(userId)
+    };
+
     return (
-        <Dialog open={true} onClose={handleClose}>
+        <Dialog open={true}>
             <DialogContent className={classes.dialogContent} ref={dialogRef}>
-                <TextField
-                    label="Search"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className={classes.searchInput}
-                />
-                <List>
-                    {searchResults.map((result, index) => (
-                        <ListItem key={index}>
-                            <ListItemText primary={result} />
-                        </ListItem>
-                    ))}
-                </List>
+                <UserSearch setSearchUsers={setSearchUsers} triggerQueryUpdate={triggerQueryUpdate}/>
+                {searchUsers.length > 0 ? (
+                    <List>
+                        {searchUsers.map((user, index) => (
+                            <UserSearchItem
+                                key={index}
+                                user={user}
+                                handleSearchUsersClick={handleSearchUsersClick}
+                            />
+                        ))}
+                    </List>
+                ) : (
+                    <List>
+                        {usersFromStore.map((user, index) => (
+                            <UserSearchItem
+                                key={index}
+                                user={user}
+                                handleSearchUsersClick={handleSearchUsersClick}
+                            />
+                        ))}
+                    </List>
+                )}
             </DialogContent>
         </Dialog>
     );

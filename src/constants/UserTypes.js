@@ -1,0 +1,4 @@
+export default {
+    REGULAR_USER: 'REGULAR_USER',
+    TRANSLATOR: 'TRANSLATOR'
+};
