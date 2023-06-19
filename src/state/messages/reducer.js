@@ -28,7 +28,7 @@ export default function messagesReducer(state = initialState, action) {
                 messages: action.data,
             };
         }
-        case types.MESSAGES_ADD : {
+        case types.MESSAGES_UPDATE : {
             // Check if the message already exists in the state
             const existingMessageIndex = state.messages.findIndex(
                 (message) => message.id === action.data.id

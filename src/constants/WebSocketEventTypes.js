@@ -1,0 +1,4 @@
+export default {
+    MESSAGE_UPDATE: 'MESSAGE_UPDATE',
+    ROOM_UPDATE: 'ROOM_UPDATE'
+};

@@ -19,9 +19,9 @@ function messagesLoaded(messages) {
     };
 }
 
-export function addNewMessage(message) {
+export function updateMessages(message) {
     return {
-        type: types.MESSAGES_ADD,
+        type: types.MESSAGES_UPDATE,
         data: message,
     }
 }

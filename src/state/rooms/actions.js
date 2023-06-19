@@ -19,9 +19,9 @@ function roomsLoaded(rooms) {
     };
 }
 
-function addNewRoom(room) {
+export function updateRooms(room) {
     return {
-        type: types.ROOMS_ADD,
+        type: types.ROOMS_UPDATE,
         data: room,
     };
 }
@@ -63,7 +63,7 @@ export function getRoom(roomId) {
                 method: endpoint.method,
             });
 
-            dispatch(addNewRoom(res));
+            dispatch(updateRooms(res));
             dispatch(updateAsync(false));
         } catch (err) {
             dispatch(updateAsync(false, err));
@@ -86,7 +86,7 @@ export function createRoom(companionUserId) {
             });
 
             if (res) {
-                dispatch(addNewRoom(res));
+                dispatch(updateRooms(res));
                 dispatch(setSelectedRoom(res.id))
             }
             dispatch(updateAsync(false));

@@ -2,14 +2,15 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {createRoom, getRoom, loadRooms, setSelectedRoom} from '../state/rooms/actions';
+import {createRoom, getRoom, loadRooms, setSelectedRoom, updateRooms} from '../state/rooms/actions';
 import {currentUserConnected, getUser, loadUsers} from '../state/users/actions';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
-import {addNewMessage, loadMessages, readMessage, sendMessage} from "../state/messages/actions";
+import {updateMessages, loadMessages, readMessage, sendMessage} from "../state/messages/actions";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
+import WebSocketEventTypes from "../constants/WebSocketEventTypes";
 
 function Chat({
                   loadRooms,
@@ -20,10 +21,13 @@ function Chat({
                   sendMessage,
                   loadUsers,
                   currentUserConnected,
-                  addNewMessage,
+                  updateMessages,
+                  updateRooms,
                   getUser,
                   readMessage,
               }) {
+
+    const {MESSAGE_UPDATE, ROOM_UPDATE} = WebSocketEventTypes
 
     const [searchUsers, setSearchUsers] = useState([]);
     const [message, setMessage] = useState('');
@@ -57,19 +61,31 @@ function Chat({
         };
 
         ws.onmessage = (event) => {
-            console.log(`Received message: ${event.data}`);
-            const receivedMessage = JSON.parse(event.data)
+            console.log(`Received event: ${event.data}`);
+            const receivedEvent = JSON.parse(event.data)
 
-            addNewMessage(receivedMessage)
-            getRoom(receivedMessage.roomId)
-            getUser(receivedMessage.senderId)
+            if (receivedEvent.type === MESSAGE_UPDATE) {
+                const message = receivedEvent.data
+
+                updateMessages(message)
+                getRoom(message.roomId)
+                getUser(message.senderId)
 
 
-            if (currentUser.data.id !== receivedMessage.senderId &&
-                selectedRoomRef.current === receivedMessage.roomId &&
-                !receivedMessage.read.includes(currentUser.data.id)
-            )
-                readMessage(JSON.parse(event.data).id)
+                if (currentUser.data.id !== message.senderId &&
+                    selectedRoomRef.current === message.roomId &&
+                    !message.read.includes(currentUser.data.id)
+                )
+                    readMessage(message.id)
+
+            } else if (receivedEvent.type === ROOM_UPDATE) {
+                const room = receivedEvent.data
+
+                updateRooms(room)
+
+                room.members.forEach(userId => getUser(userId))
+            } else {
+            }
         };
 
         ws.onclose = () => {
@@ -141,7 +157,8 @@ Chat.propTypes = {
     sendMessage: PropTypes.func.isRequired,
     loadUsers: PropTypes.func.isRequired,
     currentUserConnected: PropTypes.func.isRequired,
-    addNewMessage: PropTypes.func.isRequired,
+    updateMessages: PropTypes.func.isRequired,
+    updateRooms: PropTypes.func.isRequired,
     getUser: PropTypes.func.isRequired,
     readMessage: PropTypes.func.isRequired
 };
@@ -155,7 +172,8 @@ const mapDispatchToProps = {
     sendMessage: sendMessage,
     loadUsers: loadUsers,
     currentUserConnected: currentUserConnected,
-    addNewMessage: addNewMessage,
+    updateMessages: updateMessages,
+    updateRooms: updateRooms,
     getUser: getUser,
     readMessage: readMessage,
 };

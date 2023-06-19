@@ -29,7 +29,7 @@ export default function roomsReducer(state = initialState, action) {
                 rooms: action.data,
             };
         }
-        case types.ROOMS_ADD : {
+        case types.ROOMS_UPDATE : {
             // Check if the room already exists in the state
             const existingRoomIndex = state.rooms.findIndex(
                 (room) => room.id === action.data.id
