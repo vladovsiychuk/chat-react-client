@@ -9,6 +9,11 @@ export default {
         path: (id) => `http://localhost:8082/v1/rooms/${id}`,
     },
 
+    ROOMS_ADD_MEMBERS: {
+        method: 'PUT',
+        path: (roomId) => `http://localhost:8082/v1/rooms/${roomId}/members`,
+    },
+
     ROOMS_POST: {
         method: 'POST',
         path: 'http://localhost:8082/v1/rooms',
@@ -17,6 +22,11 @@ export default {
     MESSAGES_GET: {
         method: 'GET',
         path: (roomLimit) => `http://localhost:8082/v1/messages?roomLimit=${roomLimit}`,
+    },
+
+    MESSAGES_ROOMS_GET: {
+        method: 'GET',
+        path: (roomId) => `http://localhost:8082/v1/messages/rooms/${roomId}`,
     },
 
     MESSAGES_POST: {
@@ -41,7 +51,12 @@ export default {
 
     USER_LIST: {
         method: 'GET',
-        path: (query, roomLimit) => `http://localhost:8082/v1/users/?query=${query}&roomLimit=${roomLimit}`,
+        path: (query, type) => `http://localhost:8082/v1/users/?query=${query}${type !== null ? `&type=${type}` : ""}`,
+    },
+
+    USER_ROOMS_MEMBERS: {
+        method: 'GET',
+        path: 'http://localhost:8082/v1/users/rooms',
     },
 
     USER_GET: {

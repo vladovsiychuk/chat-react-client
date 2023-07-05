@@ -39,7 +39,7 @@ const useStyles = makeStyles(() =>
     })
 );
 
-function UserSearch({setSearchUsers, triggerQueryUpdate}) {
+function UserSearch({setSearchUsers, triggerQueryUpdate, type = null}) {
     const classes = useStyles();
     const [query, setQuery] = useState('');
     const selectedRoom = useSelector(state => state.rooms.selectedRoomId)
@@ -50,7 +50,7 @@ function UserSearch({setSearchUsers, triggerQueryUpdate}) {
             try {
                 const response = await authorized({
                     method,
-                    path: path(query, null),
+                    path: path(query, type),
                 });
                 setSearchUsers(response);
             } catch {

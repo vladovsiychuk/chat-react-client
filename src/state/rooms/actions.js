@@ -71,6 +71,27 @@ export function getRoom(roomId) {
     }
 }
 
+export function addRoomMember(roomId, userId) {
+    return async dispatch => {
+        const endpoint = EndpointConstants.ROOMS_ADD_MEMBERS;
+
+        dispatch(updateAsync(true));
+        try {
+            await authorized({
+                path: endpoint.path(roomId),
+                method: endpoint.method,
+                body: {
+                    userId
+                }
+            });
+
+            dispatch(updateAsync(false));
+        } catch (err) {
+            dispatch(updateAsync(false, err));
+        }
+    }
+}
+
 export function createRoom(companionUserId) {
     return async dispatch => {
         const endpoint = EndpointConstants.ROOMS_POST;

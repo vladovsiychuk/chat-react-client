@@ -3,10 +3,10 @@ import {useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createRoom, getRoom, loadRooms, setSelectedRoom, updateRooms} from '../state/rooms/actions';
-import {currentUserConnected, getUser, loadUsers} from '../state/users/actions';
+import {currentUserConnected, getUser, loadRoomsMembers} from '../state/users/actions';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
-import {updateMessages, loadMessages, readMessage, sendMessage} from "../state/messages/actions";
+import {updateMessage, loadMessages, readMessage, sendMessage, loadRoomMessages} from "../state/messages/actions";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
@@ -18,10 +18,11 @@ function Chat({
                   setSelectedRoom,
                   createRoom,
                   loadMessages,
+                  loadRoomMessages,
                   sendMessage,
-                  loadUsers,
+                  loadRoomsMembers,
                   currentUserConnected,
-                  updateMessages,
+                  updateMessage,
                   updateRooms,
                   getUser,
                   readMessage,
@@ -43,7 +44,7 @@ function Chat({
     useEffect(() => {
         loadRooms();
         loadMessages();
-        loadUsers();
+        loadRoomsMembers();
         connect();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -67,9 +68,11 @@ function Chat({
             if (receivedEvent.type === MESSAGE_UPDATE) {
                 const message = receivedEvent.data
 
-                updateMessages(message)
+                updateMessage(message)
                 getRoom(message.roomId)
-                getUser(message.senderId)
+
+                if (currentUser.data.id !== message.senderId)
+                    getUser(message.senderId)
 
 
                 if (currentUser.data.id !== message.senderId &&
@@ -81,9 +84,13 @@ function Chat({
             } else if (receivedEvent.type === ROOM_UPDATE) {
                 const room = receivedEvent.data
 
-                updateRooms(room)
+                room.members
+                    .filter(userId => userId !== currentUser.data.id)
+                    .forEach(userId => getUser(userId))
 
-                room.members.forEach(userId => getUser(userId))
+                loadRoomMessages(room.id)
+
+                updateRooms(room)
             } else {
             }
         };
@@ -155,9 +162,9 @@ Chat.propTypes = {
     createRoom: PropTypes.func.isRequired,
     loadMessages: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
-    loadUsers: PropTypes.func.isRequired,
+    loadRoomsMembers: PropTypes.func.isRequired,
     currentUserConnected: PropTypes.func.isRequired,
-    updateMessages: PropTypes.func.isRequired,
+    updateMessage: PropTypes.func.isRequired,
     updateRooms: PropTypes.func.isRequired,
     getUser: PropTypes.func.isRequired,
     readMessage: PropTypes.func.isRequired
@@ -169,10 +176,11 @@ const mapDispatchToProps = {
     setSelectedRoom: setSelectedRoom,
     createRoom: createRoom,
     loadMessages: loadMessages,
+    loadRoomMessages: loadRoomMessages,
     sendMessage: sendMessage,
-    loadUsers: loadUsers,
+    loadRoomsMembers: loadRoomsMembers,
     currentUserConnected: currentUserConnected,
-    updateMessages: updateMessages,
+    updateMessage: updateMessage,
     updateRooms: updateRooms,
     getUser: getUser,
     readMessage: readMessage,

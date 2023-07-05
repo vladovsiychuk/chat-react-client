@@ -76,7 +76,7 @@ const Header = () => {
 
 
     function selectedRoomMembers(type) {
-        return allUsers.filter(user => selectedRoom.members.includes(user.id) && user.type === type)
+        return [...allUsers, currentUser].filter(user => selectedRoom.members.includes(user.id) && user.type === type)
     }
 
     return (

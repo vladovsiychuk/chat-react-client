@@ -3,8 +3,10 @@ import {makeStyles} from "@mui/styles";
 import {Dialog, DialogContent, List} from "@mui/material";
 import UserSearch from "../user/UserSearch";
 import UserSearchItem from "../user/UserSearchItem";
-import {useSelector} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {getUsersByType} from "../../state/users/selectors";
+import {addRoomMember} from "../../state/rooms/actions";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles(() => ({
     dialogContent: {
@@ -17,10 +19,12 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const SearchDialog = ({type, handleSearchDialogOpen}) => {
+const SearchDialog = ({type, handleSearchDialogOpen, addRoomMember}) => {
     const classes = useStyles();
 
     const usersFromStore = useSelector(state => getUsersByType(state, {type}))
+
+    const selectedRoomId = useSelector(state => state.rooms.selectedRoomId)
 
     const dialogRef = useRef(null);
     const [searchUsers, setSearchUsers] = useState([]);
@@ -41,21 +45,14 @@ const SearchDialog = ({type, handleSearchDialogOpen}) => {
     }, []);
 
     const handleSearchUsersClick = (userId) => {
-        // const room = rooms.find(room => room.members.includes(userId))
-        //
-        // if (room) {
-        //     setSelectedRoom(room.id);
-        //     setTriggerQueryUpdate(prevTrigger => prevTrigger + 1);
-        // } else
-        //     createRoom(userId)
-        //
-        // getUser(userId)
+        addRoomMember(selectedRoomId, userId)
+        handleSearchDialogOpen()
     };
 
     return (
         <Dialog open={true}>
             <DialogContent className={classes.dialogContent} ref={dialogRef}>
-                <UserSearch setSearchUsers={setSearchUsers} triggerQueryUpdate={triggerQueryUpdate}/>
+                <UserSearch setSearchUsers={setSearchUsers} triggerQueryUpdate={triggerQueryUpdate} type={type}/>
                 {searchUsers.length > 0 ? (
                     <List>
                         {searchUsers.map((user, index) => (
@@ -82,4 +79,16 @@ const SearchDialog = ({type, handleSearchDialogOpen}) => {
     );
 };
 
-export default SearchDialog;
+
+SearchDialog.propTypes = {
+    type: PropTypes.string.isRequired,
+    handleSearchDialogOpen: PropTypes.func.isRequired,
+    addRoomMember: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = {
+    addRoomMember: addRoomMember
+};
+
+export default connect(null, mapDispatchToProps)(SearchDialog);
+

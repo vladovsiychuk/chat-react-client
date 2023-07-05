@@ -19,10 +19,17 @@ function messagesLoaded(messages) {
     };
 }
 
-export function updateMessages(message) {
+export function updateMessage(message) {
+    return {
+        type: types.MESSAGE_UPDATE,
+        data: message,
+    }
+}
+
+function updateRoomMessages(messages) {
     return {
         type: types.MESSAGES_UPDATE,
-        data: message,
+        data: messages,
     }
 }
 
@@ -38,6 +45,25 @@ export function loadMessages() {
             });
 
             dispatch(messagesLoaded(res || []));
+            dispatch(updateAsync(false));
+        } catch (err) {
+            dispatch(updateAsync(false, err));
+        }
+    };
+}
+
+export function loadRoomMessages(roomId) {
+    return async dispatch => {
+        const {method, path} = EndpointConstants.MESSAGES_ROOMS_GET;
+
+        dispatch(updateAsync(true));
+        try {
+            const res = await authorized({
+                method: method,
+                path: path(roomId),
+            });
+
+            dispatch(updateRoomMessages(res || []));
             dispatch(updateAsync(false));
         } catch (err) {
             dispatch(updateAsync(false, err));

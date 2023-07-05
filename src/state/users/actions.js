@@ -94,15 +94,15 @@ export function getUser(userId) {
     };
 }
 
-export function loadUsers() {
+export function loadRoomsMembers() {
     return async dispatch => {
-        const {method, path} = EndpointConstants.USER_LIST;
+        const {method, path} = EndpointConstants.USER_ROOMS_MEMBERS;
 
         dispatch(updateAsync(true, null, true));
         try {
             const res = await authorized({
                 method: method,
-                path: path(null, 30),
+                path: path,
             });
 
             dispatch(usersLoaded(res || []));
