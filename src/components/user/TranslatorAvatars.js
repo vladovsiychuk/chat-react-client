@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from "@mui/styles";
 import {Avatar, IconButton} from "@mui/material";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import SearchDialog from "../dialogs/SearchDialog";
+import UserTypes from "../../constants/UserTypes";
 
 const useStyles = makeStyles(() => ({
     avatarsContainer: {
@@ -33,6 +35,9 @@ const useStyles = makeStyles(() => ({
 
 const TranslatorAvatars = ({users}) => {
     const classes = useStyles();
+    const {TRANSLATOR} = UserTypes
+
+    const [searchDialogOpen, setSearchDialogOpen] = useState(false)
 
     const renderAvatars = () => {
         if (users.length <= 2) {
@@ -67,18 +72,20 @@ const TranslatorAvatars = ({users}) => {
         }
     };
 
-    const handleAddUser = () => {
-        // Add logic for adding a new user
-        console.log('Add user clicked');
-    };
+    function handleSearchDialogOpen() {
+        setSearchDialogOpen(!searchDialogOpen)
+    }
 
     return (
         <div className={classes.avatarsContainer}>
+            {searchDialogOpen && (
+                <SearchDialog type={TRANSLATOR} handleSearchDialogOpen={handleSearchDialogOpen}/>
+            )}
             <span style={{color: 'white', marginRight: '20px'}}>Translators: </span>
             {renderAvatars()}
             <IconButton
                 className={classes.addButton}
-                onClick={handleAddUser}
+                onClick={handleSearchDialogOpen}
                 aria-label="Add User"
             >
                 <PersonAddIcon className={classes.addIcon}/>
