@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-end',
-        maxWidth: '50%', // Adjusted to move component closer to right border
+        maxWidth: '50%',
         marginLeft: 'auto',
     },
     messageContainer: {
@@ -46,6 +46,8 @@ const useStyles = makeStyles(() => ({
     },
     label: {
         marginRight: '8px',
+        fontSize: '0.75em', // Reduced font size
+        fontWeight: 'normal', // Normal font weight
     },
     greyLabel: {
         borderColor: '#9e9e9e',
@@ -53,7 +55,7 @@ const useStyles = makeStyles(() => ({
     },
     orangeLabel: {
         borderColor: '#ff5722',
-        color: '#ff5722',
+        color: '#ff5722', // Make label orange
     },
     menuItem: {
         fontSize: '0.875rem',
