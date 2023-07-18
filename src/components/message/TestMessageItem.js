@@ -1,6 +1,6 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
-import { Typography, Divider, Chip, Avatar, IconButton, Menu, MenuItem } from '@mui/material';
+import {makeStyles} from '@mui/styles';
+import {Typography, Divider, Chip, Avatar, IconButton, Menu, MenuItem} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const useStyles = makeStyles(() => ({
@@ -87,12 +87,12 @@ const TestMessageItem = () => {
         <div className={classes.message}>
             <div className={classes.messageContainer}>
                 <Typography className={classes.translation}>{translatedText}</Typography>
-                <Divider />
+                <Divider/>
                 <Typography align="right">{messageContent}</Typography>
                 <div className={classes.labels}>
                     <div>
-                        <Chip label={waitingLabel} className={`${classes.label} ${classes.orangeLabel}`} variant="outlined" />
-                        <Chip label={editedLabel} className={`${classes.label} ${classes.greyLabel}`} variant="outlined" />
+                        <Chip label={waitingLabel} className={`${classes.label} ${classes.orangeLabel}`} variant="outlined"/>
+                        <Chip label={editedLabel} className={`${classes.label} ${classes.greyLabel}`} variant="outlined"/>
                     </div>
                     <div>
                         <Typography color="textSecondary">{time}</Typography>
@@ -104,7 +104,7 @@ const TestMessageItem = () => {
             </div>
             <Avatar className={classes.avatar}>{avatarLetter}</Avatar>
             <IconButton onClick={handleClick} size="small" className={classes.contextMenu}>
-                <MoreVertIcon />
+                <MoreVertIcon/>
             </IconButton>
             <Menu
                 id="simple-menu"
