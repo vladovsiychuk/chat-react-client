@@ -4,21 +4,23 @@ import {Typography, Divider, Avatar} from '@mui/material';
 import MessageLabels from "./MessageLabels";
 import ContextMenu from "./ContextMenu";
 
-const useStyles = makeStyles(() => ({
+const useStyles = alignRight => makeStyles(() => ({
     message: {
         marginBottom: '20px',
         display: 'flex',
-        flexDirection: 'row',
         alignItems: 'flex-end',
         maxWidth: '50%',
-        marginLeft: 'auto',
+        marginLeft: alignRight ? 'auto' : '0',
+        marginRight: alignRight ? '0' : 'auto',
+        flexDirection: alignRight ? 'row' : 'row-reverse',
     },
     messageContainer: {
         backgroundColor: '#f4f6f8',
         borderRadius: '10px',
         padding: '10px',
         position: 'relative',
-        marginRight: '10px',
+        marginRight: alignRight ? '10px' : '0px',
+        marginLeft: alignRight ? '0px' : '10px',
     },
     translation: {
         fontSize: '0.75em',
@@ -35,8 +37,8 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const MessageItem = () => {
-    const classes = useStyles();
+const MessageItem = ({alignRight = true}) => {
+    const classes = useStyles(alignRight)();
 
     const messageContent = "Text of the message";
     const translatedText = "Text of the translated text will be small and above the original version";
@@ -47,8 +49,8 @@ const MessageItem = () => {
             <div className={classes.messageContainer}>
                 <Typography className={classes.translation}>{translatedText}</Typography>
                 <Divider/>
-                <Typography align="right">{messageContent}</Typography>
-                <MessageLabels/>
+                <Typography align={alignRight ? "right" : "left"}>{messageContent}</Typography>
+                <MessageLabels alignRight={alignRight}/>
             </div>
             <Avatar className={classes.avatar}>{avatarLetter}</Avatar>
             <ContextMenu/>

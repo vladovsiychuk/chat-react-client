@@ -3,11 +3,12 @@ import {makeStyles} from '@mui/styles';
 import {Typography, Divider, Chip, Avatar, IconButton, Menu, MenuItem} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const useStyles = makeStyles(() => ({
+const useStyles = alignRight => makeStyles(() => ({
     main: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        flexDirection: alignRight ? 'row' : 'row-reverse',
     },
     checkmarks: {
         color: '#9e9e9e',
@@ -16,7 +17,8 @@ const useStyles = makeStyles(() => ({
         },
     },
     label: {
-        marginRight: '8px',
+        marginRight: alignRight ? '8px' : '0px',
+        marginLeft: alignRight ? '0px' : '8px',
         fontSize: '0.75em', // Reduced font size
         fontWeight: 'normal', // Normal font weight
     },
@@ -30,8 +32,8 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const MessageLabels = () => {
-    const classes = useStyles();
+const MessageLabels = ({alignRight = true}) => {
+    const classes = useStyles(alignRight)();
 
     const waitingLabel = "Waiting for Translation";
     const editedLabel = "Edited";
