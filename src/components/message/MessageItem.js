@@ -3,6 +3,7 @@ import {makeStyles} from '@mui/styles';
 import {Typography, Divider, Avatar} from '@mui/material';
 import MessageLabels from "./MessageLabels";
 import ContextMenu from "./ContextMenu";
+import {useSelector} from "react-redux";
 
 const useStyles = alignRight => makeStyles(() => ({
     message: {
@@ -37,25 +38,40 @@ const useStyles = alignRight => makeStyles(() => ({
     },
 }));
 
-const MessageItem = ({alignRight = true}) => {
-    const classes = useStyles(alignRight)();
+const useCurrentUserMessage = (message) => {
+    const currentUser = useSelector(state => state.users.currentUser.data);
+    return message.senderId === currentUser.id;
+}
 
-    const messageContent = "Text of the message";
+const useMessageSender = (message, currentUserMessage) => {
+    const users = useSelector(state => state.users.users);
+    const currentUser = useSelector(state => state.users.currentUser.data);
+    return currentUserMessage ?
+        currentUser
+        :
+        users.find(user => user.id === message.senderId);
+}
+
+const MessageItem = ({message, index}) => {
+    const currentUserMessage = useCurrentUserMessage(message);
+    const messageSender = useMessageSender(message, currentUserMessage);
+    const classes = useStyles(currentUserMessage)();
+
     const translatedText = "Text of the translated text will be small and above the original version";
-    const avatarLetter = "V";
 
     return (
-        <div className={classes.message}>
+        <div className={classes.message} key={index}>
             <div className={classes.messageContainer}>
                 <Typography className={classes.translation}>{translatedText}</Typography>
                 <Divider/>
-                <Typography align={alignRight ? "right" : "left"}>{messageContent}</Typography>
-                <MessageLabels alignRight={alignRight}/>
+                <Typography align={currentUserMessage ? "right" : "left"}>{message.content}</Typography>
+                <MessageLabels alignRight={currentUserMessage}/>
             </div>
-            <Avatar className={classes.avatar}>{avatarLetter}</Avatar>
+            <Avatar className={classes.avatar}>{messageSender.email.substring(0, 1)}</Avatar>
             <ContextMenu/>
         </div>
     );
 };
 
 export default MessageItem;
+
