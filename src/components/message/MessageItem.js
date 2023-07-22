@@ -1,9 +1,10 @@
 import React from 'react';
 import {makeStyles} from '@mui/styles';
-import {Typography, Divider, Avatar} from '@mui/material';
+import {Typography, Avatar} from '@mui/material';
 import MessageLabels from "./MessageLabels";
 import ContextMenu from "./ContextMenu";
 import {useSelector} from "react-redux";
+import SecondaryContent from "./SecondaryContent";
 
 const useStyles = alignRight => makeStyles(() => ({
     message: {
@@ -22,11 +23,6 @@ const useStyles = alignRight => makeStyles(() => ({
         position: 'relative',
         marginRight: alignRight ? '10px' : '0px',
         marginLeft: alignRight ? '0px' : '10px',
-    },
-    translation: {
-        fontSize: '0.75em',
-        marginBottom: '10px',
-        color: '#607d8b',
     },
     avatar: {
         height: '50px',
@@ -57,13 +53,10 @@ const MessageItem = ({message, index}) => {
     const messageSender = useMessageSender(message, currentUserMessage);
     const classes = useStyles(currentUserMessage)();
 
-    const translatedText = "Text of the translated text will be small and above the original version";
-
     return (
         <div className={classes.message} key={index}>
             <div className={classes.messageContainer}>
-                <Typography className={classes.translation}>{translatedText}</Typography>
-                <Divider/>
+                <SecondaryContent/>
                 <Typography align={currentUserMessage ? "right" : "left"}>{message.content}</Typography>
                 <MessageLabels alignRight={currentUserMessage}/>
             </div>
