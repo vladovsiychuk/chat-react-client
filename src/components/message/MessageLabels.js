@@ -1,7 +1,6 @@
 import React from 'react';
 import {makeStyles} from '@mui/styles';
-import {Typography, Divider, Chip, Avatar, IconButton, Menu, MenuItem} from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import {Typography, Chip} from '@mui/material';
 
 const useStyles = alignRight => makeStyles(() => ({
     main: {

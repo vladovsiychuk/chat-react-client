@@ -15,6 +15,7 @@ const useStyles = alignRight => makeStyles(() => ({
         marginLeft: alignRight ? 'auto' : '0',
         marginRight: alignRight ? '0' : 'auto',
         flexDirection: alignRight ? 'row' : 'row-reverse',
+        justifyContent: 'flex-end'
     },
     messageContainer: {
         backgroundColor: '#f4f6f8',
@@ -56,7 +57,7 @@ const MessageItem = ({message}) => {
     return (
         <div className={classes.message}>
             <div className={classes.messageContainer}>
-                <SecondaryContent/>
+                <SecondaryContent alignRight={currentUserMessage}/>
                 <Typography align={currentUserMessage ? "right" : "left"}>{message.content}</Typography>
                 <MessageLabels alignRight={currentUserMessage}/>
             </div>
