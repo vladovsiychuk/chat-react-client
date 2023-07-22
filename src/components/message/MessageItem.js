@@ -48,13 +48,13 @@ const useMessageSender = (message, currentUserMessage) => {
         users.find(user => user.id === message.senderId);
 }
 
-const MessageItem = ({message, index}) => {
+const MessageItem = ({message}) => {
     const currentUserMessage = useCurrentUserMessage(message);
     const messageSender = useMessageSender(message, currentUserMessage);
     const classes = useStyles(currentUserMessage)();
 
     return (
-        <div className={classes.message} key={index}>
+        <div className={classes.message}>
             <div className={classes.messageContainer}>
                 <SecondaryContent/>
                 <Typography align={currentUserMessage ? "right" : "left"}>{message.content}</Typography>

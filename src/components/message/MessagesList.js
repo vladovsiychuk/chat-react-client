@@ -27,7 +27,7 @@ const MessagesList = () => {
     return (
         <main className={classes.main}>
             {roomMessages.map((message, index) => (
-                <MessageItem message={message} index={index}/>
+                <MessageItem message={message} key={index}/>
             ))}
         </main>
     );
