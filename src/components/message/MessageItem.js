@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from '@mui/styles';
 import {Typography, Avatar} from '@mui/material';
 import MessageLabels from "./MessageLabels";
@@ -54,15 +54,34 @@ const MessageItem = ({message}) => {
     const messageSender = useMessageSender(message, currentUserMessage);
     const classes = useStyles(currentUserMessage)();
 
+    const [showSecondaryContent, setShowSecondaryContent] = useState(false)
+    const [secondaryContentLanguage, setSecondaryContentLanguage] = useState(null)
+
+    const handleClickShowSecondaryContent = () => {
+        setShowSecondaryContent(!showSecondaryContent)
+    }
+
     return (
         <div className={classes.message}>
             <div className={classes.messageContainer}>
-                <SecondaryContent alignRight={currentUserMessage}/>
+                {showSecondaryContent && (
+                    <SecondaryContent
+                        alignRight={currentUserMessage}
+                        message={message}
+                        selectedTranslation={secondaryContentLanguage}
+                    />
+                )}
                 <Typography align={currentUserMessage ? "right" : "left"}>{message.content}</Typography>
                 <MessageLabels alignRight={currentUserMessage}/>
             </div>
             <Avatar className={classes.avatar}>{messageSender.email.substring(0, 1)}</Avatar>
-            <ContextMenu/>
+            <ContextMenu
+                handleClickShowSecondaryContent={handleClickShowSecondaryContent}
+                message={message}
+                secondaryContentExpanded={showSecondaryContent}
+                secondaryContentLanguage={secondaryContentLanguage}
+                setSecondaryContentLanguage={setSecondaryContentLanguage}
+            />
         </div>
     );
 };

@@ -13,12 +13,16 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const ContextMenu = () => {
+const ContextMenu = ({
+                         handleClickShowSecondaryContent,
+                         message,
+                         secondaryContentExpanded,
+                         secondaryContentLanguage,
+                         setSecondaryContentLanguage
+                     }) => {
     const classes = useStyles();
 
     const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const menuItems = ["Menu item 1", "Menu item 2", "Menu item 3"];
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -26,6 +30,11 @@ const ContextMenu = () => {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleItemClicked = (language) => {
+        setSecondaryContentLanguage(language)
+        handleClickShowSecondaryContent()
     };
 
     return (
@@ -40,11 +49,33 @@ const ContextMenu = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                {menuItems.map((item, index) => (
-                    <MenuItem key={index} onClick={handleClose} className={classes.menuItem}>
-                        {item}
+                {message.translations.map((translation, index) => (
+                    <MenuItem
+                        key={index}
+                        onClick={() => {
+                            handleClose();
+                            handleItemClicked(translation.language)
+                        }}
+                        className={classes.menuItem}>
+                        {
+                            translation.language === secondaryContentLanguage ?
+                                secondaryContentExpanded ?
+                                    'Hide'
+                                    : 'Show'
+                                : 'Show'
+                        }
+                        {
+                            ` ${translation.language.toLowerCase()} translation`
+                        }
                     </MenuItem>
                 ))}
+                <MenuItem
+                    onClick={() => {
+                        handleClose();
+                    }}
+                    className={classes.menuItem}>
+                    'something'
+                </MenuItem>
             </Menu>
         </>
     );

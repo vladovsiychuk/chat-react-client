@@ -1,6 +1,7 @@
-import React from 'react';
 import {makeStyles} from '@mui/styles';
 import {Typography, Divider} from '@mui/material';
+import {useSelector} from "react-redux";
+import UserTypes from "../../constants/UserTypes";
 
 const useStyles = alignRight => makeStyles(() => ({
     translation: {
@@ -11,17 +12,17 @@ const useStyles = alignRight => makeStyles(() => ({
     },
 }));
 
-const MessageItem = ({alignRight}) => {
+const MessageItem = ({alignRight, message, selectedTranslation = null}) => {
     const classes = useStyles(alignRight)();
-    const show = true
+    const currentUser = useSelector(state => state.users.currentUser.data);
+    const {REGULAR_USER} = UserTypes
 
-    // const translatedText = "Text of the translated text will be small and above the original version";
-    const translatedText = "Text of the translated text will ";
+    const content = currentUser.type === REGULAR_USER ? message.translations[0].translation : message.translations.find(translation => translation.language === selectedTranslation)
 
     return (
-        show && (
+        (
             <>
-                <Typography className={classes.translation}>{translatedText}</Typography>
+                <Typography className={classes.translation}>{content}</Typography>
                 <Divider/>
             </>
         )
