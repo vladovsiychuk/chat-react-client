@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from '@mui/styles';
 import {IconButton, Menu, MenuItem} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -22,20 +22,24 @@ const ContextMenu = ({
                      }) => {
     const classes = useStyles();
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const handleMenuItemClick = (language) => {
         setAnchorEl(null);
+        if (language) {
+            setSecondaryContentLanguage(language);
+            handleClickShowSecondaryContent();
+        }
     };
 
-    const handleItemClicked = (language) => {
-        setSecondaryContentLanguage(language)
-        handleClickShowSecondaryContent()
-    };
+    const buildMenuItemText = (language) => {
+        const showHideText = language === secondaryContentLanguage && secondaryContentExpanded ? 'Hide' : 'Show';
+        return `${showHideText} ${language.toLowerCase()} translation`;
+    }
 
     return (
         <>
@@ -47,32 +51,19 @@ const ContextMenu = ({
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={handleClose}
+                onClose={() => handleMenuItemClick(null)}
             >
                 {message.translations.map((translation, index) => (
                     <MenuItem
                         key={index}
-                        onClick={() => {
-                            handleClose();
-                            handleItemClicked(translation.language)
-                        }}
-                        className={classes.menuItem}>
-                        {
-                            translation.language === secondaryContentLanguage ?
-                                secondaryContentExpanded ?
-                                    'Hide'
-                                    : 'Show'
-                                : 'Show'
-                        }
-                        {
-                            ` ${translation.language.toLowerCase()} translation`
-                        }
+                        onClick={() => handleMenuItemClick(translation.language)}
+                        className={classes.menuItem}
+                    >
+                        {buildMenuItemText(translation.language)}
                     </MenuItem>
                 ))}
                 <MenuItem
-                    onClick={() => {
-                        handleClose();
-                    }}
+                    onClick={() => handleMenuItemClick(null)}
                     className={classes.menuItem}>
                     'something'
                 </MenuItem>

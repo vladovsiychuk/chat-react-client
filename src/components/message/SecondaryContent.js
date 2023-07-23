@@ -15,19 +15,20 @@ const useStyles = alignRight => makeStyles(() => ({
 const MessageItem = ({alignRight, message, selectedTranslation = null}) => {
     const classes = useStyles(alignRight)();
     const currentUser = useSelector(state => state.users.currentUser.data);
-    const {REGULAR_USER} = UserTypes
 
-    const content = currentUser.type === REGULAR_USER ? message.translations[0].translation : message.translations.find(translation => translation.language === selectedTranslation)
+    let content;
+    if (currentUser.type === UserTypes.REGULAR_USER) {
+        content = message.translations[0].translation;
+    } else {
+        content = message.translations.find(translation => translation.language === selectedTranslation);
+    }
 
     return (
-        (
-            <>
-                <Typography className={classes.translation}>{content}</Typography>
-                <Divider/>
-            </>
-        )
+        <>
+            <Typography className={classes.translation}>{content}</Typography>
+            <Divider/>
+        </>
     );
 };
 
 export default MessageItem;
-

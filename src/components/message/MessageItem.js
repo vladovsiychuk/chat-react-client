@@ -35,44 +35,34 @@ const useStyles = alignRight => makeStyles(() => ({
     },
 }));
 
-const useCurrentUserMessage = (message) => {
-    const currentUser = useSelector(state => state.users.currentUser.data);
-    return message.senderId === currentUser.id;
-}
-
-const useMessageSender = (message, currentUserMessage) => {
+const MessageItem = ({message}) => {
     const users = useSelector(state => state.users.users);
     const currentUser = useSelector(state => state.users.currentUser.data);
-    return currentUserMessage ?
-        currentUser
-        :
-        users.find(user => user.id === message.senderId);
-}
+    const isCurrentUserMessage = message.senderId === currentUser.id;
+    const messageSender = isCurrentUserMessage ? currentUser : users.find(user => user.id === message.senderId);
+    const classes = useStyles(isCurrentUserMessage)();
 
-const MessageItem = ({message}) => {
-    const currentUserMessage = useCurrentUserMessage(message);
-    const messageSender = useMessageSender(message, currentUserMessage);
-    const classes = useStyles(currentUserMessage)();
-
-    const [showSecondaryContent, setShowSecondaryContent] = useState(false)
-    const [secondaryContentLanguage, setSecondaryContentLanguage] = useState(null)
+    const [showSecondaryContent, setShowSecondaryContent] = useState(false);
+    const [secondaryContentLanguage, setSecondaryContentLanguage] = useState(null);
 
     const handleClickShowSecondaryContent = () => {
         setShowSecondaryContent(!showSecondaryContent)
     }
+
+    const alignment = isCurrentUserMessage ? "right" : "left";
 
     return (
         <div className={classes.message}>
             <div className={classes.messageContainer}>
                 {showSecondaryContent && (
                     <SecondaryContent
-                        alignRight={currentUserMessage}
+                        alignRight={isCurrentUserMessage}
                         message={message}
                         selectedTranslation={secondaryContentLanguage}
                     />
                 )}
-                <Typography align={currentUserMessage ? "right" : "left"}>{message.content}</Typography>
-                <MessageLabels alignRight={currentUserMessage}/>
+                <Typography align={alignment}>{message.content}</Typography>
+                <MessageLabels alignRight={isCurrentUserMessage}/>
             </div>
             <Avatar className={classes.avatar}>{messageSender.email.substring(0, 1)}</Avatar>
             <ContextMenu
@@ -87,4 +77,3 @@ const MessageItem = ({message}) => {
 };
 
 export default MessageItem;
-
