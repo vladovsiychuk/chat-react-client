@@ -11,6 +11,7 @@ import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
 import WebSocketEventTypes from "../constants/WebSocketEventTypes";
+import TestMessageInput from "../components/message/TestMessageInput";
 
 function Chat({
                   loadRooms,
@@ -141,12 +142,7 @@ function Chat({
                         <div>
                             <Header/>
                             <MessagesList/>
-                            <MessageInput
-                                message={message}
-                                setMessage={setMessage}
-                                handleKeyPress={handleKeyPress}
-                                sendNewMessage={sendNewMessage}
-                            />
+                            <TestMessageInput/>
                         </div>
                     }
                 </div>
