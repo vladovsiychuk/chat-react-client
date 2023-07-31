@@ -33,15 +33,17 @@ const useStyles = makeStyles(() => ({
         cursor: 'pointer',
     },
     translationContainer: {
+        position: 'absolute',
+        bottom: '15px',
+        left: '315px',
+        justifyContent: 'space-between',
+        backgroundColor: '#ffffff',
+        marginBottom: '50px',
+        overflow: 'auto',
+        width: 'calc(100% - 300px - 50px)',
+        padding: '5px',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        width: '100%',
-        backgroundColor: '#ffffff',
-        borderRadius: '10px',
-        padding: '10px',
-        marginBottom: '10px',
-        border: '1px solid #000',
     },
     translationHeader: {
         display: 'flex',
@@ -90,7 +92,7 @@ const TestMessageInput = () => {
     };
 
     return (
-        <div className={classes.container}>
+        <>
             {showTranslationTask && (
                 <Box className={classes.translationContainer}>
                     <Box className={classes.divider}/>
@@ -116,26 +118,28 @@ const TestMessageInput = () => {
                     <Typography>{originalMessage}</Typography>
                 </Box>
             )}
-            <div className={classes.messageRow}>
-                <TextField
-                    id="chattextbox"
-                    value={message}
-                    autoComplete="off"
-                    placeholder="Type your translation ..."
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    size="small"
-                    className={classes.textField}
-                    variant="outlined"
-                />
-                <IconButton onClick={() => {
-                    console.log("message sent!")
-                    setMessage('')
-                }} className={classes.sendIcon}>
-                    <Send/>
-                </IconButton>
+            <div className={classes.container}>
+                <div className={classes.messageRow}>
+                    <TextField
+                        id="chattextbox"
+                        value={message}
+                        autoComplete="off"
+                        placeholder="Type your translation ..."
+                        onChange={(e) => setMessage(e.target.value)}
+                        onKeyDown={handleKeyPress}
+                        size="small"
+                        className={classes.textField}
+                        variant="outlined"
+                    />
+                    <IconButton onClick={() => {
+                        console.log("message sent!")
+                        setMessage('')
+                    }} className={classes.sendIcon}>
+                        <Send/>
+                    </IconButton>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
