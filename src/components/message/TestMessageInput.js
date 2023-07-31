@@ -1,31 +1,75 @@
 import React, {useState} from 'react';
-import {makeStyles} from "@mui/styles";
-import {IconButton, TextField} from "@mui/material";
-import {Send} from "@mui/icons-material";
+import {makeStyles} from '@mui/styles';
+import {IconButton, TextField, Select, MenuItem, Typography, Box} from '@mui/material';
+import {Send, Close} from '@mui/icons-material';
 
 const useStyles = makeStyles(() => ({
-    root: {
+    container: {
         position: 'absolute',
         bottom: '15px',
         left: '315px',
         boxSizing: 'border-box',
         overflow: 'auto',
         width: 'calc(100% - 300px - 50px)',
-        height: '50px',
         backgroundColor: '#d3d4db',
         borderRadius: '10px',
         padding: '5px',
         display: 'flex',
-        alignItems: 'center',
+        flexDirection: 'column',
+        border: 'none',
     },
     textField: {
         width: 'calc(100% - 40px)',
         height: '40px',
         marginRight: '10px',
+        border: 'none',
+        '&:focus': {
+            outline: 'none',
+            border: 'none',
+        },
     },
     sendIcon: {
         color: 'blue',
         cursor: 'pointer',
+    },
+    translationContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        width: '100%',
+        backgroundColor: '#ffffff',
+        borderRadius: '10px',
+        padding: '10px',
+        marginBottom: '10px',
+        border: '1px solid #000',
+    },
+    translationHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
+    translationTitle: {
+        color: 'blue',
+        fontWeight: 'bold',
+        marginRight: '5px',
+    },
+    languageSelector: {
+        fontSize: '0.8rem',
+        padding: '0px',
+        height: '1.5em',
+        marginLeft: '5px',
+    },
+    divider: {
+        width: '100%',
+        height: '1px',
+        border: 'none',
+        backgroundColor: '#000000',
+        margin: '10px 0',
+    },
+    messageRow: {
+        display: 'flex',
+    },
+    closeButton: {
         marginLeft: 'auto',
     },
 }));
@@ -33,6 +77,8 @@ const useStyles = makeStyles(() => ({
 const TestMessageInput = () => {
     const classes = useStyles();
     const [message, setMessage] = useState('');
+    const [showTranslationTask, setShowTranslationTask] = useState(true);
+    const [language, setLanguage] = useState('english');
 
     const originalMessage = "original message that is going to be translated"
 
@@ -44,24 +90,51 @@ const TestMessageInput = () => {
     };
 
     return (
-        <div className={classes.root}>
-            <TextField
-                id="chattextbox"
-                value={message}
-                autoComplete="off"
-                placeholder="Type your message ..."
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={handleKeyPress}
-                size="small"
-                className={classes.textField}
-                onFocus={() => {
-                }}
-            />
-            <IconButton onClick={() => {
-                console.log("message sent!")
-            }} className={classes.sendIcon}>
-                <Send/>
-            </IconButton>
+        <div className={classes.container}>
+            {showTranslationTask && (
+                <Box className={classes.translationContainer}>
+                    <Box className={classes.divider}/>
+                    <Box className={classes.translationHeader}>
+                        <Typography className={classes.translationTitle}>
+                            Translate message to:
+                        </Typography>
+                        <Select
+                            value={language}
+                            onChange={(e) => setLanguage(e.target.value)}
+                            className={classes.languageSelector}
+                            disableUnderline
+                        >
+                            <MenuItem value='english'>English</MenuItem>
+                            <MenuItem value='spanish'>Spanish</MenuItem>
+                            <MenuItem value='french'>French</MenuItem>
+                            <MenuItem value='german'>German</MenuItem>
+                        </Select>
+                        <IconButton onClick={() => setShowTranslationTask(false)} className={classes.closeButton}>
+                            <Close/>
+                        </IconButton>
+                    </Box>
+                    <Typography>{originalMessage}</Typography>
+                </Box>
+            )}
+            <div className={classes.messageRow}>
+                <TextField
+                    id="chattextbox"
+                    value={message}
+                    autoComplete="off"
+                    placeholder="Type your translation ..."
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    size="small"
+                    className={classes.textField}
+                    variant="outlined"
+                />
+                <IconButton onClick={() => {
+                    console.log("message sent!")
+                    setMessage('')
+                }} className={classes.sendIcon}>
+                    <Send/>
+                </IconButton>
+            </div>
         </div>
     );
 };
