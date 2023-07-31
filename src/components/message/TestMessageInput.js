@@ -50,6 +50,8 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'space-between', // change here
     },
     translationTitle: {
+        display: 'flex',
+        alignItems: 'center',
         color: 'blue',
         fontWeight: 'bold',
         marginRight: '5px',
@@ -93,8 +95,8 @@ const TestMessageInput = () => {
                 <Box className={classes.translationContainer}>
                     <Box className={classes.divider}/>
                     <Box className={classes.translationHeader}>
-                        <Box>
-                            <Typography className={classes.translationTitle}>
+                        <Box className={classes.translationTitle}>
+                            <Typography>
                                 Translate message to:
                             </Typography>
                             <Select
