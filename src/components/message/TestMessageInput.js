@@ -36,7 +36,6 @@ const useStyles = makeStyles(() => ({
         position: 'absolute',
         bottom: '15px',
         left: '315px',
-        justifyContent: 'space-between',
         backgroundColor: '#ffffff',
         marginBottom: '50px',
         overflow: 'auto',
@@ -48,7 +47,7 @@ const useStyles = makeStyles(() => ({
     translationHeader: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between', // change here
     },
     translationTitle: {
         color: 'blue',
@@ -70,9 +69,6 @@ const useStyles = makeStyles(() => ({
     },
     messageRow: {
         display: 'flex',
-    },
-    closeButton: {
-        marginLeft: 'auto',
     },
 }));
 
@@ -97,21 +93,23 @@ const TestMessageInput = () => {
                 <Box className={classes.translationContainer}>
                     <Box className={classes.divider}/>
                     <Box className={classes.translationHeader}>
-                        <Typography className={classes.translationTitle}>
-                            Translate message to:
-                        </Typography>
-                        <Select
-                            value={language}
-                            onChange={(e) => setLanguage(e.target.value)}
-                            className={classes.languageSelector}
-                            disableUnderline
-                        >
-                            <MenuItem value='english'>English</MenuItem>
-                            <MenuItem value='spanish'>Spanish</MenuItem>
-                            <MenuItem value='french'>French</MenuItem>
-                            <MenuItem value='german'>German</MenuItem>
-                        </Select>
-                        <IconButton onClick={() => setShowTranslationTask(false)} className={classes.closeButton}>
+                        <Box>
+                            <Typography className={classes.translationTitle}>
+                                Translate message to:
+                            </Typography>
+                            <Select
+                                value={language}
+                                onChange={(e) => setLanguage(e.target.value)}
+                                className={classes.languageSelector}
+                                disableUnderline
+                            >
+                                <MenuItem value='english'>English</MenuItem>
+                                <MenuItem value='spanish'>Spanish</MenuItem>
+                                <MenuItem value='french'>French</MenuItem>
+                                <MenuItem value='german'>German</MenuItem>
+                            </Select>
+                        </Box>
+                        <IconButton onClick={() => setShowTranslationTask(false)}>
                             <Close/>
                         </IconButton>
                     </Box>
