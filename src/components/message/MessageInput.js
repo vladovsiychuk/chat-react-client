@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {makeStyles} from '@mui/styles';
 import {IconButton, TextField, Select, MenuItem, Typography, Box, Input} from '@mui/material';
 import {Send, Close} from '@mui/icons-material';
+import TranslationTask from "./TranslationTask";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -76,40 +77,10 @@ const useStyles = makeStyles(() => ({
 
 const MessageInput = ({message, setMessage, handleKeyPress, sendNewMessage}) => {
     const classes = useStyles();
-    const [showTranslationTask, setShowTranslationTask] = useState(true);
-    const [language, setLanguage] = useState('english');
-
-    const originalMessage = "original message that is going to be translated"
 
     return (
         <>
-            {showTranslationTask && (
-                <Box className={classes.translationContainer}>
-                    <Box className={classes.divider}/>
-                    <Box className={classes.translationHeader}>
-                        <Box className={classes.translationTitle}>
-                            <Typography>
-                                Translate message to:
-                            </Typography>
-                            <Select
-                                value={language}
-                                onChange={(e) => setLanguage(e.target.value)}
-                                className={classes.languageSelector}
-                                input={<Input disableUnderline/>}
-                            >
-                                <MenuItem value='english'>English</MenuItem>
-                                <MenuItem value='spanish'>Spanish</MenuItem>
-                                <MenuItem value='french'>French</MenuItem>
-                                <MenuItem value='german'>German</MenuItem>
-                            </Select>
-                        </Box>
-                        <IconButton onClick={() => setShowTranslationTask(false)}>
-                            <Close/>
-                        </IconButton>
-                    </Box>
-                    <Typography>{originalMessage}</Typography>
-                </Box>
-            )}
+            <TranslationTask/>
             <div className={classes.container}>
                 <div className={classes.messageRow}>
                     <TextField
