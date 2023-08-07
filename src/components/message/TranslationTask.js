@@ -4,7 +4,7 @@ import {IconButton, Select, MenuItem, Typography, Box, Input} from '@mui/materia
 import {Close} from '@mui/icons-material';
 
 const useStyles = makeStyles(() => ({
-    translationContainer: {
+    container: {
         position: 'absolute',
         bottom: '15px',
         left: '315px',
@@ -53,7 +53,7 @@ const TranslationTask = () => {
     return (
         <>
             {showTranslationTask && (
-                <Box className={classes.translationContainer}>
+                <Box className={classes.container}>
                     <Box className={classes.divider}/>
                     <Box className={classes.translationHeader}>
                         <Box className={classes.translationTitle}>

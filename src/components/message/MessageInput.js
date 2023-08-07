@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {makeStyles} from '@mui/styles';
-import {IconButton, TextField, Select, MenuItem, Typography, Box, Input} from '@mui/material';
-import {Send, Close} from '@mui/icons-material';
+import {IconButton, TextField} from '@mui/material';
+import {Send} from '@mui/icons-material';
 import TranslationTask from "./TranslationTask";
 
 const useStyles = makeStyles(() => ({
