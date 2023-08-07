@@ -1,4 +1,5 @@
 import types from "./types";
+import MessageActionContansts from "../../constants/MessageActionContansts";
 
 export const initialState = {
     messages: [],
@@ -6,6 +7,7 @@ export const initialState = {
         isLoading: null,
         error: null,
     },
+    messageAction: null,
 };
 
 export default function messagesReducer(state = initialState, action) {
@@ -73,6 +75,39 @@ export default function messagesReducer(state = initialState, action) {
                 ...state,
                 messages: updatedMessages,
             };
+        }
+        case types.MESSAGE_ACTION_EDITING: {
+            return {
+                ...state,
+                messageAction: {
+                    type: MessageActionContansts.EDITING,
+                    messageId: action.data,
+                }
+            }
+        }
+        case types.MESSAGE_ACTION_TRANSLATING: {
+            return {
+                ...state,
+                messageAction: {
+                    type: MessageActionContansts.TRANSLATING,
+                    messageId: action.data,
+                }
+            }
+        }
+        case types.MESSAGE_ACTION_REPLYING: {
+            return {
+                ...state,
+                messageAction: {
+                    type: MessageActionContansts.REPLYING,
+                    messageId: action.data,
+                }
+            }
+        }
+        case types.MESSAGE_ACTION_CANCEL: {
+            return {
+                ...state,
+                messageAction: null,
+            }
         }
         default:
             return state;

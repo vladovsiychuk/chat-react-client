@@ -33,6 +33,33 @@ function updateRoomMessages(messages) {
     }
 }
 
+export function actionEditing(messageId) {
+    return {
+        type: types.MESSAGE_ACTION_EDITING,
+        data: messageId,
+    }
+}
+
+export function actionTranslating(messageId) {
+    return {
+        type: types.MESSAGE_ACTION_TRANSLATING,
+        data: messageId,
+    }
+}
+
+export function actionReplying(messageId) {
+    return {
+        type: types.MESSAGE_ACTION_REPLYING,
+        data: messageId,
+    }
+}
+
+export function actionCancel() {
+    return {
+        type: types.MESSAGE_ACTION_CANCEL,
+    }
+}
+
 export function loadMessages() {
     return async dispatch => {
         const {method, path} = EndpointConstants.MESSAGES_GET;

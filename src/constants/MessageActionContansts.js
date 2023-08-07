@@ -1,0 +1,6 @@
+export default {
+    EDITING: 'EDITING',
+    TRANSLATING: 'TRANSLATING',
+    REPLYING: 'REPLYING',
+    CANCEL: 'CANCEL',
+};

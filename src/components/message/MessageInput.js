@@ -33,43 +33,6 @@ const useStyles = makeStyles(() => ({
         color: 'blue',
         cursor: 'pointer',
     },
-    translationContainer: {
-        position: 'absolute',
-        bottom: '15px',
-        left: '315px',
-        backgroundColor: '#ffffff',
-        marginBottom: '50px',
-        overflow: 'auto',
-        width: 'calc(100% - 300px - 50px)',
-        padding: '5px',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    translationHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between', // change here
-    },
-    translationTitle: {
-        display: 'flex',
-        alignItems: 'center',
-        color: 'blue',
-        fontWeight: 'bold',
-        marginRight: '5px',
-    },
-    languageSelector: {
-        fontSize: '0.8rem',
-        padding: '0px',
-        height: '1.5em',
-        marginLeft: '5px',
-    },
-    divider: {
-        width: '100%',
-        height: '1px',
-        border: 'none',
-        backgroundColor: '#000000',
-        margin: '10px 0',
-    },
     messageRow: {
         display: 'flex',
     },
