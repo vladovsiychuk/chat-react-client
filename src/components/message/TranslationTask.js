@@ -2,6 +2,9 @@ import React, {useState} from 'react';
 import {makeStyles} from '@mui/styles';
 import {IconButton, Select, MenuItem, Typography, Box, Input} from '@mui/material';
 import {Close} from '@mui/icons-material';
+import {connect, useSelector} from "react-redux";
+import {getActionMessage} from "../../state/messages/selectors";
+import {actionCancel} from "../../state/messages/actions";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -43,12 +46,12 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const TranslationTask = () => {
+const TranslationTask = ({actionCancel}) => {
     const classes = useStyles();
-    const [showTranslationTask, setShowTranslationTask] = useState(true);
     const [language, setLanguage] = useState('english');
 
-    const originalMessage = "original message that is going to be translated"
+    const showTranslationTask = !!useSelector(state => state.messages.messageAction)
+    const message = useSelector(state => getActionMessage(state))
 
     return (
         <>
@@ -72,15 +75,19 @@ const TranslationTask = () => {
                                 <MenuItem value='german'>German</MenuItem>
                             </Select>
                         </Box>
-                        <IconButton onClick={() => setShowTranslationTask(false)}>
+                        <IconButton onClick={actionCancel}>
                             <Close/>
                         </IconButton>
                     </Box>
-                    <Typography>{originalMessage}</Typography>
+                    <Typography>{message.content}</Typography>
                 </Box>
             )}
         </>
     );
 };
 
-export default TranslationTask;
+const mapDispatchToProps = {
+    actionCancel: actionCancel,
+};
+
+export default connect(null, mapDispatchToProps)(TranslationTask);

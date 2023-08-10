@@ -6,6 +6,8 @@ const getCurrentUserStore = (state) => state.users.currentUser.data;
 
 const getSelectedRoomId = (state) => state.rooms.selectedRoomId
 
+const getActionMessageId = (state) => state.messages.messageAction?.messageId
+
 const getRoomId = (state, props) => props.roomId;
 
 export const roomMessagesSelector = createSelector(
@@ -37,3 +39,11 @@ export const getSelectedRoomMessages = createSelector(
             .sort((a, b) => a.dateCreated - b.dateCreated);
     }
 );
+
+export const getActionMessage = createSelector(
+    [getMessagesStore, getActionMessageId],
+    (messagesStore, actionMessageId) => {
+        return messagesStore.find(message => message.id === actionMessageId);
+    }
+);
+

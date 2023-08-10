@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {makeStyles} from '@mui/styles';
 import {IconButton, Menu, MenuItem} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import {actionEditing} from "../../state/messages/actions";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles(() => ({
     contextMenu: {
@@ -18,7 +20,8 @@ const ContextMenu = ({
                          message,
                          secondaryContentExpanded,
                          secondaryContentLanguage,
-                         setSecondaryContentLanguage
+                         setSecondaryContentLanguage,
+                         actionEditing,
                      }) => {
     const classes = useStyles();
 
@@ -34,6 +37,7 @@ const ContextMenu = ({
             setSecondaryContentLanguage(language);
             handleClickShowSecondaryContent();
         }
+        actionEditing(message.id)
     };
 
     const buildMenuItemText = (language) => {
@@ -65,11 +69,15 @@ const ContextMenu = ({
                 <MenuItem
                     onClick={() => handleMenuItemClick(null)}
                     className={classes.menuItem}>
-                    'something'
+                    'edit'
                 </MenuItem>
             </Menu>
         </>
     );
 };
 
-export default ContextMenu;
+const mapDispatchToProps = {
+    actionEditing: actionEditing,
+};
+
+export default connect(null, mapDispatchToProps)(ContextMenu);
