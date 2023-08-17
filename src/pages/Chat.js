@@ -6,11 +6,13 @@ import {createRoom, getRoom, loadRooms, setSelectedRoom, updateRooms} from '../s
 import {currentUserConnected, getUser, loadRoomsMembers} from '../state/users/actions';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
-import {updateMessage, loadMessages, readMessage, sendMessage, loadRoomMessages} from "../state/messages/actions";
+import {updateMessage, loadMessages, readMessage, sendMessage, loadRoomMessages, updateMessageContent, actionCancel} from "../state/messages/actions";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
 import WebSocketEventTypes from "../constants/WebSocketEventTypes";
+import MessageActionContansts from "../constants/MessageActionContansts";
+import {getActionMessage} from "../state/messages/selectors";
 
 function Chat({
                   loadRooms,
@@ -26,6 +28,8 @@ function Chat({
                   updateRooms,
                   getUser,
                   readMessage,
+                  updateMessageContent,
+                  actionCancel,
               }) {
 
     const {MESSAGE_UPDATE, ROOM_UPDATE} = WebSocketEventTypes
@@ -37,6 +41,8 @@ function Chat({
     const rooms = useSelector(state => state.rooms.rooms);
     const currentUser = useSelector(state => state.users.currentUser);
     const selectedRoom = useSelector(state => state.rooms.selectedRoomId)
+    const messageAction = useSelector(state => state.messages.messageAction)
+    const actionMessage = useSelector(state => getActionMessage(state))
     const selectedRoomRef = useRef(selectedRoom);
 
     const token = getAccessToken();
@@ -105,7 +111,18 @@ function Chat({
     };
 
     function sendNewMessage() {
-        sendMessage(selectedRoom, message)
+        const {EDITING, TRANSLATING, REPLAYING, CANCEL} = MessageActionContansts
+
+        switch (messageAction?.type) {
+            case EDITING:
+                updateMessageContent(actionMessage.id, message)
+                break;
+            default:
+                sendMessage(selectedRoom, message)
+                break;
+        }
+
+        actionCancel()
         setMessage('')
     }
 
@@ -184,6 +201,8 @@ const mapDispatchToProps = {
     updateRooms: updateRooms,
     getUser: getUser,
     readMessage: readMessage,
+    updateMessageContent: updateMessageContent,
+    actionCancel: actionCancel,
 };
 
 export default connect(null, mapDispatchToProps)(Chat);

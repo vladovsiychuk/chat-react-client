@@ -123,6 +123,30 @@ export function sendMessage(roomId, content) {
     }
 }
 
+export function updateMessageContent(messageId, content) {
+    return async dispatch => {
+        if (content === '')
+            return
+
+        const {method, path} = EndpointConstants.MESSAGES_PUT;
+
+        dispatch(updateAsync(true));
+        try {
+            await authorized({
+                method,
+                path: path(messageId),
+                body: {
+                    content: content,
+                }
+            });
+
+            dispatch(updateAsync(false));
+        } catch (err) {
+            dispatch(updateAsync(false, err));
+        }
+    }
+}
+
 export function readMessage(messageId) {
     return async dispatch => {
         const {method, path} = EndpointConstants.MESSAGES_READ;

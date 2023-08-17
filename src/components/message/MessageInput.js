@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {makeStyles} from '@mui/styles';
 import {IconButton, TextField} from '@mui/material';
 import {Send} from '@mui/icons-material';
 import TranslationTask from "./TranslationTask";
+import {getActionMessage} from "../../state/messages/selectors";
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -40,6 +42,13 @@ const useStyles = makeStyles(() => ({
 
 const MessageInput = ({message, setMessage, handleKeyPress, sendNewMessage}) => {
     const classes = useStyles();
+    const actionMessage = useSelector(state => getActionMessage(state))
+
+    useEffect(() => {
+        if (actionMessage) {
+            setMessage(actionMessage.content);
+        }
+    }, [actionMessage])
 
     return (
         <>

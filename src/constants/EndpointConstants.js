@@ -34,6 +34,11 @@ export default {
         path: `http://localhost:8082/v1/messages`,
     },
 
+    MESSAGES_PUT: {
+        method: 'PUT',
+        path: (messageId) => `http://localhost:8082/v1/messages/${messageId}`,
+    },
+
     MESSAGES_READ: {
         method: 'PUT',
         path: (messageId) => `http://localhost:8082/v1/messages/${messageId}/read`,

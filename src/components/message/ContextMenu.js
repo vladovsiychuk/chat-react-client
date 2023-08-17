@@ -69,7 +69,7 @@ const ContextMenu = ({
                 <MenuItem
                     onClick={() => handleMenuItemClick(null)}
                     className={classes.menuItem}>
-                    'edit'
+                    Edit
                 </MenuItem>
             </Menu>
         </>

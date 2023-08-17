@@ -5,6 +5,7 @@ import {Close} from '@mui/icons-material';
 import {connect, useSelector} from "react-redux";
 import {getActionMessage} from "../../state/messages/selectors";
 import {actionCancel} from "../../state/messages/actions";
+import MessageActionContansts from "../../constants/MessageActionContansts";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -50,31 +51,35 @@ const TranslationTask = ({actionCancel}) => {
     const classes = useStyles();
     const [language, setLanguage] = useState('english');
 
-    const showTranslationTask = !!useSelector(state => state.messages.messageAction)
+    const messageAction = useSelector(state => state.messages.messageAction)
     const message = useSelector(state => getActionMessage(state))
 
     return (
         <>
-            {showTranslationTask && (
+            {messageAction && (
                 <Box className={classes.container}>
                     <Box className={classes.divider}/>
                     <Box className={classes.translationHeader}>
-                        <Box className={classes.translationTitle}>
-                            <Typography>
-                                Translate message to:
-                            </Typography>
-                            <Select
-                                value={language}
-                                onChange={(e) => setLanguage(e.target.value)}
-                                className={classes.languageSelector}
-                                input={<Input disableUnderline/>}
-                            >
-                                <MenuItem value='english'>English</MenuItem>
-                                <MenuItem value='spanish'>Spanish</MenuItem>
-                                <MenuItem value='french'>French</MenuItem>
-                                <MenuItem value='german'>German</MenuItem>
-                            </Select>
-                        </Box>
+                        {messageAction.type !== MessageActionContansts.EDITING ? (
+                            <Box className={classes.translationTitle}>
+                                <Typography>
+                                    Translate message to:
+                                </Typography>
+                                <Select
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value)}
+                                    className={classes.languageSelector}
+                                    input={<Input disableUnderline/>}
+                                >
+                                    <MenuItem value='english'>English</MenuItem>
+                                    <MenuItem value='spanish'>Spanish</MenuItem>
+                                    <MenuItem value='french'>French</MenuItem>
+                                    <MenuItem value='german'>German</MenuItem>
+                                </Select>
+                            </Box>
+                        ) : (
+                            <div style={{flexGrow: 1}}></div> // Spacer to push the close button
+                        )}
                         <IconButton onClick={actionCancel}>
                             <Close/>
                         </IconButton>
