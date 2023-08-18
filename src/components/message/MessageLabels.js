@@ -31,7 +31,7 @@ const useStyles = alignRight => makeStyles(() => ({
     },
 }));
 
-const MessageLabels = ({alignRight = true}) => {
+const MessageLabels = ({alignRight = true, message}) => {
     const classes = useStyles(alignRight)();
 
     const waitingLabel = "Waiting for Translation";
@@ -41,15 +41,17 @@ const MessageLabels = ({alignRight = true}) => {
     return (
         <div className={classes.main}>
             <div>
-                <Chip label={waitingLabel} className={`${classes.label} ${classes.orangeLabel}`} variant="outlined"/>
-                <Chip label={editedLabel} className={`${classes.label} ${classes.greyLabel}`} variant="outlined"/>
+                {/*<Chip label={waitingLabel} className={`${classes.label} ${classes.orangeLabel}`} variant="outlined"/>*/}
+                { !!message.isModified && (
+                    <Chip label={editedLabel} className={`${classes.label} ${classes.greyLabel}`} variant="outlined"/>
+                )}
             </div>
-            <div>
-                <Typography color="textSecondary">{time}</Typography>
-                <span className={classes.checkmarks}>
-                    <span>✓</span> <span className="blue">✓</span>
-                </span>
-            </div>
+            {/*<div>*/}
+            {/*    <Typography color="textSecondary">{time}</Typography>*/}
+            {/*    <span className={classes.checkmarks}>*/}
+            {/*        <span>✓</span> <span className="blue">✓</span>*/}
+            {/*    </span>*/}
+            {/*</div>*/}
         </div>
     );
 };

@@ -62,7 +62,7 @@ const MessageItem = ({message}) => {
                     />
                 )}
                 <Typography align={alignment}>{message.content}</Typography>
-                <MessageLabels alignRight={isCurrentUserMessage}/>
+                <MessageLabels alignRight={isCurrentUserMessage} message={message}/>
             </div>
             <Avatar className={classes.avatar}>{messageSender.email.substring(0, 1)}</Avatar>
             <ContextMenu
