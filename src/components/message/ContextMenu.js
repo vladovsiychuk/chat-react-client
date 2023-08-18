@@ -31,13 +31,15 @@ const ContextMenu = ({
         setAnchorEl(event.currentTarget);
     };
 
-    const handleMenuItemClick = (language) => {
+    const handleMenuItemClick = (language, setAction = true) => {
         setAnchorEl(null);
         if (language) {
             setSecondaryContentLanguage(language);
             handleClickShowSecondaryContent();
         }
-        actionEditing(message.id)
+
+        if (setAction)
+            actionEditing(message.id)
     };
 
     const buildMenuItemText = (language) => {
@@ -55,7 +57,7 @@ const ContextMenu = ({
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={() => handleMenuItemClick(null)}
+                onClose={() => handleMenuItemClick(null, false)}
             >
                 {message.translations.map((translation, index) => (
                     <MenuItem
