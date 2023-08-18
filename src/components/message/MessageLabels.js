@@ -36,22 +36,23 @@ const MessageLabels = ({alignRight = true, message}) => {
 
     const waitingLabel = "Waiting for Translation";
     const editedLabel = "Edited";
-    const time = "20:30";
+    const date = new Date(message.dateCreated);
+    const time = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 
     return (
         <div className={classes.main}>
             <div>
                 {/*<Chip label={waitingLabel} className={`${classes.label} ${classes.orangeLabel}`} variant="outlined"/>*/}
-                { !!message.isModified && (
+                {!!message.isModified && (
                     <Chip label={editedLabel} className={`${classes.label} ${classes.greyLabel}`} variant="outlined"/>
                 )}
             </div>
-            {/*<div>*/}
-            {/*    <Typography color="textSecondary">{time}</Typography>*/}
-            {/*    <span className={classes.checkmarks}>*/}
-            {/*        <span>✓</span> <span className="blue">✓</span>*/}
-            {/*    </span>*/}
-            {/*</div>*/}
+            <div>
+                <Typography color="textSecondary">{time}</Typography>
+                {/*    <span className={classes.checkmarks}>*/}
+                {/*        <span>✓</span> <span className="blue">✓</span>*/}
+                {/*    </span>*/}
+            </div>
         </div>
     );
 };
