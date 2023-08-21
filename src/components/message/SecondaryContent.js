@@ -20,7 +20,7 @@ const MessageItem = ({alignRight, message, selectedTranslation = null}) => {
     if (currentUser.type === UserTypes.REGULAR_USER) {
         content = message.translations[0].translation;
     } else {
-        content = message.translations.find(translation => translation.language === selectedTranslation);
+        content = message.translations.find(translation => translation.language === selectedTranslation).translation;
     }
 
     return (

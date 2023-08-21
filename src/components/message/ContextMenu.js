@@ -41,13 +41,18 @@ const ContextMenu = ({
         if (language) {
             setSecondaryContentLanguage(language);
             handleClickShowSecondaryContent();
+            return
         }
 
-        if (action === MessageActionContansts.EDITING)
+        if (action === MessageActionContansts.EDITING) {
             actionEditing(message.id)
+            return
+        }
 
-        if (action === MessageActionContansts.TRANSLATING)
+        if (action === MessageActionContansts.TRANSLATING) {
             actionTranslating(message.id, currentUser.translationLanguages[0])
+            return
+        }
     }
 
     const buildMenuItemText = (language) => {
