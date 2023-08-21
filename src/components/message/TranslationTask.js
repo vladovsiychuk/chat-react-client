@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {makeStyles} from '@mui/styles';
 import {IconButton, Select, MenuItem, Typography, Box, Input} from '@mui/material';
 import {Close} from '@mui/icons-material';
 import {connect, useSelector} from "react-redux";
 import {getActionMessage} from "../../state/messages/selectors";
-import {actionCancel} from "../../state/messages/actions";
+import {actionCancel, addTranslationLanguage} from "../../state/messages/actions";
 import MessageActionContansts from "../../constants/MessageActionContansts";
 
 const useStyles = makeStyles(() => ({
@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
     translationHeader: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between', // change here
+        justifyContent: 'space-between',
     },
     translationTitle: {
         display: 'flex',
@@ -47,12 +47,13 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const TranslationTask = ({actionCancel}) => {
+const TranslationTask = ({actionCancel, addTranslationLanguage}) => {
     const classes = useStyles();
-    const [language, setLanguage] = useState('english');
+    const {messageAction} = useSelector(state => state.messages);
+    const currentUser = useSelector(state => state.users.currentUser.data);
+    const message = useSelector(getActionMessage);
 
-    const messageAction = useSelector(state => state.messages.messageAction)
-    const message = useSelector(state => getActionMessage(state))
+    const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 
     return (
         <>
@@ -60,25 +61,24 @@ const TranslationTask = ({actionCancel}) => {
                 <Box className={classes.container}>
                     <Box className={classes.divider}/>
                     <Box className={classes.translationHeader}>
-                        {messageAction.type !== MessageActionContansts.EDITING ? (
+                        {messageAction.type === MessageActionContansts.TRANSLATING ? (
                             <Box className={classes.translationTitle}>
-                                <Typography>
-                                    Translate message to:
-                                </Typography>
+                                <Typography>Translate message to:</Typography>
                                 <Select
-                                    value={language}
-                                    onChange={(e) => setLanguage(e.target.value)}
+                                    value={messageAction.data.language}
+                                    onChange={e =>
+                                        addTranslationLanguage(e.target.value)
+                                    }
                                     className={classes.languageSelector}
                                     input={<Input disableUnderline/>}
                                 >
-                                    <MenuItem value='english'>English</MenuItem>
-                                    <MenuItem value='spanish'>Spanish</MenuItem>
-                                    <MenuItem value='french'>French</MenuItem>
-                                    <MenuItem value='german'>German</MenuItem>
+                                    {currentUser.translationLanguages.map(lang => (
+                                        <MenuItem key={lang.toLowerCase()} value={lang.toUpperCase()}>{capitalize(lang)}</MenuItem>
+                                    ))}
                                 </Select>
                             </Box>
                         ) : (
-                            <div style={{flexGrow: 1}}></div> // Spacer to push the close button
+                            <div style={{flexGrow: 1}}></div>
                         )}
                         <IconButton onClick={actionCancel}>
                             <Close/>
@@ -93,6 +93,7 @@ const TranslationTask = ({actionCancel}) => {
 
 const mapDispatchToProps = {
     actionCancel: actionCancel,
+    addTranslationLanguage: addTranslationLanguage,
 };
 
 export default connect(null, mapDispatchToProps)(TranslationTask);

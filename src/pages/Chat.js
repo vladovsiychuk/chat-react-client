@@ -6,7 +6,7 @@ import {createRoom, getRoom, loadRooms, setSelectedRoom, updateRooms} from '../s
 import {currentUserConnected, getUser, loadRoomsMembers} from '../state/users/actions';
 import UserListSidebar from '../components/user/UserListSidebar';
 import {getAccessToken} from '../state/middleware/authMiddleware';
-import {updateMessage, loadMessages, readMessage, sendMessage, loadRoomMessages, updateMessageContent, actionCancel} from "../state/messages/actions";
+import {updateMessage, loadMessages, readMessage, sendMessage, loadRoomMessages, updateMessageContent, actionCancel, translateMessage} from "../state/messages/actions";
 import Header from "../components/room/Header";
 import MessagesList from "../components/message/MessagesList";
 import MessageInput from "../components/message/MessageInput";
@@ -30,12 +30,13 @@ function Chat({
                   readMessage,
                   updateMessageContent,
                   actionCancel,
+                  translateMessage,
               }) {
 
     const {MESSAGE_UPDATE, ROOM_UPDATE} = WebSocketEventTypes
 
     const [searchUsers, setSearchUsers] = useState([]);
-    const [message, setMessage] = useState('');
+    const [input, setInput] = useState('');
     const [triggerQueryUpdate, setTriggerQueryUpdate] = useState(0);
 
     const rooms = useSelector(state => state.rooms.rooms);
@@ -115,15 +116,18 @@ function Chat({
 
         switch (messageAction?.type) {
             case EDITING:
-                updateMessageContent(actionMessage.id, message)
+                updateMessageContent(actionMessage.id, input)
+                break;
+            case TRANSLATING:
+                translateMessage(input)
                 break;
             default:
-                sendMessage(selectedRoom, message)
+                sendMessage(selectedRoom, input)
                 break;
         }
 
         actionCancel()
-        setMessage('')
+        setInput('')
     }
 
     const handleSearchUsersClick = (userId) => {
@@ -159,8 +163,8 @@ function Chat({
                             <Header/>
                             <MessagesList/>
                             <MessageInput
-                                message={message}
-                                setMessage={setMessage}
+                                message={input}
+                                setMessage={setInput}
                                 handleKeyPress={handleKeyPress}
                                 sendNewMessage={sendNewMessage}
                             />
@@ -184,7 +188,8 @@ Chat.propTypes = {
     updateMessage: PropTypes.func.isRequired,
     updateRooms: PropTypes.func.isRequired,
     getUser: PropTypes.func.isRequired,
-    readMessage: PropTypes.func.isRequired
+    readMessage: PropTypes.func.isRequired,
+    translateMessage: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {
@@ -203,6 +208,7 @@ const mapDispatchToProps = {
     readMessage: readMessage,
     updateMessageContent: updateMessageContent,
     actionCancel: actionCancel,
+    translateMessage: translateMessage,
 };
 
 export default connect(null, mapDispatchToProps)(Chat);

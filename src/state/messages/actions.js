@@ -40,10 +40,20 @@ export function actionEditing(messageId) {
     }
 }
 
-export function actionTranslating(messageId) {
+export function actionTranslating(messageId, defaultLanguage) {
     return {
         type: types.MESSAGE_ACTION_TRANSLATING,
-        data: messageId,
+        data: {
+            messageId,
+            language: defaultLanguage
+        }
+    }
+}
+
+export function addTranslationLanguage(language) {
+    return {
+        type: types.MESSAGE_ACTION_TRANSLATING_ADD_LANGUAGE,
+        data: language,
     }
 }
 
@@ -156,6 +166,29 @@ export function readMessage(messageId) {
             await authorized({
                 method,
                 path: path(messageId),
+            });
+
+            dispatch(updateAsync(false));
+        } catch (err) {
+            dispatch(updateAsync(false, err));
+        }
+    }
+}
+
+export function translateMessage(translationContent) {
+    return async (dispatch, getState) => {
+        const {messageAction} = getState().messages
+        const {method, path} = EndpointConstants.MESSAGES_TRANSLATE;
+
+        dispatch(updateAsync(true));
+        try {
+            await authorized({
+                method,
+                path: path(messageAction.data.messageId),
+                body: {
+                    language: messageAction.data.language,
+                    translation: translationContent,
+                }
             });
 
             dispatch(updateAsync(false));

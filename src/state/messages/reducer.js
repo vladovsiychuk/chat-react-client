@@ -81,7 +81,9 @@ export default function messagesReducer(state = initialState, action) {
                 ...state,
                 messageAction: {
                     type: MessageActionContansts.EDITING,
-                    messageId: action.data,
+                    data: {
+                        messageId: action.data,
+                    }
                 }
             }
         }
@@ -90,7 +92,19 @@ export default function messagesReducer(state = initialState, action) {
                 ...state,
                 messageAction: {
                     type: MessageActionContansts.TRANSLATING,
-                    messageId: action.data,
+                    data: action.data,
+                }
+            }
+        }
+        case types.MESSAGE_ACTION_TRANSLATING_ADD_LANGUAGE: {
+            return {
+                ...state,
+                messageAction: {
+                    ...state.messageAction,
+                    data: {
+                        ...state.messageAction.data,
+                        language: action.data,
+                    }
                 }
             }
         }
@@ -99,7 +113,7 @@ export default function messagesReducer(state = initialState, action) {
                 ...state,
                 messageAction: {
                     type: MessageActionContansts.REPLYING,
-                    messageId: action.data,
+                    data: {messageId: action.data},
                 }
             }
         }

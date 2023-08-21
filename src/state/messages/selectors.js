@@ -6,7 +6,7 @@ const getCurrentUserStore = (state) => state.users.currentUser.data;
 
 const getSelectedRoomId = (state) => state.rooms.selectedRoomId
 
-const getActionMessageId = (state) => state.messages.messageAction?.messageId
+const getActionMessageId = (state) => state.messages.messageAction?.data.messageId
 
 const getRoomId = (state, props) => props.roomId;
 
