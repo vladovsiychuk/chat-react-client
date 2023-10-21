@@ -1,6 +1,9 @@
 import React from 'react';
 import {makeStyles} from '@mui/styles';
 import {Typography, Chip} from '@mui/material';
+import {getUserById} from "../../state/users/selectors";
+import {useSelector} from "react-redux";
+import UserTypes from "../../constants/UserTypes";
 
 const useStyles = alignRight => makeStyles(() => ({
     main: {
@@ -34,6 +37,9 @@ const useStyles = alignRight => makeStyles(() => ({
 const MessageLabels = ({alignRight = true, message}) => {
     const classes = useStyles(alignRight)();
 
+    const currentUser = useSelector(state => state.users.currentUser.data);
+    const translator = useSelector(state => getUserById(state, {id: message.translations[0]?.translatorId}))
+
     const waitingLabel = "Waiting for Translation";
     const editedLabel = "Edited";
     const date = new Date(message.dateCreated);
@@ -45,6 +51,9 @@ const MessageLabels = ({alignRight = true, message}) => {
                 {/*<Chip label={waitingLabel} className={`${classes.label} ${classes.orangeLabel}`} variant="outlined"/>*/}
                 {!!message.isModified && (
                     <Chip label={editedLabel} className={`${classes.label} ${classes.greyLabel}`} variant="outlined"/>
+                )}
+                {currentUser.type === UserTypes.REGULAR_USER && !!translator && (
+                    <Chip label={`Translated by ${translator.email}`} className={`${classes.label} ${classes.greyLabel}`} variant="outlined"/>
                 )}
             </div>
             <div>
