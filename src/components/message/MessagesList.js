@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {makeStyles} from "@mui/styles";
 import {useSelector} from "react-redux";
 import {getSelectedRoomMessages} from "../../state/messages/selectors";
@@ -21,11 +21,23 @@ const useStyles = makeStyles(() => ({
 
 const MessagesList = () => {
     const classes = useStyles();
+    const currentUser = useSelector(state => state.users.currentUser.data);
+    const roomMessages = useSelector(state => getSelectedRoomMessages(state));
+    const scrollRef = useRef(null);
+    const [isFirstRender, setIsFirstRender] = useState(true);
 
-    const roomMessages = useSelector(state => getSelectedRoomMessages(state))
+    useEffect(() => {
+        const lastMessage = roomMessages[roomMessages.length - 1];
+
+        if (isFirstRender || (lastMessage && lastMessage.senderId === currentUser.id)) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            setIsFirstRender(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [roomMessages, currentUser]);
 
     return (
-        <main className={classes.main}>
+        <main className={classes.main} ref={scrollRef}>
             {roomMessages.map((message, index) => (
                 <MessageItem message={message} key={index}/>
             ))}
