@@ -25,19 +25,25 @@ const MessagesList = () => {
     const roomMessages = useSelector(state => getSelectedRoomMessages(state));
     const scrollRef = useRef(null);
     const [isFirstRender, setIsFirstRender] = useState(true);
+    const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
 
     useEffect(() => {
         const lastMessage = roomMessages[roomMessages.length - 1];
 
-        if (isFirstRender || (lastMessage && lastMessage.senderId === currentUser.id)) {
+        if (shouldScrollToBottom || isFirstRender || (lastMessage && lastMessage.senderId === currentUser.id)) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
             setIsFirstRender(false);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roomMessages, currentUser]);
 
+    const handleScroll = () => {
+        const isAtBottom = scrollRef.current.scrollTop + scrollRef.current.clientHeight >= scrollRef.current.scrollHeight;
+        setShouldScrollToBottom(isAtBottom);
+    };
+
     return (
-        <main className={classes.main} ref={scrollRef}>
+        <main className={classes.main} ref={scrollRef} onScroll={handleScroll}>
             {roomMessages.map((message, index) => (
                 <MessageItem message={message} key={index}/>
             ))}
