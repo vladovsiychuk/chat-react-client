@@ -81,11 +81,13 @@ const ContextMenu = ({
                         {buildMenuItemText(translation.language)}
                     </MenuItem>
                 ))}
-                <MenuItem
-                    onClick={() => handleMenuItemClick(null, MessageActionContansts.EDITING)}
-                    className={classes.menuItem}>
-                    Edit
-                </MenuItem>
+                {message.senderId === currentUser.id && (
+                    <MenuItem
+                        onClick={() => handleMenuItemClick(null, MessageActionContansts.EDITING)}
+                        className={classes.menuItem}>
+                        Edit
+                    </MenuItem>
+                )}
                 {currentUser.type === UserTypes.TRANSLATOR && (
                     <MenuItem
                         onClick={() => handleMenuItemClick(null, MessageActionContansts.TRANSLATING)}
